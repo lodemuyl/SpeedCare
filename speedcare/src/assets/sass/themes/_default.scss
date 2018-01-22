@@ -1,0 +1,28 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+  #app{
+    .navlogo{
+      height: 8px;
+      vertical-align: middle;
+      height: 48px
+    }
+    #load{
+      height: 100vh;
+      position: relative;
+      .loadblock{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 50%;
+        transform: translateX(-50%);
+
+      }
+    }
+  }
