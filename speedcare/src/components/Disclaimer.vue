@@ -1,6 +1,6 @@
 <template>
   <div class="disclaimer">
-    <h1>{{ msg }}</h1>
+    <h2 class="pagetitle center">{{ msg }}</h2>
     <p>
 Last updated: January 22, 2018
 
@@ -42,7 +42,7 @@ export default {
   name: 'Disclaimer',
   data () {
     return {
-      msg: 'disclaimer'
+      msg: 'Disclaimer'
     }
   }
 }

@@ -1,13 +1,12 @@
 /* eslint-disable */
 import firebase from '../../../node_modules/firebase'
 const app = firebase.initializeApp({
-    apiKey: 'AIzaSyCQlYBkHTw5Q6N6A7_ygs6w8OkrKPE44uY',
-    authDomain: 'roboplot-1.firebaseapp.com',
-    databaseURL: 'https://roboplot-1.firebaseio.com',
-    projectId: 'roboplot-1',
-    storageBucket: 'roboplot-1.appspot.com',
-    messagingSenderId: '775004018292'
-  })
+  apiKey: "AIzaSyCF_x3JhhhWObz4M4hi8CGn6MIje557mnQ",
+  authDomain: "speedcare-lode.firebaseapp.com",
+  databaseURL: "https://speedcare-lode.firebaseio.com",
+  projectId: "speedcare-lode",
+  storageBucket: "speedcare-lode.appspot.com",
+  messagingSenderId: "924949047923"
+})
   export const db = app.database()
-  export const alldata = db.ref('data')
-  export const actief = db.ref('actief')
+  export const alldata = db.ref('PA6H1F1727')

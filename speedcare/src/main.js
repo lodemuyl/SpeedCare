@@ -5,13 +5,11 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import 'materialize-css/sass/materialize.scss'
+import 'materialize-css'
 import '@/assets/sass/main.scss'
-import './assets/js/materialize'
+import './assets/js/firebase'
 Vue.config.productionTip = false
-
-//let elem = document.querySelector('.sidenav');
-//let instance = M.Sidenav.init(elem, options);
-
 new Vue({
   el: '#app',
   router,

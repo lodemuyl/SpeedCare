@@ -11,10 +11,13 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "firebase": "^4.9.0",
+    "materialize-css": "^1.0.0-alpha.3",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
     "vue": "^2.5.2",
+    "vue-agile": "^0.3.6",
     "vue-materialize": "^1.0.0",
     "vue-router": "^3.0.1"
   },

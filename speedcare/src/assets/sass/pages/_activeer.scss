@@ -1,0 +1,15 @@
+.activeer{
+    .pn{
+        width: auto;
+        height: 130px;
+        border-radius: 5px
+    }
+    .collapsible{
+        border: 0px solid $red!important;
+        box-shadow: 0px 0px 0px 0 rgba(0,0,0,0.0)
+    }
+    .collapsible-header,
+    .collapsible-body{
+        border: 0px solid white;
+    }   
+}

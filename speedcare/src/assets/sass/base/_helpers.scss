@@ -13,6 +13,9 @@
 .beige{
     color: $beige!important
 }
+.wit{
+    color: $wit!important
+}
 .grijsbackground{
     background-color: $grey!important
 }
@@ -27,4 +30,17 @@
 }
 .beigebackground{
     background-color: $beige!important
+}
+.lower{
+    text-transform: lowercase;
+}
+.fullwidth{
+    width: 100%
+}
+.autooverflow{
+    overflow: auto;
+}
+.link{
+    color: $red;
+    border-bottom: 2px solid $red;
 }

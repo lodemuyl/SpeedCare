@@ -1,0 +1,43 @@
+   /* label focus color */
+   .input-field input[type=text]:focus + label,
+   .input-field input[type=password]:focus + label,
+   .input-field input[type=email]:focus + label {
+    color: $green!important
+  }
+  /* label underline focus color */
+  .input-field input[type=text]:focus,
+  .input-field input[type=password]:focus,
+  .input-field input[type=email]:focus {
+    border-bottom: 1px solid $green!important;
+    box-shadow: 0 1px 0 0 $green!important;
+  }
+   /* valid color */
+   .input-field input[type=text].valid,
+   .input-field input[type=password].valid,
+   .input-field input[type=email].valid {
+    border-bottom: 1px solid $blue;
+    box-shadow: 0 1px 0 0 $blue;
+  }
+  /* invalid color */
+  .input-field input[type=text].invalid,
+  .input-field input[type=password].invalid,
+  .input-field input[type=email].invalid {
+    border-bottom: 1px solid $red;
+    box-shadow: 0 1px 0 0 $red;
+  }
+
+  .tabs .tab a{
+    color: $red;
+} /*Black color to the text*/
+
+.tabs .tab a:hover {
+    color: $blue;
+} /*Text color on hover*/
+
+.tabs .tab a.active {
+    color: $red;
+} /*Background and text color when a tab is active*/
+
+.tabs .indicator {
+    background-color: $red;
+} /*Color of underline*/
