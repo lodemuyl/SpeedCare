@@ -4,6 +4,9 @@
         height: 130px;
         border-radius: 5px
     }
+    .fileinport{
+        display: none;
+    }
     .collapsible{
         border: 0px solid $red!important;
         box-shadow: 0px 0px 0px 0 rgba(0,0,0,0.0)
@@ -12,4 +15,16 @@
     .collapsible-body{
         border: 0px solid white;
     }   
+    .profileim{
+        width: 150px;
+        height: 250px;
+        padding: 50px 0px
+    }
+    .editbutton{        
+        top: 50px;
+        left: calc(50% + 37.5px);
+        a{
+            background-color: $red
+        }
+    }
 }

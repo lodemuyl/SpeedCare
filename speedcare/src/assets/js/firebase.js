@@ -9,4 +9,6 @@ const app = firebase.initializeApp({
   messagingSenderId: "924949047923"
 })
   export const db = app.database()
-  export const alldata = db.ref('PA6H1F1727')
+
+
+  

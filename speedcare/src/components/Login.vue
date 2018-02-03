@@ -6,18 +6,18 @@
             <div class="col s12">
                 <div class="row">
                     <div class="input-field col s12">
-                    <input id="email" type="email" class="validate" v-model="email">
+                    <input @keyup.enter="login" id="email" type="email" class="validate" v-model="email" tabindex=1>
                     <label for="email">Email</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                    <input id="password" type="password" class="validate" v-model="wachtwoord">
+                    <input @keyup.enter="login" id="password" type="password" class="validate" v-model="wachtwoord" tabindex=2>
                     <label for="password">Wachtwoord</label>
                     </div>
                 </div>
-                <button class="btn fullwidth waves-effect waves-light" type="submit" name="action" v-on:click="login">Login</button>                 
-                <div class="fullwidth center"><router-link to="Activeer" class="">Activeer</router-link></div>
+                <button tabindex=3 class="btn fullwidth waves-effect waves-light" type="submit" name="action" v-on:click="login">Login</button>                 
+                <div class="fullwidth center"><router-link tabindex=4 to="Activeer" class="">Activeer</router-link></div>
                 <div v-if="errors.length !== 0" class="row">                
                   <div class="input-field col s12 card-panel teal roodbackground wit">
                     <p v-for="error in errors">{{ error }}</p>
@@ -47,7 +47,7 @@ export default {
         this.errors = []
         firebase.auth().signInWithEmailAndPassword(this.email, this.wachtwoord).then(
             () => {
-              this.$router.replace('/')
+              this.$router.replace('Account') 
             },
             (err) => {             
                 console.log('niet gelukt message: ' + err.message)

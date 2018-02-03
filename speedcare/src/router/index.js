@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
@@ -8,15 +9,19 @@ import Ritten from '@/components/Ritten'
 import Notfound from '@/components/404'
 import Account from '@/components/Account'
 import Disclaimer from '@/components/Disclaimer'
+import firebase from 'firebase'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
+    // {
+    //   path: '*',
+    //   redirect: '/Home'
+    // },
     {
       path: '/',
-      name: 'Home',
-      component: Home
+      redirect: '/Home'
     },
     {
       path: '/Disclaimer',
@@ -36,22 +41,47 @@ export default new Router({
     {
       path: '/Rapporten',
       name: 'Rapporten',
-      component: Rapporten
+      component: Rapporten,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/Ritten',
       name: 'Ritten',
-      component: Ritten
+      component: Ritten,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/Account',
       name: 'Account',
-      component: Account
+      component: Account,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/*',
-      name: 'Notfound',
-      component: Notfound
-    }
+      path: '/Home',
+      name: 'Home',
+      component: Home,
+    },
+    {
+       path: '/*',
+       name: 'Notfound',
+       component: Notfound
+     }
   ]
 })
+router.beforeEach((to, from, next) => {
+  let currentUser = firebase.auth().currentUser;
+  let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  if(requiresAuth && !currentUser) next('Login')
+  // bugfix anders zal hij in een ininity loop geraken
+  //else if (!requiresAuth && !currentUser && to.name == "Home") next()
+  else if (!requiresAuth && currentUser && to.name == "Home") next()
+  else if (!requiresAuth && currentUser) next('Home')
+  else next()
+})
+export default router

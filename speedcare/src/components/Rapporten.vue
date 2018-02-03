@@ -57,7 +57,6 @@ export default {
       elem1 = document.querySelector('#firstclick'); 
       instance = M.Tabs.init(elem,options);    
       instance.updateTabIndicator();
-      console.log(elem1)
       elem1.click();      
     })
   }

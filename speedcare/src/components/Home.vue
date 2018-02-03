@@ -7,14 +7,10 @@
           <div class="slide slide--3"></div>
           <div class="slide slide--4"></div>
       </agile>
-
     <div class="container">
       <div class="row">
         <div class="col s12 m12 l4">
           <div class="card horizontal">
-            <div class="card-image">
-              <img src="https://lorempixel.com/100/190/nature/6">
-            </div>
             <div class="card-stacked">
               <div class="card-content">
                 <h5>Ritten</h5>
@@ -27,9 +23,6 @@
         </div>
         <div class="col s12 m12 l4">
           <div class="card horizontal">
-            <div class="card-image">
-              <img src="https://lorempixel.com/100/190/nature/6">
-            </div>
             <div class="card-stacked">
               <div class="card-content">
                 <h5>Rapporten</h5>
@@ -42,9 +35,6 @@
         </div>
         <div class="col s12 m12 l4">
           <div class="card horizontal">
-            <div class="card-image">
-              <img src="https://lorempixel.com/100/190/nature/6">
-            </div>
             <div class="card-stacked">
               <div class="card-content">
                 <h5>Account</h5>
@@ -69,12 +59,10 @@ export default {
   name: 'Home',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js PWA'
+      loggedin: this.$parent.currentUser
     }
   },
-  created () {
-     M.toast({html: 'I am a toast!',classes:"roodbackground"})
-     M.toast({html: 'I am a toast!',classes:"groenbackground"})
+  created () {    
   }
 }
 </script>

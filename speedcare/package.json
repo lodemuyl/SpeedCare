@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "firebase": "^4.9.0",
+    "font-awesome": "^4.7.0",
     "materialize-css": "^1.0.0-alpha.3",
+    "moment": "^2.20.1",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",

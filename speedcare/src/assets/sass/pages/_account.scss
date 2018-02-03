@@ -1,0 +1,27 @@
+.account{
+    .labelacc{
+        top:-30px;
+    }
+    .fileinport{
+        display: none;
+    }
+    .validate{
+        border-bottom: 0px!important;
+    }
+    .edit{
+        font-size: 1.5em;
+        display: inline
+    }
+    .profileim{
+        width: 150px;
+        height: 250px;
+        padding: 50px 0px
+    }
+    .editbutton{        
+        top: 50px;
+        left: calc(50% + 37.5px);
+        a{
+            background-color: $red
+        }
+    }
+}
