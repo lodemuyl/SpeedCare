@@ -77,7 +77,6 @@ export default {
       let user = this.$parent.currentUser.providerData[0];
       let lastsignin = this.$parent.currentUser.metadata.lastSignInTime;
       let uid = this.$parent.currentUser.uid
-      console.log(this.$parent.currentUser)
       this.email = user.email;
       this.naam = user.displayName;
       if(user.photoURL){

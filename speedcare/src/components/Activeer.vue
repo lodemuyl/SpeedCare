@@ -118,44 +118,81 @@ export default {
   },
   methods: {
     activeer: function(){
+        let element = document.querySelector('.page-footer');
         this.loaded = false;
         this.errors = []
-        firebase.auth().createUserWithEmailAndPassword(this.email, this.wachtwoord)
-        .then(
-            (user) => {
-                let temp = {
-                    actief: true,
-                    producnummer: this.productnummer.toUpperCase()
-                }
-                db.ref(user.uid).set(temp)
-                if(this.afbeelding){
-                    let ref = user.uid + "/customurl"        
-                    return firebase.storage().ref('userafbeeldingen/'+user.uid).put(this.afbeelding)
-                }
-                return null
-            }
-        ).then(
-            (filedata) => {
-                if(filedata){
-                    let downloadurl = filedata.metadata.downloadURLs[0];
-                    firebase.auth().currentUser.updateProfile({
-                        photoURL: downloadurl,
-                        displayName: this.naam
-                    })
-                }
-                
-            }
-        ).then(
-            (data) => {
-                if(this.errors.length =! 0){
-                    M.toast({html: "Je profiel is aangemaakt", displayLength:6000,classes:"groenbackground"})
+        //validatie
+        if(!this.productnummer){
+           this.errors.push("Gelieve het productnummer in te voeren")
+           element.scrollIntoView();
+           this.loaded = true;
+        }else if(!this.naam){
+           this.errors.push("Gelieve jouw gebruikersnaam in te vullen")
+           element.scrollIntoView();
+           this.loaded = true;
+        }else if(!this.email){
+           this.errors.push("Gelieve jouw email in te vullen")
+           element.scrollIntoView();
+           this.loaded = true;
+        }else if(!this.wachtwoord){
+            this.errors.push("Gelieve jouw wachtwoord in te vullen")
+            element.scrollIntoView();
+            this.loaded = true;
+        }else{
+            if(this.email){
+                var re = /\S+@\S+\.\S+/;
+                if(!re.test(this.email)){
+                    this.errors.push("Gelieve een geldig emailadres in te vullen")
                     this.loaded = true;
-                    this.$router.replace('Account')    
-                }                
+                    element.scrollIntoView();
+                }else{
+                    try{
+                        firebase.auth().createUserWithEmailAndPassword(this.email, this.wachtwoord)
+                        .then(
+                            (user) => {
+                                let temp = {
+                                    actief: true,
+                                    producnummer: this.productnummer.toUpperCase()
+                                }
+                                db.ref(user.uid).set(temp)
+                                if(this.afbeelding){
+                                    let ref = user.uid + "/customurl"        
+                                    return firebase.storage().ref('userafbeeldingen/'+user.uid).put(this.afbeelding)
+                                }
+                                return null
+                            }
+                        ).then(
+                            (filedata) => {
+                                if(filedata){
+                                    let downloadurl = filedata.metadata.downloadURLs[0];
+                                    firebase.auth().currentUser.updateProfile({
+                                        photoURL: downloadurl,                         
+                                        displayName: this.naam
+                                    })
+                                }else{                    
+                                    firebase.auth().currentUser.updateProfile({                         
+                                        displayName: this.naam
+                                    })
+                                }                
+                            }
+                        ).then(
+                            (data) => {
+                                if(this.errors.length =! 0){
+                                    M.toast({html: "Je profiel is aangemaakt", displayLength:6000,classes:"groenbackground"})
+                                    this.$router.replace('Account') 
+                                    location.reload();                   
+                                }                
+                            }
+                        )
+                    }catch(e){
+                        this.errors.push(e.message)
+                        element.scrollIntoView();
+                        this.loaded = true;
+                    }     
+                }
             }
-        ).catch(error => {
-            this.errors.push(err.message)
-      }) 
+        }
+
     },
     editprofilepicture: function(){
       this.$refs.fileinput.click();

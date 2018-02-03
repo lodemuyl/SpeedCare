@@ -8,7 +8,7 @@
           <div class="slide slide--4"></div>
       </agile>
     <div class="container">
-      <div class="row">
+      <div v-show="loggedin" class="row">
         <div class="col s12 m12 l4">
           <div class="card horizontal">
             <div class="card-stacked">
