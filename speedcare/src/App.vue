@@ -10,13 +10,14 @@
             <li v-show="currentUser"><router-link to="Ritten"><i class="material-icons left">view_list</i>Ritten</router-link></li>
             <li v-show="currentUser"><router-link to="Rapporten"><i class="material-icons left">show_chart</i>Rapporten</router-link></li>
             <li v-show="currentUser"><router-link to="Account"><i class="material-icons left">person_pin</i>Account</router-link></li>
+            <li v-show="currentUser" v-on:click="logout"><a><i class="material-icons left">power_settings_new</i>Logout</a></li>
           </ul>
           <ul id="mobile-demo" class="sidenav">
             <li v-on:click="close"><div class="user-view">
               <div class="background">
                 <img src="./assets/images/materialize.jpg">
               </div>
-              <router-link to="Account" v-if="currentUser"><img class="circle" src="./assets/images/user.png"></router-link>
+              <router-link to="Account" v-if="currentUser"><img class="circle" :src="profilepicurl"></router-link>
               <router-link to="Account" v-if="currentUser"><span class="name">{{ currentUser.displayName }}</span></router-link>
               <router-link to="Account" v-if="currentUser"><span class="email">{{ currentUser.email }}</span></router-link>
             </div></li>
@@ -71,14 +72,22 @@
 <script>
 /* eslint-disable */
 import firebase from 'firebase';
+import { db } from './assets/js/firebase'
 var elem;
 var instance;
 export default {
   name: 'app',
   data () {
     return {
-      currentUser: firebase.auth().currentUser
+      currentUser: firebase.auth().currentUser,
+      uid: null,
+      profilepicurl: '/static/img/user.93a57c9.png',
     }
+  },
+  created(){
+    //db.ref(this.currentUser.uid).once("value").then((e)=>{
+    //  console.log(e.val())      
+    //})
   },
   mounted: function(){
     this.$nextTick(function(){
@@ -94,11 +103,13 @@ export default {
       instance.close();
     },
     logout: function(){
+      let ref = this.currentUser.uid + "/actief"
+      db.ref(ref).set(false)
       firebase.auth().signOut().then(() => {
         this.close()
         M.toast({html: "Je bent uitgelogd", displayLength:6000,classes:"groenbackground"})
         this.$router.replace('Home')
-      })
+      })      
     }
   }
 }

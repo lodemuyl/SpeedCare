@@ -45,7 +45,10 @@
     border-bottom: 2px solid $red;
 }
 .strong{
-    font-weight: 700
+    font-weight: 700!important
+}
+.halfstrong{
+    font-weight: 500!important
 }
 .absolute{
     position: absolute;

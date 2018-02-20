@@ -51,6 +51,7 @@
 <script>
 /* eslint-disable */
 import firebase from 'firebase'
+import { db } from '../assets/js/firebase'
 export default {
   name: 'Login',
   data () {
@@ -65,19 +66,22 @@ export default {
   methods: {
     login: function(){
       this.loaded = false;
-        this.errors = []
-        firebase.auth().signInWithEmailAndPassword(this.email, this.wachtwoord).then(
-            () => {
-              this.loaded = true;
-              location.reload(); 
-              this.$router.replace('Account') 
+      this.errors = []
+      firebase.auth().signInWithEmailAndPassword(this.email, this.wachtwoord).then(
+            (e) => {
+              let ref = e.uid + "/actief"
+              db.ref(ref).set(true)              
             },
             (err) => {      
                 this.loaded = true;       
                 console.log('niet gelukt message: ' + err.message)
                 this.errors.push(err.message)
             }
-        )
+        ).then(()=>{
+          this.loaded = true;
+          this.$router.push('Account') 
+          this.$forceUpdate()
+        })
     }
   }
 }

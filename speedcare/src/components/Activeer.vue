@@ -103,6 +103,7 @@ export default {
       loaded: true,
       wachtwoord: null,
       productnummer: null,
+      useruid: null,
       profilepicurl: '/static/img/user.93a57c9.png',
       afbeelding: null,
       errors: []
@@ -150,9 +151,10 @@ export default {
                         firebase.auth().createUserWithEmailAndPassword(this.email, this.wachtwoord)
                         .then(
                             (user) => {
+                                this.useruid = user.uid;
                                 let temp = {
                                     actief: true,
-                                    producnummer: this.productnummer.toUpperCase()
+                                    productnummer: this.productnummer.toUpperCase()
                                 }
                                 db.ref(user.uid).set(temp)
                                 if(this.afbeelding){
@@ -160,6 +162,16 @@ export default {
                                     return firebase.storage().ref('userafbeeldingen/'+user.uid).put(this.afbeelding)
                                 }
                                 return null
+                            }
+                        ).then(
+                            ()=>{
+                                let pk = this.productnummer
+                                let uid = this.useruid
+                                let temp = {
+                                     user: uid
+                                }
+                                let ref = "Relations/" + pk
+                                db.ref(ref).set(temp)
                             }
                         ).then(
                             (filedata) => {

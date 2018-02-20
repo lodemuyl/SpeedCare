@@ -1,0 +1,28 @@
+.rapporten{
+    .collapsible{
+        color: $red;
+        border-color: $grey;
+        li{   
+            margin-bottom: 2px;  
+            .collapsible-header{
+                background-color: $grey!important;
+                color: $beige;
+                border-color: $grey;        
+            }
+            .collapsible-body{
+                color: $beige;
+                background-color: $grey;
+                border-bottom-color: $grey;
+            }
+        }
+    }    
+    #jaar{
+        .card{
+            background-color: $blue!important;
+            .card-title{
+                color: $beige
+                
+            }
+        }
+    }
+}

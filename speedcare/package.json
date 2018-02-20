@@ -11,8 +11,10 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "chartjs": "^0.3.24",
     "firebase": "^4.9.0",
     "font-awesome": "^4.7.0",
+    "hchs-vue-charts": "^1.2.8",
     "materialize-css": "^1.0.0-alpha.3",
     "moment": "^2.20.1",
     "node-sass": "^4.7.2",
