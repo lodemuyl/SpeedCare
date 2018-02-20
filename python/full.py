@@ -2,6 +2,7 @@
 import serial
 import pynmea2
 import datetime
+import logging
 
 #variables
 from lib import variables
@@ -19,3 +20,4 @@ try:
                 functions.main(lines)
 except:
     print('afsluiten')
+    functions.log('close')

@@ -5,6 +5,9 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import socket
+import logging
+
+logging.basicConfig(filename='logfile.log',level=logging.DEBUG)
 
 #utc naar lokale tijd
 #def lokaletijd(utctijd):
@@ -25,9 +28,11 @@ def checkActive():
             if checkproductkey and checkproductkey[variables.pk]:
                 variables.uid = checkproductkey[variables.pk].get('user')
                 print('start')
+                log('start')
                 return True
         except Exception as inst:
             print('jouw pk is nog niet geactiveerd activeer hem nu op blablabla')
+            log('pk not active')
             return False
     else:
         return False
@@ -48,14 +53,17 @@ def checknetwork():
         socket.setdefaulttimeout(3)
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
         print('network')
+        log('Network up')
         return True
     except Exception as ex:
         print('geen netwerk')
+        log('Network down')
         return False
 
 #logging
-def logging():
-    print('log')
+def log(message):
+    now = datetime.datetime.now()
+    logging.info(str(now) + ': ' + message)
 
 #wegschrijven naar firebase
 def write():
@@ -131,10 +139,11 @@ def checksum(line):
 	for c in checkString[0]:
 		checksum ^= ord(c)
 
-	try: # Just to make sure
+	try: 
 		inputChecksum = int(checkString[2].rstrip(), 16);
 	except:
 		print("Error in string")
+		log('error in string')
 		return False
 	
 	if checksum == inputChecksum:
@@ -144,4 +153,5 @@ def checksum(line):
 		print("===================================error!============================================")
 		print("=====================================================================================")
 		print(hex(checksum), "!=", hex(inputChecksum))
+		log('Checksum error')
 		return False

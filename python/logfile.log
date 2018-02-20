@@ -1,0 +1,12 @@
+INFO:root:2018-02-20 15:58:25.117094: Network down
+INFO:root:2018-02-20 15:59:11.577413: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-02-20 15:59:12.748448: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/2/20/15:59:12.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/2/20/15:59:13.json HTTP/1.1" 200 31
+INFO:root:2018-02-20 15:59:14.204542: close
