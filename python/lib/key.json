@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "speedcare-lode",
+  "private_key_id": "3124e64e7aa487257e79332639141941200a9154",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCtIqSm2OUJaFjR\nS6qzFOwscG5sRD+QYuUpCh3/QGH35LEr/fWaKHQa34K7QlUgXrUNO52cX8bkoE4B\njAK8w3tyf9AkgrOo7uDRWa4nTBUrAqB6iVYZQJi8RCcQyNVW7qpFpR6lqNrQUDAY\nV4q75LVBoFb7cumktyW3ITMlExbpUw8L8ljjEbe3yi5fTiVgXwTCIRGTg0g7RL8V\nXC8ddCNugzIw5g1QvpxRkW4skmM7jLqA2S2rfZwDK8edbg8g5rYETF4blUYTcFIu\nVnu+vwe2OwYZKAioBlJyJaHMVifqVLvSS3PW6mhsmvfAuSdB0UlOzlJ9aYUr9Tz5\nBl/oX/0XAgMBAAECggEADtiw0tKNjV7NIvbAnAZYHEAbOp3S75Azbhn9KYVoAT2z\nSFOeNcpwmQSqmAvfndzRMgx3KaYi5Dmvhr1urKjR/fxiKQdWMvnM/dbECCr43mJ6\nyBcycrbnLK8Rby8xms3w0Z5lADf4ZN2YyjWTjXosEC/DgGDBvUtWk3C9iy6AYUsx\nwwgetACD7hrylhWN2jTj4bFGLGzkp3yTVMnqyJXBYdarAHR1XxLYFjv9OhZf76dL\nrcNvh6ugMQzPJhvgpWA+XkvaeguQHsq0lk/UwRiHdSv300KQbzgs6vZz6DfhUlhN\n70lvAOkZ3jX5v9M9/gHNssvfthOxBZrgZyNd6rntJQKBgQDZDQ7B95o3vyH+/5HD\n31cS2meF1x9U8F1Kl0v6FfmcFbXDgQkR4n0B5Xerq/xrGGxsHviUw8tt5hrDrjcY\naWkZo+20kw2O1BaTft2LvcDoD7JKOQbWi9fhSfYLvtH8NGAwZ2wTWADq4oPrspDm\ntJb8WcTZQQZo8zeTBWypXThx5QKBgQDMNC0Z7p9uHd03FByPrN1dNX/WG3DzvQi/\nU7ICCFek6/GdxJd0F2ZVmITVcPTexUD3uvdSiy+htChxfESp32CXD2OpHtCrPkfJ\njn7sujaXd+n/RqD8VktcpO5SgVJTjzEIpV5Zo7jAUDzAZqL66aI0g3KKhoV7qCFL\noDvdJy4zSwKBgEMIVVZyMZ6l2Mn4A/yKLUoVSYN8PKDu2uD+eOhzgPNDgS8v2q07\nVYAQbjUGmJ46nMGHjx3imiEGv51PYJSZeWwBxJfQEo/Z0F8c/y75G2qP7nAdzI7W\nAYYCYYqfFBrf0hUg26/drercqgFQ1I9rlnW5A6JVArXG55LwSe7Ea3pBAoGAZhzh\nQMp2pxX//P7tmVsUBvwtxN9MCFZK/YHYzfNmAG6MEByyr7bT0ZHHOwSVLqDs7/Rq\noLhBRVdVsgo2O8wb/O4RJAzow/kM5NmA1tf3XJ72QFUNQ6HTZayEEHXiuS4tkuk+\n2Qxp4qE8/+lTLq2OEzx4FpVWQpO8spiZ1uk0zSkCgYAMQLWph+GzqbziC5YyOqrr\n68IWB48qb5C+snYYJcTxx6NDrDsi/qVLzgTxWZZukJuGlZYWaGpRk5j20Ih1pS1z\n3OepvSvwiMl3K3C3+ga//pmU3fTz+7kfk5qlr5QWTBIXUupQUulJjn/Od0DqEJLq\n09qYydIP8Z1Ei2R2KV8FzA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-cvvxy@speedcare-lode.iam.gserviceaccount.com",
+  "client_id": "100932936899987106159",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-cvvxy%40speedcare-lode.iam.gserviceaccount.com"
+}
