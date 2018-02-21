@@ -6,7 +6,10 @@ from firebase_admin import credentials
 from firebase_admin import db
 import socket
 import logging
+import RPi.GPIO as GPIO
 
+
+GPIO.setmode(GPIO.BCM)
 logging.basicConfig(filename='logfile.log',level=logging.DEBUG)
 
 #utc naar lokale tijd
@@ -29,10 +32,16 @@ def checkActive():
                 variables.uid = checkproductkey[variables.pk].get('user')
                 print('start')
                 log('start')
+                GPIO.setup(variables.errorled, GPIO.OUT)
+                GPIO.output(variables.errorled, GPIO.LOW)
+                GPIO.setup(variables.runled, GPIO.OUT)
+                GPIO.output(variables.runled,GPIO.HIGH)
                 return True
         except Exception as inst:
             print('jouw pk is nog niet geactiveerd activeer hem nu op blablabla')
             log('pk not active')
+            GPIO.setup(variables.errorled, GPIO.OUT)
+            GPIO.output(variables.errorled, GPIO.HIGH)
             return False
     else:
         return False
@@ -58,6 +67,8 @@ def checknetwork():
     except Exception as ex:
         print('geen netwerk')
         log('Network down')
+        GPIO.setup(variables.errorled, GPIO.OUT)
+        PIO.output(variables.errorled, GPIO.HIGH)
         return False
 
 #logging
@@ -144,6 +155,8 @@ def checksum(line):
 	except:
 		print("Error in string")
 		log('error in string')
+		GPIO.setup(variables.errorled, GPIO.OUT)
+		GPIO.output(variables.errorled, GPIO.HIGH)
 		return False
 	
 	if checksum == inputChecksum:
@@ -154,4 +167,6 @@ def checksum(line):
 		print("=====================================================================================")
 		print(hex(checksum), "!=", hex(inputChecksum))
 		log('Checksum error')
+		GPIO.setup(variables.errorled, GPIO.OUT)
+		GPIO.output(variables.errorled, GPIO.HIGH)
 		return False

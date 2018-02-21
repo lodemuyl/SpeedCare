@@ -3,6 +3,8 @@ import serial
 import pynmea2
 import datetime
 import logging
+import RPi.GPIO as GPIO
+
 
 #variables
 from lib import variables
@@ -21,3 +23,5 @@ try:
 except:
     print('afsluiten')
     functions.log('close')
+    GPIO.setup(variables.runled, GPIO.OUT)
+    GPIO.output(variables.runled, GPIO.LOW)

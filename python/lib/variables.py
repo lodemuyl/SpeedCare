@@ -3,6 +3,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import datetime
+
 #verschil tussen onze tijdszone en utc
 lokaal = 1
 #seriele interface voor ontvangen van gps data
@@ -25,4 +26,7 @@ snelheid = 0
 tijd = 0
 kwaliteit = ""
 hoogte = 0
-
+#leds
+powerled = 27
+runled = 17
+errorled = 22
