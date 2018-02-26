@@ -104,7 +104,7 @@ export default {
       wachtwoord: null,
       productnummer: null,
       useruid: null,
-      profilepicurl: '/static/img/user.93a57c9.png',
+      profilepicurl: "../../static/img/user.png",
       afbeelding: null,
       errors: []
     }

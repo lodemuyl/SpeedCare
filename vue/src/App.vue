@@ -15,7 +15,7 @@
           <ul id="mobile-demo" class="sidenav">
             <li v-on:click="close"><div class="user-view">
               <div class="background">
-                <img src="./assets/images/materialize.jpg">
+                <img src="./assets/images/sidenav.png">
               </div>
               <router-link to="Account" v-if="currentUser"><img class="circle" :src="profilepicurl"></router-link>
               <router-link to="Account" v-if="currentUser"><span class="name">{{ currentUser.displayName }}</span></router-link>
@@ -45,16 +45,16 @@
               <div class="col l3 s12">
                 <h5 class="groen">Algemeen</h5></h5>
                 <ul>
-                  <li><a class="grey-text text-lighten-3" href="#!">Disclaimer</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Contact</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Over</a></li>
+                  <li><router-link class="grey-text text-lighten-3" to="Disclaimer">Disclaimer</router-link></li>
+                  <li><a class="grey-text text-lighten-3" href="mailto:lodemuyl@student.arteveldehs.be">Contact</a></li>
+                  <li><router-link to="Over" class="grey-text text-lighten-3">Over</router-link></li>
                 </ul>
               </div>
               <div class="col l3 s12">
                 <h5 class="groen">Social Media</h5>
                 <ul>
-                  <li><a class="grey-text text-lighten-3" href="#!">Facebook</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Twitter</a></li>
+                  <li><a class="grey-text text-lighten-3" target="_blank" href="https://www.facebook.com/lode.muylaert">Facebook</a></li>
+                  <li><a class="grey-text text-lighten-3" target="_blank" href="https://twitter.com/LodeMuylaert?lang=nl">Twitter</a></li>
                 </ul>
               </div>
             </div>

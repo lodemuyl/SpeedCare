@@ -43,6 +43,9 @@
 .link{
     color: $red;
     border-bottom: 2px solid $red;
+    a{
+        text-decoration: none!important;
+    }
 }
 .strong{
     font-weight: 700!important
@@ -55,4 +58,25 @@
 }
 .relative{
     position: relative;
+}
+.notopmargin{
+    margin-top: 0px !important;
+}
+.bold{
+    font-weight: 700
+}
+.regulartext{
+    color: $grey;
+    font-size: 1.0rem
+}
+.subtitle{
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: $grey
+}
+.leftcenter{
+    text-align: left
+}
+.rightcenter{
+    text-align: right
 }

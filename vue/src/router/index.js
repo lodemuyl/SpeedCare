@@ -6,6 +6,7 @@ import Login from '@/components/Login'
 import Activeer from '@/components/Activeer'
 import Rapporten from '@/components/Rapporten'
 import Ritten from '@/components/Ritten'
+import Over from '@/components/Over'
 import Notfound from '@/components/404'
 import Account from '@/components/Account'
 import Disclaimer from '@/components/Disclaimer'
@@ -37,6 +38,11 @@ let router = new Router({
       path: '/Activeer',
       name: 'Activeer',
       component: Activeer
+    },
+    {
+      path: '/Over',
+      name: 'Over',
+      component: Over
     },
     {
       path: '/Rapporten',
