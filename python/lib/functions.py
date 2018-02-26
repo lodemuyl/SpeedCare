@@ -11,6 +11,7 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 logging.basicConfig(filename='logfile.log',level=logging.DEBUG)
+GPIO.setwarnings(False)
 
 #utc naar lokale tijd
 #def lokaletijd(utctijd):
@@ -40,6 +41,7 @@ def checkActive():
         except Exception as inst:
             print('jouw pk is nog niet geactiveerd activeer hem nu op blablabla')
             log('pk not active')
+            log(inst)
             GPIO.setup(variables.errorled, GPIO.OUT)
             GPIO.output(variables.errorled, GPIO.HIGH)
             return False
@@ -53,8 +55,9 @@ def main(lines):
         pass
     elif lines[0] == "GPGGA":
         printGGA(lines)
-        write()
-        pass
+        if variables.gewijzigdeparameters >= 6:
+            write()
+        pass     
     
 #check internet connection
 def checknetwork():
@@ -67,6 +70,7 @@ def checknetwork():
     except Exception as ex:
         print('geen netwerk')
         log('Network down')
+        log(ex)
         GPIO.setup(variables.errorled, GPIO.OUT)
         PIO.output(variables.errorled, GPIO.HIGH)
         return False
@@ -85,7 +89,7 @@ def write():
     day = now.day
     currdate = str(day) +'/'+ str(month) +'/'+str(year)
     currtime = str(now.time())
-    writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + currtime[:8]
+    writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
     writedata = {
         "lat" : variables.lat,
         "lon" : variables.lon,
@@ -94,9 +98,10 @@ def write():
         "hoogte" : variables.hoogte,
         "utc" : variables.tijd
         }
-    write = db.reference(writeref)
-    #print(write)
-    write.push(writedata)
+    if variables.counter % 2 == 0:
+        write = db.reference(writeref)
+        write.push(writedata)
+    variables.counter += 1
 
 #ophalen van alle data afkomstig uit de ultimate gps module
 def readString():
@@ -119,6 +124,8 @@ def getLatLng(latString,lngString):
     
 #rmc
 def printRMC(lines):
+    if lines:
+        variables.gewijzigdeparameters += 3
     latlng = getLatLng(lines[3],lines[5])
     variables.lat = latlng[0]
     variables.lon = latlng[1]
@@ -134,6 +141,8 @@ def speed(knots):
 
 #gga
 def printGGA(lines):
+    if lines:
+        variables.gewijzigdeparameters += 3
     #print("tijd                           :", getTime(lines[1], "%H%M%S.%f", "%H:%M:%S"), "UTC")
     variables.tijd = getTime(lines[1], "%H%M%S.%f", "%H:%M:%S")
     variables.kwaliteit = variables.signaal[int(lines[6])]

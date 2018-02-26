@@ -3,6 +3,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import datetime
+import time
 
 #verschil tussen onze tijdszone en utc
 lokaal = 1
@@ -26,7 +27,13 @@ snelheid = 0
 tijd = 0
 kwaliteit = ""
 hoogte = 0
+gewijzigdeparameters = 0
 #leds
 powerled = 27
 runled = 17
 errorled = 22
+#autoritid
+timenow = datetime.datetime.now()
+autoritid = timenow.time()
+#counter
+counter = 0
