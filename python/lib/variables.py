@@ -37,3 +37,5 @@ timenow = datetime.datetime.now()
 autoritid = timenow.time()
 #counter
 counter = 0
+
+

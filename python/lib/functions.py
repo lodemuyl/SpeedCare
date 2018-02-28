@@ -102,6 +102,16 @@ def write():
         write = db.reference(writeref)
         write.push(writedata)
     variables.counter += 1
+    
+#ophalen maximumsnelheden
+def getSpeedLimit(lat, lon):
+    url = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?locationattributes=linkInfo&prox='+str(lat)+'%2C'+str(lon)+'%2C61&mode=retrieveAddresses&maxresults=1&&app_id=bngQkvofptY6BhYwJqkR&app_code=PiLtHYGTE1jPKNQuDp7xxw'
+    f = urllib.request.urlopen(url)
+    g = f.read().decode('utf-8')
+    j = json.loads(g)
+    category = j["Response"]["View"][0]["Result"][0]['Location']['LinkInfo']['SpeedCategory']
+    
+#getSpeedLimit(50.8942,4.0025);
 
 #ophalen van alle data afkomstig uit de ultimate gps module
 def readString():
