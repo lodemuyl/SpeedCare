@@ -4,6 +4,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 import datetime
 import time
+import os
 
 #verschil tussen onze tijdszone en utc
 lokaal = 1
@@ -37,5 +38,13 @@ timenow = datetime.datetime.now()
 autoritid = timenow.time()
 #counter
 counter = 0
+#maxspeedpath
+scriptdir = os.path.dirname(__file__)
+rel_path = "maximumsnelheden.json"
+maxspeedpath = os.path.join(scriptdir, rel_path)
+#maxspeedapi
+appid = 'bngQkvofptY6BhYwJqkR'
+appcode = 'PiLtHYGTE1jPKNQuDp7xxw'
+
 
 

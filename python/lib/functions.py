@@ -7,6 +7,9 @@ from firebase_admin import db
 import socket
 import logging
 import RPi.GPIO as GPIO
+import urllib.request
+import urllib.parse
+import json
 
 
 GPIO.setmode(GPIO.BCM)
@@ -38,10 +41,10 @@ def checkActive():
                 GPIO.setup(variables.runled, GPIO.OUT)
                 GPIO.output(variables.runled,GPIO.HIGH)
                 return True
-        except Exception as inst:
-            print('jouw pk is nog niet geactiveerd activeer hem nu op blablabla')
+        except Exception as exactive:
+            print('jouw pk is nog niet geactiveerd of bestaat niet')
+            log('message : ' + str(exactive))
             log('pk not active')
-            log(inst)
             GPIO.setup(variables.errorled, GPIO.OUT)
             GPIO.output(variables.errorled, GPIO.HIGH)
             return False
@@ -56,7 +59,7 @@ def main(lines):
     elif lines[0] == "GPGGA":
         printGGA(lines)
         if variables.gewijzigdeparameters >= 6:
-            write()
+            write()            
         pass     
     
 #check internet connection
@@ -67,12 +70,12 @@ def checknetwork():
         print('network')
         log('Network up')
         return True
-    except Exception as ex:
-        print('geen netwerk')
+    except Exception as exnetwork:
+        print('Geen netwerk')
+        log('message : ' + str(exnetwork))
         log('Network down')
-        log(ex)
         GPIO.setup(variables.errorled, GPIO.OUT)
-        PIO.output(variables.errorled, GPIO.HIGH)
+        GPIO.output(variables.errorled, GPIO.HIGH)
         return False
 
 #logging
@@ -80,38 +83,52 @@ def log(message):
     now = datetime.datetime.now()
     logging.info(str(now) + ': ' + message)
 
-#wegschrijven naar firebase
-def write():
-    #current time
-    now = datetime.datetime.now()
-    year = now.year
-    month = now.month
-    day = now.day
-    currdate = str(day) +'/'+ str(month) +'/'+str(year)
-    currtime = str(now.time())
-    writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
-    writedata = {
-        "lat" : variables.lat,
-        "lon" : variables.lon,
-        "snelheid" : variables.snelheid,
-        "signaal" : variables.kwaliteit,
-        "hoogte" : variables.hoogte,
-        "utc" : variables.tijd
-        }
-    if variables.counter % 2 == 0:
-        write = db.reference(writeref)
-        write.push(writedata)
-    variables.counter += 1
-    
 #ophalen maximumsnelheden
 def getSpeedLimit(lat, lon):
-    url = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?locationattributes=linkInfo&prox='+str(lat)+'%2C'+str(lon)+'%2C61&mode=retrieveAddresses&maxresults=1&&app_id=bngQkvofptY6BhYwJqkR&app_code=PiLtHYGTE1jPKNQuDp7xxw'
-    f = urllib.request.urlopen(url)
-    g = f.read().decode('utf-8')
-    j = json.loads(g)
-    category = j["Response"]["View"][0]["Result"][0]['Location']['LinkInfo']['SpeedCategory']
-    
-#getSpeedLimit(50.8942,4.0025);
+    try:
+        url = 'http://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?locationattributes=linkInfo&prox='+str(lat)+'%2C'+str(lon)+'%2C61&mode=retrieveAddresses&maxresults=1&&app_id='+str(variables.appid)+'&app_code='+str(variables.appcode)
+        f = urllib.request.urlopen(url)
+        g = f.read().decode('utf-8')
+        fulljson = json.loads(g)
+        category = fulljson["Response"]["View"][0]["Result"][0]['Location']['LinkInfo']['SpeedCategory']    
+        gg = json.loads(open(variables.maxspeedpath).read())
+        return gg[category]
+    except Exception as Exspeed:
+        log('message : ' + str(Exspeed))
+        print('Speedlimitation error')
+        GPIO.output(variables.errorled, GPIO.OUT)
+        GPIO.output(variables.errorled, GPIO.HIGH)
+        sys.exit(1)
+        
+#wegschrijven naar firebase
+def write():
+    try:
+        #current time
+        now = datetime.datetime.now()
+        year = now.year
+        month = now.month
+        day = now.day
+        currdate = str(day) +'/'+ str(month) +'/'+str(year)
+        currtime = str(now.time())
+        writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
+        writedata = {
+            "lat" : variables.lat,
+            "lon" : variables.lon,
+            "snelheid" : variables.snelheid,
+            "maxsnelheid" : str(getSpeedLimit(variables.lat,variables.lon)),
+            "signaal" : variables.kwaliteit,
+            "utc" : variables.tijd
+            }
+        if variables.counter % 2 == 0:
+            write = db.reference(writeref)
+            write.push(writedata)
+        variables.counter += 1
+    except Exception as exwrite:
+        log('message : ' + str(exwrite))
+        print('Write error')
+        GPIO.output(variables.errorled, GPIO.OUT)
+        GPIO.output(variables.errorled, GPIO.HIGH)
+        sys.exit(1)
 
 #ophalen van alle data afkomstig uit de ultimate gps module
 def readString():
@@ -139,7 +156,9 @@ def printRMC(lines):
     latlng = getLatLng(lines[3],lines[5])
     variables.lat = latlng[0]
     variables.lon = latlng[1]
-    variables.snelheid = speed(lines[7])	    
+    variables.snelheid = speed(lines[7])
+    print("")
+    print("")
     print("Lat,Long                       :", variables.lat, lines[4], ", ", variables.lon, lines[6], sep='')
     print("Snelheid                       :", variables.snelheid)	
     return
@@ -160,6 +179,8 @@ def printGGA(lines):
     print("tijd                           :", variables.tijd , "UTC")
     print("Kwaliteit signaal              :", variables.kwaliteit)
     print("Hoogte                         :", variables.hoogte, lines[10],sep="")
+    print("")
+    print("")
     return
 
 #checksum 
