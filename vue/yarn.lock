@@ -6028,6 +6028,14 @@ vue-fixed-action-button@^1.2.0:
   dependencies:
     vue-mixins "^0.3.0"
 
+vue-fullcalendar@^1.0.5, vue-fullcalendar@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/vue-fullcalendar/-/vue-fullcalendar-1.0.9.tgz#a853bb25946252277533b9994ef503cfacb01233"
+  dependencies:
+    es6-promise "^4.0.5"
+    vue "^2.1.8"
+    vue-fullcalendar "^1.0.5"
+
 vue-hot-reload-api@^2.2.0:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.2.4.tgz#683bd1d026c0d3b3c937d5875679e9a87ec6cd8f"
@@ -6178,7 +6186,7 @@ vue-zoombox@^1.0.0:
     vue-mixins "^0.3.0"
     vue-overlay "^1.0.1"
 
-vue@2.*.*, vue@^2.0.1, vue@^2.5.2:
+vue@2.*.*, vue@^2.0.1, vue@^2.1.8, vue@^2.5.2:
   version "2.5.13"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.13.tgz#95bd31e20efcf7a7f39239c9aa6787ce8cf578e1"
 

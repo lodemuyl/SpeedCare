@@ -73,8 +73,15 @@
 /* eslint-disable */
 import firebase from 'firebase';
 import { db } from './assets/js/firebase'
+import moment from 'moment'
+//eigen naamgeving voor rittencalender
+moment.locale('nl', {
+  months: 'Januari_Februari_Maart_April_Mei_Juni_Juli_Augustus_September_November_December',
+  weekdaysShort: 'Maandag_Dinsdag_Woensdag_Donderdag_Vrijdag_Zaterdag_Zondag'
+})
 var elem;
 var instance;
+
 export default {
   name: 'app',
   data () {

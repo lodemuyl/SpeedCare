@@ -15,6 +15,7 @@ import firebase from 'firebase'
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 let app;
+
 firebase.auth().onAuthStateChanged(function(user){
   if(!app){
     new Vue({

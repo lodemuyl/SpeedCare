@@ -1,0 +1,79 @@
+.rittencalender{    
+    background-color: $beige;
+    .autoritevent,.body-item{
+        background-color: $red!important;
+        color: $wit!important;
+        text-align: center;
+        border-radius: 2px 2px
+    }
+    .more-header{
+        background-color: $grey!important;
+        color: $wit;
+    }
+    .more-events{
+        border-radius: 2px 2px!important;
+        border: 1px solid $grey!important;
+    }
+    .more-header{
+        .close{
+            &:after{
+                font-family: $material;
+                font-style: normal;
+                font-size: 1.5rem;
+                content:"\E14C";
+                color: $wit;
+            }  
+            color: $grey;
+        }
+    }
+    .weeks{
+        background-color: $grey;
+        padding: 0px 0px;
+        color: $beige;
+    }
+    .week{
+      padding: 15px 0px
+    }
+    .day-number{
+        color: $blue;
+        font-weight: 600
+    }
+    .not-cur-month{
+      .day-number{
+          color: $green!important
+      }  
+    }
+    .full-calendar-body{
+        border-radius: 2px 2px
+    }
+    .header-center{
+        color: $red;
+        font-weight: 600;
+        font-family: $montserat;
+        .title{
+            font-size: 1.5rem;
+        }
+        .prev-month{
+            &:before{
+                font-family: $material;
+                font-style: normal;
+                font-size: 3.5rem;
+                content:"\E314";
+                color: $red;
+            }  
+            float: left;  
+            color: $beige;       
+        }
+        .next-month{
+            &:after{
+                font-family: $material;
+                font-size: 3.5rem;
+                font-style: normal;
+                content: '\E315';
+                color: $red;
+            }
+            color: $beige;
+            float: right;            
+        }
+    }
+}
