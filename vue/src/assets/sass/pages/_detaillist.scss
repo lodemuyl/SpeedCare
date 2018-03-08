@@ -1,0 +1,17 @@
+.detaillist{
+    .material-icons{
+        color: $beige;
+
+    }
+    .container{
+        margin-top: 40px;
+    }
+    .collection{
+        border: 0px;
+    }
+    .collection-item{
+        background-color: $grey!important;
+        color: $beige;
+        font-weight: 600
+    }
+}

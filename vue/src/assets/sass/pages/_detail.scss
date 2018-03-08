@@ -1,0 +1,55 @@
+.detail{
+    .pannel{
+        align-items: stretch;
+        display: flex;
+        flex-flow: row wrap;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .leftside,.rightside{
+        height: 90vh;
+        color: white;
+        flex-basis: 450px;
+        flex-grow: 1;
+        flex-shrink: 1;
+        font-size: 1.2rem;
+    }
+    .leftside{
+        order: 0
+    }
+    .rightside{
+        order: 1;
+        background-color: $grey;      
+    }
+    .inlineinfo{
+        display: inline;
+        margin-left: 5px;
+
+    }
+    .maxspeedsign{
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        margin-right: 10px;
+
+
+    }
+    span.badge.new:after {
+        content: "";
+    }
+    .collapsible{
+        height: 300px;
+        overflow: auto;
+        border: 0px;
+        box-shadow: 0px 0px 0px;
+    }
+    .collapsible-header{
+        cursor: default;
+        color: $blue;
+        font-size: 1rem;
+        font-weight: 500
+    }
+    .infoicons{
+        font-weight: 500;
+    }
+}

@@ -88,7 +88,7 @@ export default {
     return {
       currentUser: firebase.auth().currentUser,
       uid: null,
-      profilepicurl: '/static/img/user.93a57c9.png',
+      profilepicurl: '../static/img/user.png',
     }
   },
   created(){

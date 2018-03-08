@@ -13,6 +13,9 @@ body {
       vertical-align: middle;
       height: 48px
     }
+    .spinner-red,.spinner-red-only{
+      border-color: $red;
+    }
     #load{
       height: 100vh;
       position: relative;

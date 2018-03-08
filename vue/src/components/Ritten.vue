@@ -19,7 +19,7 @@
     </div>
     <div v-show="loaded">
       <h2 class="pagetitle center">{{ msg }}</h2>
-      <full-calendar @changeMonth="changeMonth" @eventClick="eventClick" :events="fcEvents" :config="config" class="rittencalender"></full-calendar>
+      <full-calendar  :editable="true" firstDay=1 locale="fr" @changeMonth="changeMonth" @eventClick="eventClick" :events="fcEvents" class="rittencalender"></full-calendar>
     </div>
   </div>
 </template>
@@ -33,7 +33,6 @@ import { alldata } from '../assets/js/firebase'
 import { actief } from '../assets/js/firebase'
 import { db } from '../assets/js/firebase'
 Vue.component('full-calendar', fullCalendar)
-var helpers = require('../assets/js/helpers')
 
 export default {
   name: 'Ritten',
@@ -42,13 +41,11 @@ export default {
       msg: 'Ritten',
       loaded: false,
       logs: {},
-      config: {
-        locale: 'fr'
-      },
       fcEvents : [
       ]
     }
   },
+  
   created (){
     this.ritten();
   },
@@ -57,7 +54,7 @@ export default {
       let vandaag = new Date();
       let all = db.ref(this.$parent.currentUser.uid)  
       let self = this
-      all.child(vandaag.getFullYear()).child(vandaag.getMonth()+1).on('value', (snapshot) => {
+      all.child(vandaag.getFullYear()).child(vandaag.getMonth()+1).once('value', (snapshot) => {
         let data = snapshot.val()
         self.logs = data
         for (var key in self.logs) {
@@ -66,7 +63,7 @@ export default {
             let jaar = vandaag.getFullYear()
             let ritdate = jaar + '-' + maand + '-' + key
             let ritobject = {
-              title : subkey.substring(0,5),
+              title : subkey,
               start : ritdate,
               cssClass  : 'autoritevent',
             }
@@ -77,7 +74,8 @@ export default {
       })
     },
     eventClick: function(event, jsEvent, pos) {
-        console.log('eventClick', event, jsEvent, pos)
+        let path = '/Ritten/' + event.start + '/' + event.title
+        this.$router.push(path)
     },
     changeMonth: function(start, end, current){
       console.log('changeMonth', start, end, current)

@@ -7,6 +7,8 @@ import Activeer from '@/components/Activeer'
 import Rapporten from '@/components/Rapporten'
 import Ritten from '@/components/Ritten'
 import Over from '@/components/Over'
+import Detail from '@/components/Detail'
+import Detaillist from '@/components/Detaillist'
 import Notfound from '@/components/404'
 import Account from '@/components/Account'
 import Disclaimer from '@/components/Disclaimer'
@@ -72,6 +74,22 @@ let router = new Router({
       path: '/Home',
       name: 'Home',
       component: Home,
+    },
+    {
+      path: '/Ritten/:datum',
+      name: 'Detaillist',
+      component: Detaillist,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/Ritten/:datum/:tijd',
+      name: 'Detail',
+      component: Detail,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
        path: '/*',
