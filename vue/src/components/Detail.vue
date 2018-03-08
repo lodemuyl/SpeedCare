@@ -27,7 +27,7 @@
                     <p class="subtitle">Info</p>
                     <div class="row">
                         <div class="col s12 m6 l6">
-                            <div><i class="material-icons rood infoicons">date_range</i><p class="inlineinfo">Datum</p></div>
+                            <div><i class="material-icons rood infoicons">date_range</i><p class="inlineinfo">{{ datum | datumnederlands }}</p></div>
                             <div><i class="material-icons rood infoicons">access_time</i><p class="inlineinfo">7 uur tot 8 uur</p></div>
                             <div><i class="material-icons rood infoicons">account_circle</i><p class="inlineinfo">lode muylaert</p></div>
                         </div>
@@ -43,7 +43,8 @@
                                 <li v-for="overtreding in violationslist">
                                     <div class="collapsible-header">
                                     <img class ="maxspeedsign" :src="overtreding.url">
-                                    {{ overtreding.lat }}
+                                    <span class="overtredingstijd">{{ overtreding.tijd }}</span>
+                                    {{ overtreding.lat }}                                    
                                     <span class="new badge red">{{ overtreding.werkelijkesnelheid }} km/u</span></div>                                    
                                 </li>
                             </ul>
@@ -64,6 +65,8 @@
 import { alldata } from '../assets/js/firebase'
 import { actief } from '../assets/js/firebase'
 import { db } from '../assets/js/firebase' 
+import moment from 'moment'
+import 'moment/locale/nl';
 export default {
   name: 'Detail',
   data () {
@@ -133,13 +136,15 @@ export default {
             let jaar = ritdate.getFullYear();
             let maand = ritdate.getMonth()+1;
             let dag = ritdate.getDate();
-            let self = this
+            let self = this;
             let violation = {};
+            let data = {};
             all.child(jaar).child(maand).child(dag).child(tijd).once('value', (snapshot) => {
                 snapshot.forEach(function(childSnapshot) { 
                     let key = childSnapshot.key;  
                     let childData = childSnapshot.val();
                     let childData2 = Object.values(childData)[0];
+
                     if(childData2['snelheid'] > childData2['maxsnelheid']){
                         violation[key] = {
                             'werkelijkesnelheid': childData2['snelheid'],
@@ -147,6 +152,7 @@ export default {
                             'url': '../static/img/maxspeed/' + childData2['maxsnelheid'] + '.png',
                             'lat': childData2['lat'],
                             'lon': childData2['lon'],
+                            'tijd': key,
                             'tesnel': childData2['snelheid'] - Number(childData2['maxsnelheid'])
                         }                        
                     }
@@ -160,6 +166,18 @@ export default {
             })
           }else{
             this.$router.push('/Ritten')                  
+          }
+      },
+      getstreetname: function(){
+
+      }
+  },
+  filters: {
+    datumnederlands: function(datum){
+          if(datum){              
+            return moment(datum).locale('nl').format('LL')
+          }else{
+              return false
           }
       }
   }

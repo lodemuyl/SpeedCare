@@ -34,6 +34,15 @@
 
 
     }
+    .overtredingstijd{
+        color: white;
+        font-size: 0.8rem;
+        margin-right: 10px;
+        background-color: $grey;
+        padding: 4px;
+        font-weight: 500;
+        border-radius: 2px;
+    }
     span.badge.new:after {
         content: "";
     }

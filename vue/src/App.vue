@@ -5,11 +5,11 @@
           <router-link to="home" class="brand-logo center"><img class="navlogo" src="./assets/images/logo1.png" alt="SpeedCare"></router-link>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li v-show="!currentUser"><router-link to="Login"><i class="material-icons left">input</i>Login</router-link></li>
-            <li v-show="!currentUser"><router-link to="Activeer"><i class="material-icons left">loupe</i>Activeren</router-link></li>
-            <li v-show="currentUser"><router-link to="Ritten"><i class="material-icons left">view_list</i>Ritten</router-link></li>
-            <li v-show="currentUser"><router-link to="Rapporten"><i class="material-icons left">show_chart</i>Rapporten</router-link></li>
-            <li v-show="currentUser"><router-link to="Account"><i class="material-icons left">person_pin</i>Account</router-link></li>
+            <li v-show="!currentUser"><router-link to="/Login"><i class="material-icons left">input</i>Login</router-link></li>
+            <li v-show="!currentUser"><router-link to="/Activeer"><i class="material-icons left">loupe</i>Activeren</router-link></li>
+            <li v-show="currentUser"><router-link to="/Ritten"><i class="material-icons left">view_list</i>Ritten</router-link></li>
+            <li v-show="currentUser"><router-link to="/Rapporten"><i class="material-icons left">show_chart</i>Rapporten</router-link></li>
+            <li v-show="currentUser"><router-link to="/Account"><i class="material-icons left">person_pin</i>Account</router-link></li>
             <li v-show="currentUser" v-on:click="logout"><a><i class="material-icons left">power_settings_new</i>Logout</a></li>
           </ul>
           <ul id="mobile-demo" class="sidenav">
@@ -17,17 +17,17 @@
               <div class="background">
                 <img src="./assets/images/sidenav.png">
               </div>
-              <router-link to="Account" v-if="currentUser"><img class="circle" :src="profilepicurl"></router-link>
-              <router-link to="Account" v-if="currentUser"><span class="name">{{ currentUser.displayName }}</span></router-link>
-              <router-link to="Account" v-if="currentUser"><span class="email">{{ currentUser.email }}</span></router-link>
+              <router-link to="/Account" v-if="currentUser"><img class="circle" :src="profilepicurl"></router-link>
+              <router-link to="/Account" v-if="currentUser"><span class="name">{{ currentUser.displayName }}</span></router-link>
+              <router-link to="/Account" v-if="currentUser"><span class="email">{{ currentUser.email }}</span></router-link>
             </div></li>
-            <li v-show="!currentUser" v-on:click="close"><router-link to="Login"><i class="material-icons">input</i>Login</router-link></li>
-            <li v-show="!currentUser" v-on:click="close"><router-link to="Activeer"><i class="material-icons">loupe</i>Activeren</router-link></li>
-            <li v-show="currentUser" v-on:click="close"><router-link to="Ritten"><i class="material-icons">view_list</i>Ritten</router-link></li>
-            <li v-show="currentUser" v-on:click="close"><router-link to="Rapporten"><i class="material-icons">show_chart</i>Rapporten</router-link></li>
+            <li v-show="!currentUser" v-on:click="close"><router-link to="/Login"><i class="material-icons">input</i>Login</router-link></li>
+            <li v-show="!currentUser" v-on:click="close"><router-link to="/Activeer"><i class="material-icons">loupe</i>Activeren</router-link></li>
+            <li v-show="currentUser" v-on:click="close"><router-link to="/Ritten"><i class="material-icons">view_list</i>Ritten</router-link></li>
+            <li v-show="currentUser" v-on:click="close"><router-link to="/Rapporten"><i class="material-icons">show_chart</i>Rapporten</router-link></li>
             <li v-show="currentUser"><div class="divider"></div></li>
             <li v-show="currentUser"><a class="subheader">Account</a></li>
-            <li v-show="currentUser" v-on:click="close"><router-link to="Account"><i class="material-icons">person_pin</i>Mijn account</router-link></li>
+            <li v-show="currentUser" v-on:click="close"><router-link to="/Account"><i class="material-icons">person_pin</i>Mijn account</router-link></li>
             <li v-show="currentUser" v-on:click="logout"><a><i class="material-icons">power_settings_new</i>Logout</a></li>
           </ul>
         </div>
