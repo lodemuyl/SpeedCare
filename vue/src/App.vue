@@ -74,11 +74,6 @@
 import firebase from 'firebase';
 import { db } from './assets/js/firebase'
 import moment from 'moment'
-//eigen naamgeving voor rittencalender
-moment.locale('nl', {
-  months: 'Januari_Februari_Maart_April_Mei_Juni_Juli_Augustus_September_November_December',
-  weekdaysShort: 'Maandag_Dinsdag_Woensdag_Donderdag_Vrijdag_Zaterdag_Zondag'
-})
 var elem;
 var instance;
 
@@ -89,12 +84,10 @@ export default {
       currentUser: firebase.auth().currentUser,
       uid: null,
       profilepicurl: '../static/img/user.png',
+      mapsapikey: 'AIzaSyCjDB7jB1CqPueuUcUPXj1LBxMmob3iF1M'
     }
   },
   created(){
-    //db.ref(this.currentUser.uid).once("value").then((e)=>{
-    //  console.log(e.val())      
-    //})
   },
   mounted: function(){
     this.$nextTick(function(){

@@ -17,6 +17,21 @@
         height: 250px;
         padding: 50px 0px
     }
+    .editbuttoninline{
+        :hover{
+            cursor: pointer!important;
+        }
+        display: inline-block;
+        a{
+            i{
+             font-size: 1.8rem;
+            };           
+            color: $red;
+        }
+    }
+    .modal{
+        height: 220px;
+    }
     .editbutton{        
         top: 50px;
         left: calc(50% + 37.5px);

@@ -11,6 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "chartjs": "^0.3.24",
     "firebase": "^4.9.0",
     "font-awesome": "^4.7.0",

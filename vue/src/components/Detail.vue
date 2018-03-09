@@ -28,12 +28,12 @@
                     <div class="row">
                         <div class="col s12 m6 l6">
                             <div><i class="material-icons rood infoicons">date_range</i><p class="inlineinfo">{{ datum | datumnederlands }}</p></div>
-                            <div><i class="material-icons rood infoicons">access_time</i><p class="inlineinfo">7 uur tot 8 uur</p></div>
-                            <div><i class="material-icons rood infoicons">account_circle</i><p class="inlineinfo">lode muylaert</p></div>
+                            <div><i class="material-icons rood infoicons">access_time</i><p class="inlineinfo">{{ start }} - {{ end }}</p></div>
+                            <div><i class="material-icons rood infoicons">account_circle</i><p class="inlineinfo">{{ user }}</p></div>
                         </div>
                         <div class="col s12 m6 l6">
-                            <div><i class="material-icons rood infoicons">timer</i><p class="inlineinfo">duuur vd rit</p></div>
-                            <div><i class="material-icons rood infoicons">directions_car</i><p class="inlineinfo">maxspeed</p></div>
+                            <div><i class="material-icons rood infoicons">timer</i><p class="inlineinfo">{{ duur }}</p></div>
+                            <div><i class="material-icons rood infoicons">directions_car</i><p class="inlineinfo">{{ highestspeed }} km/u</p></div>
                         </div>
                     </div>
                     <p class="subtitle">Overtredingen</p>
@@ -44,7 +44,7 @@
                                     <div class="collapsible-header">
                                     <img class ="maxspeedsign" :src="overtreding.url">
                                     <span class="overtredingstijd">{{ overtreding.tijd }}</span>
-                                    {{ overtreding.lat }}                                    
+                                    {{ overtreding.address }}                                    
                                     <span class="new badge red">{{ overtreding.werkelijkesnelheid }} km/u</span></div>                                    
                                 </li>
                             </ul>
@@ -53,6 +53,13 @@
                             <p>U hebt geenovertredingen begaan op deze rit</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div v-show="errormessage" class="container">
+            <div class="col s12 m12 l12">
+                <div class="card-panel roodbackground ">
+                    <span class="grijs">{{errormessage}}</span>
                 </div>
             </div>
         </div>
@@ -65,6 +72,7 @@
 import { alldata } from '../assets/js/firebase'
 import { actief } from '../assets/js/firebase'
 import { db } from '../assets/js/firebase' 
+import axios from 'axios'
 import moment from 'moment'
 import 'moment/locale/nl';
 export default {
@@ -73,10 +81,16 @@ export default {
     return {
       msg: 'Overzicht Detail',
       loaded: false,
+      user: this.$parent.currentUser.displayName,
       logs: {},
+      start: null,
+      duur: null,
+      end: null,
+      highestspeed: 0,
       violationslist: {},
       datum: this.$route.params.datum,
-      tijd: this.$route.params.tijd
+      tijd: this.$route.params.tijd,
+      errormessage: null,
     }
   },
   created(){
@@ -113,7 +127,7 @@ export default {
       },
       getdata: function(datum, tijd){
         if(datum && tijd){
-            let all = db.ref(this.$parent.currentUser.uid)  
+            let all = db.ref(this.$parent.currentUser.uid)
             let ritdate = new Date(datum)
             let jaar = ritdate.getFullYear();
             let maand = ritdate.getMonth()+1;
@@ -144,7 +158,14 @@ export default {
                     let key = childSnapshot.key;  
                     let childData = childSnapshot.val();
                     let childData2 = Object.values(childData)[0];
-
+                    (childData2['snelheid'] > self.highestspeed) ? (self.highestspeed = childData2['snelheid']) : false;
+                    data[key] = {
+                        'lat': childData2['lat'],
+                        'lon': childData2['lon'],
+                        'maxsnelheid': childData2['maxsnelheid'],
+                        'werkelijkesnelheid': childData2['snelheid'],
+                        'signaal': childData2['signaal']
+                    };
                     if(childData2['snelheid'] > childData2['maxsnelheid']){
                         violation[key] = {
                             'werkelijkesnelheid': childData2['snelheid'],
@@ -153,14 +174,28 @@ export default {
                             'lat': childData2['lat'],
                             'lon': childData2['lon'],
                             'tijd': key,
+                            'address': self.getstreetname(Number(childData2['lat']), Number(childData2['lon'])),
                             'tesnel': childData2['snelheid'] - Number(childData2['maxsnelheid'])
-                        }                        
+                        };
                     }
                 });
                 if(Object.keys(violation).length === 0){
                     self.violationslist = null;
                 }else{
-                    self.violationslist = violation;
+                    self.violationslist = violation;                    
+                }
+                if(Object.keys(data).length === 0){
+                    self.logs = null;
+                }else{
+                    self.logs = data;
+                    self.start = Object.keys(data)[0]
+                    self.end = Object.keys(data)[Object.keys(data).length - 1]
+                    let start = new Date("01/01/2010 " + self.start);
+                    let end = new Date("01/01/2010 " + self.end);
+                    let difference = end - start;
+                    let diff_result = new Date(difference);
+                    diff_result.setHours(diff_result.getHours()-1);
+                    self.duur =  moment(diff_result).locale('nl').format('LTS')
                 }
                 this.loaded = true
             })
@@ -168,12 +203,29 @@ export default {
             this.$router.push('/Ritten')                  
           }
       },
-      getstreetname: function(){
-
+      getstreetname: function(lat, lon){  
+            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?`, {
+                params: {
+                    key: this.$parent.mapsapikey,
+                    latlng: lat + ',' + lon
+                }       
+            })
+            .then((val) => {
+                if(val.data.status === "OK"){
+                    console.log(val.data.results[0]['formatted_address'])
+                    return val.data.results[0]['formatted_address']
+                }else{
+                    this.errormessage = val.data.status;
+                    return false
+                }
+                console.log(val.data.status)
+            }).catch(e => {
+                this.errormessage = e.message
+            })         
       }
   },
   filters: {
-    datumnederlands: function(datum){
+  datumnederlands: function(datum){
           if(datum){              
             return moment(datum).locale('nl').format('LL')
           }else{
