@@ -21,6 +21,17 @@
         <h2 class="pagetitle center">{{ msg }}</h2>
         <div class="pannel">
             <div class="leftside">
+                <gmap-map :center="center" :zoom="14" map-type-id="terrain"  style="width: 100%; height: 100%">
+                    <gmap-polyline class="polyline"
+                        :path="coords" 
+                        :editable="true"
+                        :dragable ="false"
+                        key="lode"
+                        :options="{strokeColor: 'blue'}" 
+                        @click="polylinepointclick($event)"                       
+                        ref="polygon">
+                    </gmap-polyline>
+                </gmap-map>
             </div>
             <div class="rightside">
                 <div class="container">
@@ -44,7 +55,7 @@
                                     <div class="collapsible-header">
                                     <img class ="maxspeedsign" :src="overtreding.url">
                                     <span class="overtredingstijd">{{ overtreding.tijd }}</span>
-                                    {{ overtreding.address }}                                    
+                                    <div v-bind:content="'lode'"></div>                                    
                                     <span class="new badge red">{{ overtreding.werkelijkesnelheid }} km/u</span></div>                                    
                                 </li>
                             </ul>
@@ -72,15 +83,28 @@
 import { alldata } from '../assets/js/firebase'
 import { actief } from '../assets/js/firebase'
 import { db } from '../assets/js/firebase' 
+import Vue from 'vue'
 import axios from 'axios'
 import moment from 'moment'
+import * as VueGoogleMaps from 'vue2-google-maps'
 import 'moment/locale/nl';
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyBRG_RCT37qOM0FoRvX-CZWEH0pu6DzWpk',
+    libraries:'geometry',
+    language: 'nl'
+  }
+})
 export default {
   name: 'Detail',
   data () {
     return {
       msg: 'Overzicht Detail',
       loaded: false,
+      center: {
+          "lat": 10,
+          "lng": 10
+      },
       user: this.$parent.currentUser.displayName,
       logs: {},
       start: null,
@@ -91,6 +115,7 @@ export default {
       datum: this.$route.params.datum,
       tijd: this.$route.params.tijd,
       errormessage: null,
+      coords: []
     }
   },
   created(){
@@ -125,24 +150,6 @@ export default {
 
 
       },
-      getdata: function(datum, tijd){
-        if(datum && tijd){
-            let all = db.ref(this.$parent.currentUser.uid)
-            let ritdate = new Date(datum)
-            let jaar = ritdate.getFullYear();
-            let maand = ritdate.getMonth()+1;
-            let dag = ritdate.getDate();
-            let self = this
-            all.child(jaar).child(maand).child(dag).child(tijd).once('value', (snapshot) => {
-                let data = snapshot.val()
-                self.logs = data
-                if(!data){
-                    this.$router.push('/Ritten')
-                }
-                this.loaded = true
-            })
-        }
-      },
       violations: function(datum, tijd){
           if(datum && tijd){
             let all = db.ref(this.$parent.currentUser.uid)  
@@ -152,38 +159,47 @@ export default {
             let dag = ritdate.getDate();
             let self = this;
             let violation = {};
+            let keys = [];
             let data = {};
             all.child(jaar).child(maand).child(dag).child(tijd).once('value', (snapshot) => {
                 snapshot.forEach(function(childSnapshot) { 
                     let key = childSnapshot.key;  
                     let childData = childSnapshot.val();
                     let childData2 = Object.values(childData)[0];
-                    (childData2['snelheid'] > self.highestspeed) ? (self.highestspeed = childData2['snelheid']) : false;
+                    (childData2['snelheid'] > self.highestspeed) ? (self.highestspeed = Number(childData2['snelheid']).toFixed(2)) : false;
+                    //elke log wegschrijven
                     data[key] = {
                         'lat': childData2['lat'],
                         'lon': childData2['lon'],
                         'maxsnelheid': childData2['maxsnelheid'],
                         'werkelijkesnelheid': childData2['snelheid'],
                         'signaal': childData2['signaal']
-                    };
+                    }                    
+                    //array vullen voor een lijst van alle tijdspunten voor zo het center te bepalen
+                    keys.push(key);
+                    //lat en long wegschrijven naar de coords array voor de route op de map weer te geven
+                    let coords = {
+                        'lat': Number(childData2['lat']),
+                        'lng': Number(childData2['lon'])
+                    }
+                    self.coords.push(coords)
                     if(childData2['snelheid'] > childData2['maxsnelheid']){
-                        violation[key] = {
-                            'werkelijkesnelheid': childData2['snelheid'],
+                        let tesnel = Number(childData2['snelheid']) - Number(childData2['maxsnelheid']);
+                        //violation logs
+                        let violationdata = {
+                            'werkelijkesnelheid': Number(childData2['snelheid']).toFixed(2),
                             'maximumsnelheid': childData2['maxsnelheid'],
                             'url': '../static/img/maxspeed/' + childData2['maxsnelheid'] + '.png',
                             'lat': childData2['lat'],
                             'lon': childData2['lon'],
                             'tijd': key,
-                            'address': self.getstreetname(Number(childData2['lat']), Number(childData2['lon'])),
-                            'tesnel': childData2['snelheid'] - Number(childData2['maxsnelheid'])
+                            'tesnel':  tesnel.toFixed(2)
                         };
-                    }
+                        Vue.set(self.violationslist, key, violationdata)
+                        self.getstreetname(Number(childData2['lat']), Number(childData2['lon']), key, violationdata )
+                    }                   
+
                 });
-                if(Object.keys(violation).length === 0){
-                    self.violationslist = null;
-                }else{
-                    self.violationslist = violation;                    
-                }
                 if(Object.keys(data).length === 0){
                     self.logs = null;
                 }else{
@@ -196,6 +212,7 @@ export default {
                     let diff_result = new Date(difference);
                     diff_result.setHours(diff_result.getHours()-1);
                     self.duur =  moment(diff_result).locale('nl').format('LTS')
+                    this.getcenter(data, keys);
                 }
                 this.loaded = true
             })
@@ -203,7 +220,7 @@ export default {
             this.$router.push('/Ritten')                  
           }
       },
-      getstreetname: function(lat, lon){  
+      getstreetname: function(lat, lon, key, violationdata){  
             axios.get(`https://maps.googleapis.com/maps/api/geocode/json?`, {
                 params: {
                     key: this.$parent.mapsapikey,
@@ -211,27 +228,49 @@ export default {
                 }       
             })
             .then((val) => {
+                let data = violationdata
                 if(val.data.status === "OK"){
-                    console.log(val.data.results[0]['formatted_address'])
-                    return val.data.results[0]['formatted_address']
+                    this.violationslist[key]['address'] = val.data.results[0]['formatted_address']
                 }else{
                     this.errormessage = val.data.status;
-                    return false
+                    console.log('kan het adres niet ophalen')
+                    this.violationslist[key]['address'] = 'kon locatie niet ophalen'
                 }
-                console.log(val.data.status)
             }).catch(e => {
                 this.errormessage = e.message
             })         
+      },
+      getcenter: function(data, keys){
+        let centernumber = 0
+        if(Object.keys(data).length == 1){
+            centernumber = 0
+        }else if(Object.keys(data).length % 2 == 0){
+            centernumber = (Object.keys(data).length / 2)-1
+        }else if(Object.keys(data).length % 2 != 0){
+            centernumber = Math.round((Object.keys(data).length / 2)-1)
+        }
+        let key = keys[centernumber]
+        let centerobjectkey = data[key]
+        let lat = parseFloat(centerobjectkey['lat'])
+        let lng = parseFloat(centerobjectkey['lon'])
+        this.center['lat'] = lat
+        this.center['lng'] = lng
+      },
+      polylinepointclick: function(event){
+          let lat = event['latLng'].lat();
+          let lng = event['latLng'].lng();
+          let key = lat + '-' + lng
+          console.log(key)
       }
   },
   filters: {
-  datumnederlands: function(datum){
-          if(datum){              
-            return moment(datum).locale('nl').format('LL')
-          }else{
-              return false
-          }
-      }
+    datumnederlands: function(datum){
+            if(datum){              
+                return moment(datum).locale('nl').format('LL')
+            }else{
+                return false
+            }
+        }
   }
 }
 </script>

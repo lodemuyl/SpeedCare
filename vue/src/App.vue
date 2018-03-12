@@ -2,7 +2,7 @@
   <div id="app">
       <nav class="blauwbackground">
         <div class="nav-wrapper">
-          <router-link to="home" class="brand-logo center"><img class="navlogo" src="./assets/images/logo1.png" alt="SpeedCare"></router-link>
+          <router-link to="/home" class="brand-logo center"><img class="navlogo" src="./assets/images/logo1.png" alt="SpeedCare"></router-link>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li v-show="!currentUser"><router-link to="/Login"><i class="material-icons left">input</i>Login</router-link></li>
@@ -84,7 +84,7 @@ export default {
       currentUser: firebase.auth().currentUser,
       uid: null,
       profilepicurl: '../static/img/user.png',
-      mapsapikey: 'AIzaSyCjDB7jB1CqPueuUcUPXj1LBxMmob3iF1M'
+      mapsapikey: 'AIzaSyCjDB7jB1CqPueuUcUPXj1LBxMmob3iF1M',
     }
   },
   created(){
