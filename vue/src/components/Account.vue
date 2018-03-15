@@ -85,7 +85,7 @@
                 </div>
                 <div class="modal-footer">
                   <a v-on:click="modalchange(modalname)" class="modal-action modal-close waves-effect waves-green btn-flat ">Opslaan</a>
-                  <a v-on:click="modalchange()" class="modal-action modal-close waves-effect waves-green btn-flat ">Annuleren</a>
+                  <a v-on:click="modalchange('annuleer')" class="modal-action modal-close waves-effect waves-green btn-flat ">Annuleren</a>
                 </div>
               </div>
                 <div class="row">
@@ -156,19 +156,20 @@ export default {
       }
     },
     modalchange: function(param){
-      if(!this.modalvalue){
+      if(!param){
         this.errormessage = "Je moet een waarde invoeren"
         this.modalvalue = null;
         this.modalplaceholder = null;
         this.modalname = null;
-      }else if(this.modalvalue){
+      }else if(param){
         if(param === "Naam"){
           this.loaded = false;
           this.changedisplayname(this.modalvalue)
         }else if(param === "Email"){
           this.loaded = false;
           this.changeemail(this.modalvalue)
-        }else{
+        }else if(param === "annuleren"){
+          console.log("annuleren")
           this.modalvalue = null;
           this.modalplaceholder = null;
           this.modalname = null;

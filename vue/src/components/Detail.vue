@@ -21,16 +21,19 @@
         <h2 class="pagetitle center">{{ msg }}</h2>
         <div class="pannel">
             <div class="leftside">
-                <gmap-map :center="center" :zoom="14" map-type-id="terrain"  style="width: 100%; height: 100%">
+                <gmap-map :center="center"  :zoom="14" map-type-id="terrain"  style="width: 100%; height: 100%">
                     <gmap-polyline class="polyline"
                         :path="coords" 
                         :editable="true"
                         :dragable ="false"
-                        key="lode"
-                        :options="{strokeColor: 'blue'}" 
+                        :options="{strokeColor: '#CF2E5E'}" 
                         @click="polylinepointclick($event)"                       
                         ref="polygon">
                     </gmap-polyline>
+                    <info-window :opened="infoWinOpen['open']" :position="infoWinOpen['position']" @closeclick="infoWinOpen['open']=false" class="infowindow"><img :src="infoWinOpen.content.speedim" class="popupspeedim"><span :class="{groen: infoWinOpen.class.groen, rood: infoWinOpen.class.rood}" class="strong">{{ infoWinOpen.content.speed }} </span><span class="strong">km/u</span></info-window>
+                    <gmap-marker :position="startlocation" :icon="icons.start"></gmap-marker>
+                    <gmap-marker :position="endlocation" :icon="icons.stop"></gmap-marker>
+
                 </gmap-map>
             </div>
             <div class="rightside">
@@ -95,19 +98,48 @@ Vue.use(VueGoogleMaps, {
     language: 'nl'
   }
 })
+Vue.component('infoWindow', VueGoogleMaps.InfoWindow)
 export default {
   name: 'Detail',
   data () {
     return {
       msg: 'Overzicht Detail',
       loaded: false,
+      icons: {
+          "start": '/static/img/icons/start.png',
+          "stop": '/static/img/icons/end.png'
+      },
       center: {
           "lat": 10,
           "lng": 10
       },
       user: this.$parent.currentUser.displayName,
       logs: {},
+      startlocation: {
+          "lat": 10,
+          "lng": 10
+      },
+      endlocation: {
+          "lat": 10,
+          "lng": 10
+      },
       start: null,
+      infoWinOpen: {
+          "open": false,
+          "position": {
+              "lat": 50.8928966,
+              "lng": 3.9989016
+          },
+          "content": {
+              "speedim": null,
+              "speed" : null,
+
+          },
+          "class": {
+              "groen": true,
+              "rood": false
+          }
+      },
       duur: null,
       end: null,
       highestspeed: 0,
@@ -167,20 +199,23 @@ export default {
                     let childData = childSnapshot.val();
                     let childData2 = Object.values(childData)[0];
                     (childData2['snelheid'] > self.highestspeed) ? (self.highestspeed = Number(childData2['snelheid']).toFixed(2)) : false;
-                    //elke log wegschrijven
-                    data[key] = {
+                    //elke log wegschrijven in eigen object voor verdere functies 
+                    let datacontent = {
                         'lat': childData2['lat'],
                         'lon': childData2['lon'],
                         'maxsnelheid': childData2['maxsnelheid'],
                         'werkelijkesnelheid': childData2['snelheid'],
-                        'signaal': childData2['signaal']
-                    }                    
+                        'signaal': childData2['signaal'],
+                        'tijd' : key
+                    }
+                    data[key] = datacontent
                     //array vullen voor een lijst van alle tijdspunten voor zo het center te bepalen
                     keys.push(key);
                     //lat en long wegschrijven naar de coords array voor de route op de map weer te geven
                     let coords = {
                         'lat': Number(childData2['lat']),
-                        'lng': Number(childData2['lon'])
+                        'lng': Number(childData2['lon']),
+                        'info': datacontent
                     }
                     self.coords.push(coords)
                     if(childData2['snelheid'] > childData2['maxsnelheid']){
@@ -195,8 +230,10 @@ export default {
                             'tijd': key,
                             'tesnel':  tesnel.toFixed(2)
                         };
+                        //assign van alle overtredingen
                         Vue.set(self.violationslist, key, violationdata)
-                        self.getstreetname(Number(childData2['lat']), Number(childData2['lon']), key, violationdata )
+                        //ophalen van locatie van overtredingen
+                        //self.getstreetname(Number(childData2['lat']), Number(childData2['lon']), key, violationdata )
                     }                   
 
                 });
@@ -204,8 +241,15 @@ export default {
                     self.logs = null;
                 }else{
                     self.logs = data;
+                    //start en stop tijd
                     self.start = Object.keys(data)[0]
                     self.end = Object.keys(data)[Object.keys(data).length - 1]
+                    //start en stop locatie
+                    Vue.set(self.startlocation, "lat", Number(data[self.start]["lat"]))
+                    Vue.set(self.startlocation, "lng", Number(data[self.start]["lon"]))
+                    Vue.set(self.endlocation, "lat", Number(data[self.end]["lat"]))
+                    Vue.set(self.endlocation, "lng", Number(data[self.end]["lon"]))
+                    //verschil in tijdseenheden voor duurpebaling 
                     let start = new Date("01/01/2010 " + self.start);
                     let end = new Date("01/01/2010 " + self.end);
                     let difference = end - start;
@@ -257,10 +301,25 @@ export default {
         this.center['lng'] = lng
       },
       polylinepointclick: function(event){
-          let lat = event['latLng'].lat();
-          let lng = event['latLng'].lng();
-          let key = lat + '-' + lng
-          console.log(key)
+          if(event.vertex){
+            let info = this.coords[event.vertex].info
+            this.infoWinOpen.position.lat = event.latLng.lat()
+            this.infoWinOpen.position.lng = event.latLng.lng()
+            this.infoWinOpen.content.speed = Number(info.werkelijkesnelheid).toFixed(2)
+            this.infoWinOpen.content.speedim = './static/img/maxspeed/' + info.maxsnelheid + '.png'
+            if(Number(info.maxsnelheid) >= info.werkelijkesnelheid){
+                this.infoWinOpen.class.groen = true
+                this.infoWinOpen.class.rood = false
+             }else{
+                this.infoWinOpen.class.groen = false
+                this.infoWinOpen.class.rood = true
+             }
+            this.infoWinOpen.open = true
+            console.log(info)
+          }else{
+              this.infoWinOpen.open = false
+              console.log("tussenliggend punt")
+          }
       }
   },
   filters: {
