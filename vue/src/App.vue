@@ -108,7 +108,7 @@ export default {
       firebase.auth().signOut().then(() => {
         this.close()
         M.toast({html: "Je bent uitgelogd", displayLength:6000,classes:"groenbackground"})
-        this.$router.replace('Home')
+        this.$router.replace('/Home')
       })      
     }
   }

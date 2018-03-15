@@ -41,7 +41,17 @@
     .gm-style-iw{
         color: $grey;
     }
-    
+    .violationclick{
+        :hover{
+            cursor: pointer!important;
+        }
+    }
+    .switch label input[type=checkbox]:checked+.lever:after {
+        background-color: $red !important;
+    }
+    .switch label input[type=checkbox]:checked+.lever {
+        background-color: $red !important;
+    }
     .overtredingstijd{
         color: white;
         font-size: 0.8rem;
@@ -50,12 +60,20 @@
         padding: 4px;
         font-weight: 500;
         border-radius: 2px;
+        height: 22px;
+        white-space: nowrap;
     }
     span.badge.new:after {
         content: "";
     }
+    .badge{
+        white-space: nowrap;
+    }
+    .paxspeedtext{
+        margin-right: 10px;
+    }
     .collapsible{
-        height: 300px;
+        height: 30vh;
         overflow: auto;
         border: 0px;
         box-shadow: 0px 0px 0px;

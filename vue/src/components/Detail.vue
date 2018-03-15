@@ -18,13 +18,13 @@
       </div>
     </div>
     <div v-show="loaded">
-        <h2 class="pagetitle center">{{ msg }}</h2>
+        <h2 class="pagetitle center">{{ datum | datumnederlands }}</h2>
         <div class="pannel">
             <div class="leftside">
                 <gmap-map :center="center"  :zoom="14" map-type-id="terrain"  style="width: 100%; height: 100%">
                     <gmap-polyline class="polyline"
                         :path="coords" 
-                        :editable="true"
+                        :editable="routedetail"
                         :dragable ="false"
                         :options="{strokeColor: '#CF2E5E'}" 
                         @click="polylinepointclick($event)"                       
@@ -50,20 +50,36 @@
                             <div><i class="material-icons rood infoicons">directions_car</i><p class="inlineinfo">{{ highestspeed }} km/u</p></div>
                         </div>
                     </div>
+                    <p class="subtitle">Bekijk gedetailleerde route</p>
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <div class="switch">
+                                <label>
+                                <span class="wit">Af</span>
+                                <input type="checkbox" v-model="routedetail">
+                                <span class="lever"></span>
+                                <span class="wit">Aan</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     <p class="subtitle">Overtredingen</p>
                     <div class="row">
-                        <div v-show="violationslist">                        
+                        <div v-show="violationslist.length ">                        
                             <ul class="collapsible">
-                                <li v-for="overtreding in violationslist">
-                                    <div class="collapsible-header">
-                                    <img class ="maxspeedsign" :src="overtreding.url">
-                                    <span class="overtredingstijd">{{ overtreding.tijd }}</span>
-                                    <div v-bind:content="'lode'"></div>                                    
-                                    <span class="new badge red">{{ overtreding.werkelijkesnelheid }} km/u</span></div>                                    
+                                <li v-for="overtreding in uniqueviolations">
+                                   <a v-on:click="showviolationdetail" class="violationclick" :speed="overtreding.werkelijkesnelheid" :max="overtreding.maximumsnelheid" :lat="overtreding.lat" :lng="overtreding.lon">
+                                        <div class="collapsible-header">
+                                            <img class ="maxspeedsign" :src="overtreding.url">
+                                            <span class="overtredingstijd">{{ overtreding.tijd }}</span>
+                                            <div class="paxspeedtext">{{overtreding.address}}</div>                                    
+                                            <span class="new badge red">{{ overtreding.werkelijkesnelheid }} km/u</span>
+                                        </div>   
+                                    </a> 
                                 </li>
                             </ul>
                         </div>
-                        <div v-show="!violationslist">
+                        <div v-show="!violationslist.length">
                             <p>U hebt geenovertredingen begaan op deze rit</p>
                         </div>
                     </div>
@@ -88,6 +104,7 @@ import { actief } from '../assets/js/firebase'
 import { db } from '../assets/js/firebase' 
 import Vue from 'vue'
 import axios from 'axios'
+import uniq from 'lodash/uniq'
 import moment from 'moment'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import 'moment/locale/nl';
@@ -103,8 +120,8 @@ export default {
   name: 'Detail',
   data () {
     return {
-      msg: 'Overzicht Detail',
       loaded: false,
+      routedetail: false,
       icons: {
           "start": '/static/img/icons/start.png',
           "stop": '/static/img/icons/end.png'
@@ -143,7 +160,7 @@ export default {
       duur: null,
       end: null,
       highestspeed: 0,
-      violationslist: {},
+      violationslist: [],
       datum: this.$route.params.datum,
       tijd: this.$route.params.tijd,
       errormessage: null,
@@ -157,6 +174,26 @@ export default {
     }else{
         this.$router.push('/Ritten')
     }  
+  },
+  computed: {
+    //overtredingsduplicaten verwijderen en hoogste snelheid loggen
+    uniqueviolations: function() {
+    let filter = [];
+    let list = [];
+        for(var i =0; i < this.violationslist.length; i++) {
+            if(filter.indexOf(this.violationslist[i].address) === -1) {
+                filter.push(this.violationslist[i].address)
+                list.push(this.violationslist[i])
+            }else{
+                let index = filter.indexOf(this.violationslist[i].address)
+                if(list[index].tesnel < this.violationslist[i].tesnel){
+                    list.splice(index,1)
+                    list.push(this.violationslist[i])
+                }
+            }
+        }
+        return list;
+    }
   },
   methods: {
       checkparam: function(datum, tijd){
@@ -190,7 +227,6 @@ export default {
             let maand = ritdate.getMonth()+1;
             let dag = ritdate.getDate();
             let self = this;
-            let violation = {};
             let keys = [];
             let data = {};
             all.child(jaar).child(maand).child(dag).child(tijd).once('value', (snapshot) => {
@@ -228,12 +264,13 @@ export default {
                             'lat': childData2['lat'],
                             'lon': childData2['lon'],
                             'tijd': key,
-                            'tesnel':  tesnel.toFixed(2)
+                            'tesnel':  tesnel.toFixed(2),
+                            'address': 'geen adres'
                         };
                         //assign van alle overtredingen
-                        Vue.set(self.violationslist, key, violationdata)
+                        self.violationslist.push(violationdata)                  
                         //ophalen van locatie van overtredingen
-                        //self.getstreetname(Number(childData2['lat']), Number(childData2['lon']), key, violationdata )
+                        self.getstreetname(Number(childData2['lat']), Number(childData2['lon']), self.violationslist.length)
                     }                   
 
                 });
@@ -264,7 +301,7 @@ export default {
             this.$router.push('/Ritten')                  
           }
       },
-      getstreetname: function(lat, lon, key, violationdata){  
+      getstreetname: function(lat, lon, lengte){  
             axios.get(`https://maps.googleapis.com/maps/api/geocode/json?`, {
                 params: {
                     key: this.$parent.mapsapikey,
@@ -272,13 +309,12 @@ export default {
                 }       
             })
             .then((val) => {
-                let data = violationdata
                 if(val.data.status === "OK"){
-                    this.violationslist[key]['address'] = val.data.results[0]['formatted_address']
+                    this.violationslist[lengte-1]['address'] = val.data.results[0]['formatted_address']
                 }else{
                     this.errormessage = val.data.status;
                     console.log('kan het adres niet ophalen')
-                    this.violationslist[key]['address'] = 'kon locatie niet ophalen'
+                    this.violationslist[lengte-1]['address'] = 'kon locatie niet ophalen'
                 }
             }).catch(e => {
                 this.errormessage = e.message
@@ -315,15 +351,32 @@ export default {
                 this.infoWinOpen.class.rood = true
              }
             this.infoWinOpen.open = true
-            console.log(info)
           }else{
               this.infoWinOpen.open = false
               console.log("tussenliggend punt")
           }
+      },
+      showviolationdetail: function(event){
+        let lat = Number(event.currentTarget.attributes['lat'].value)
+        let lng = Number(event.currentTarget.attributes['lng'].value)
+        let max = event.currentTarget.attributes['max'].value
+        let werkelijkesnelheid = event.currentTarget.attributes['speed'].value
+        this.infoWinOpen.position.lat = lat
+        this.infoWinOpen.position.lng = lng
+        this.infoWinOpen.content.speed = Number(werkelijkesnelheid).toFixed(2)
+        this.infoWinOpen.content.speedim = './static/img/maxspeed/' + max + '.png'
+        if(Number(max) >= werkelijkesnelheid){
+            this.infoWinOpen.class.groen = true
+            this.infoWinOpen.class.rood = false
+        }else{
+            this.infoWinOpen.class.groen = false
+            this.infoWinOpen.class.rood = true
+        }
+        this.infoWinOpen.open = true
       }
   },
   filters: {
-    datumnederlands: function(datum){
+      datumnederlands: function(datum){
             if(datum){              
                 return moment(datum).locale('nl').format('LL')
             }else{

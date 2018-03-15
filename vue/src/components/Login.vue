@@ -79,8 +79,8 @@ export default {
             }
         ).then(()=>{
           this.loaded = true;
-          this.$router.push('Account') 
-          this.$forceUpdate()
+          this.$router.push('/Account') 
+          location.reload()
         })
     }
   }
