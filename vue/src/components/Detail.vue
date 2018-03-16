@@ -48,6 +48,7 @@
                         <div class="col s12 m6 l6">
                             <div><i class="material-icons rood infoicons">timer</i><p class="inlineinfo">{{ duur }}</p></div>
                             <div><i class="material-icons rood infoicons">directions_car</i><p class="inlineinfo">{{ highestspeed }} km/u</p></div>
+                            <div><i class="material-icons rood infoicons">assessment</i><p class="inlineinfo">{{ score }} / 100</p></div>
                         </div>
                     </div>
                     <p class="subtitle">Bekijk gedetailleerde route</p>
@@ -122,6 +123,7 @@ export default {
     return {
       loaded: false,
       routedetail: false,
+      firebaseref: db.ref(this.$parent.currentUser.uid),
       icons: {
           "start": '/static/img/icons/start.png',
           "stop": '/static/img/icons/end.png'
@@ -161,6 +163,7 @@ export default {
       end: null,
       highestspeed: 0,
       violationslist: [],
+      score: 0,
       datum: this.$route.params.datum,
       tijd: this.$route.params.tijd,
       errormessage: null,
@@ -169,7 +172,6 @@ export default {
   },
   created(){
     if (this.checkparam(this.datum, this.tijd)){
-        //this.getdata(this.datum, this.tijd)
         this.violations(this.datum, this.tijd);
     }else{
         this.$router.push('/Ritten')
@@ -221,7 +223,7 @@ export default {
       },
       violations: function(datum, tijd){
           if(datum && tijd){
-            let all = db.ref(this.$parent.currentUser.uid)  
+            let all = this.firebaseref
             let ritdate = new Date(datum)
             let jaar = ritdate.getFullYear();
             let maand = ritdate.getMonth()+1;
@@ -294,6 +296,8 @@ export default {
                     diff_result.setHours(diff_result.getHours()-1);
                     self.duur =  moment(diff_result).locale('nl').format('LTS')
                     this.getcenter(data, keys);
+                    this.getscore()
+
                 }
                 this.loaded = true
             })
@@ -373,6 +377,27 @@ export default {
             this.infoWinOpen.class.rood = true
         }
         this.infoWinOpen.open = true
+      },
+      getscore: function(){
+        if(this.violationslist.length > 0){
+            let coefficient = 1;
+            let scoreopaantal = 100 - ((this.violationslist.length / this.coords.length)*100)
+            let totaaltesnel = 0
+            this.violationslist.forEach((e)=>{
+                totaaltesnel += Number(e.tesnel)
+            })
+            let gemiddeldtesnel = totaaltesnel / this.violationslist.length
+            if(gemiddeldtesnel < 10 && gemiddeldtesnel > 5){
+                coefficient = 0.98
+            }else if(gemiddeldtesnel >= 10 && gemiddeldtesnel < 20){
+                coefficient = 0.9
+            }else if(gemiddeldtesnel > 20){
+                coefficient = 0.8
+            }
+            this.score = Number(scoreopaantal * coefficient).toFixed(2)
+        }else{
+            this.score = 100
+        }
       }
   },
   filters: {
