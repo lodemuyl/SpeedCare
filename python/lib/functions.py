@@ -5,6 +5,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import socket
+import os
 import logging
 import RPi.GPIO as GPIO
 import urllib.request
@@ -13,19 +14,17 @@ import json
 
 
 GPIO.setmode(GPIO.BCM)
-logging.basicConfig(filename='logfile.log',level=logging.DEBUG)
+logdir = os.path.dirname(__file__)
+logname = "speedcarelog.log"
+abslogname = os.path.join(logdir, logname)
+logging.basicConfig(filename=abslogname,level=logging.DEBUG)
 GPIO.setwarnings(False)
-
-#utc naar lokale tijd
-#def lokaletijd(utctijd):
-    #huidiguur = datetime.datetime(100,1,1,utctijd.hour,utctijd.minute,utctijd.second) 
-    #nieuwuur = huidiguur + datetime.timedelta(hours=variables.lokaal)
-    #return nieuwuur.time()
 
 #checkactive
 def checkActive():
     network = checknetwork()
     if network:
+        print("checkkkk")
         #firebase credentials
         firebase_admin.initialize_app(variables.cred, {
             'databaseURL' : 'https://speedcare-lode.firebaseio.com/'
@@ -92,7 +91,10 @@ def getSpeedLimit(lat, lon):
         fulljson = json.loads(g)
         category = fulljson["Response"]["View"][0]["Result"][0]['Location']['LinkInfo']['SpeedCategory']    
         gg = json.loads(open(variables.maxspeedpath).read())
-        return gg[category]
+        if category == 'SC2' or category == 'SC3' or category == 'SC4' or category == 'SC5' or category == 'SC6' or category == 'SC7' or category == 'SC8':
+            return gg[category]        
+        else:
+            return gg['SC2']
     except Exception as Exspeed:
         log('message : ' + str(Exspeed))
         print('Speedlimitation error')
@@ -117,6 +119,8 @@ def write():
             "snelheid" : variables.snelheid,
             "maxsnelheid" : str(getSpeedLimit(variables.lat,variables.lon)),
             "signaal" : variables.kwaliteit,
+            "sattelieten": variables.sattelieten,
+            "navwarning": variables.navwarning,
             "utc" : variables.tijd
             }
         if variables.counter % 2 == 0:
@@ -156,11 +160,13 @@ def printRMC(lines):
     latlng = getLatLng(lines[3],lines[5])
     variables.lat = latlng[0]
     variables.lon = latlng[1]
+    variables.navwarning = lines[2]
     variables.snelheid = speed(lines[7])
     print("")
     print("")
     print("Lat,Long                       :", variables.lat, lines[4], ", ", variables.lon, lines[6], sep='')
-    print("Snelheid                       :", variables.snelheid)	
+    print("Snelheid                       :", variables.snelheid)
+    print("Navwarning                     :", variables.navwarning)
     return
     
 #knots to kmph
@@ -176,9 +182,11 @@ def printGGA(lines):
     variables.tijd = getTime(lines[1], "%H%M%S.%f", "%H:%M:%S")
     variables.kwaliteit = variables.signaal[int(lines[6])]
     variables.hoogte = lines[9]
+    variables.sattelieten = lines[7]
     print("tijd                           :", variables.tijd , "UTC")
     print("Kwaliteit signaal              :", variables.kwaliteit)
     print("Hoogte                         :", variables.hoogte, lines[10],sep="")
+    print("Aantal sattelieten             :", variables.sattelieten)
     print("")
     print("")
     return

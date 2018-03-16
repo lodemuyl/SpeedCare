@@ -1,0 +1,38 @@
+INFO:root:2018-03-16 11:52:37.507477: message : [Errno 101] Network is unreachable
+INFO:root:2018-03-16 11:52:37.508372: Network down
+INFO:root:2018-03-16 11:52:37.509083: message : lost networkconnection
+INFO:root:2018-03-16 11:53:13.486048: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-03-16 11:53:16.818370: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:53:11/11:53:16.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:53:11/11:53:19.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:53:11/11:53:20.json HTTP/1.1" 200 31
+INFO:root:2018-03-16 11:53:20.908227: close
+INFO:root:2018-03-16 11:53:27.327142: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-03-16 11:53:28.782861: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:53:27/11:53:28.json HTTP/1.1" 200 31
+INFO:root:2018-03-16 11:53:35.503666: message : <urlopen error [Errno -3] Temporary failure in name resolution>
+INFO:root:2018-03-16 11:53:35.504883: message : name 'sys' is not defined
+INFO:root:2018-03-16 11:53:35.512550: close
+INFO:root:2018-03-16 11:56:39.760406: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-03-16 11:56:40.988362: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:56:39/11:56:41.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:56:39/11:56:43.json HTTP/1.1" 200 31
+INFO:root:2018-03-16 11:56:44.424900: close

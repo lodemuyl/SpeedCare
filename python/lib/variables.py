@@ -5,6 +5,10 @@ from firebase_admin import db
 import datetime
 import time
 import os
+#abspath
+abspath = os.path.dirname(os.path.realpath(__file__))
+#libpath = os.path.join(abspath, 'key.json')
+
 
 #verschil tussen onze tijdszone en utc
 lokaal = 1
@@ -19,13 +23,15 @@ ser = serial.Serial(si, 9600, timeout=0.5)
 #knotsconvertfactor
 factor = 1.85200
 #firebase
-cred = credentials.Certificate('./lib/key.json')
+cred = credentials.Certificate(os.path.join(abspath, 'key.json'))
 uid = ''
 #rmc&gga
 lat = 0
 lon = 0
 snelheid = 0
 tijd = 0
+sattelieten = 0
+navwarning = ""
 kwaliteit = ""
 hoogte = 0
 gewijzigdeparameters = 0
