@@ -29,7 +29,7 @@
             </div>          
             <div v-show="loadedyear" class="card" v-for="jaar in jaren">
                   <div class="card-content white-text">
-                    <span class="card-title halfstrong">{{jaar}}</span>
+                    <span class="card-title halfstrong">2018</span>
                     <ul class="collapsible ">
                       <li v-for="maand in maanden" v-bind:value="jaar">
                         <div class="collapsible-header halfstrong">{{ maand }}</div>
@@ -73,7 +73,7 @@ export default {
       msg: 'Rapporten',
       firebaseref: db.ref(this.$parent.currentUser.uid), 
       loadedyear: false,
-      jaren: [2018,2019,2020],
+      jaren: [2018],
       maanden:['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
       jaar: moment().format('YYYY'),
       options:{
@@ -88,8 +88,7 @@ export default {
     }
   },
   created(){
-    this.getyears();
-
+    this.getdates();
   },
   mounted(){
     var elem
@@ -112,18 +111,27 @@ export default {
     main: function(){
 
     },
-    getyears: function(){
+    getdates: function(){
       let all = this.firebaseref;
-      let years = []
+      let dates = {}
       all.once("value").then((snapshot)=>{
-        snapshot.forEach((val)=>{
-          if(val.key === "actief" || val.key === "productnummer"){
+        snapshot.forEach((year)=>{
+          if(year.key === "actief" || year.key === "productnummer"){
             return false
           } else{
-            years.push(Number(val.key))
+            console.log(year.key)
+            year.forEach((month)=>{
+              console.log('--'+month.key)
+              month.forEach((day)=>{
+                console.log('----'+day.key)
+                day.forEach((time)=>{
+                  console.log('------'+time.key)
+                })
+              })
+            })
           }        
         })
-        this.jaren = years
+       // this.jaren = years
         this.loadedyear = true
       })
     }

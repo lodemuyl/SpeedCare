@@ -183,11 +183,11 @@ export default {
     let filter = [];
     let list = [];
         for(var i =0; i < this.violationslist.length; i++) {
-            if(filter.indexOf(this.violationslist[i].address) === -1) {
-                filter.push(this.violationslist[i].address)
+            if(filter.indexOf(this.violationslist[i].straatnaam) === -1) {
+                filter.push(this.violationslist[i].straatnaam)
                 list.push(this.violationslist[i])
             }else{
-                let index = filter.indexOf(this.violationslist[i].address)
+                let index = filter.indexOf(this.violationslist[i].straatnaam)
                 if(list[index].tesnel < this.violationslist[i].tesnel){
                     list.splice(index,1)
                     list.push(this.violationslist[i])
@@ -267,7 +267,8 @@ export default {
                             'lon': childData2['lon'],
                             'tijd': key,
                             'tesnel':  tesnel.toFixed(2),
-                            'address': 'geen adres'
+                            'address': 'geen adres',
+                            'straatnaam': 'geen straatnaam'
                         };
                         //assign van alle overtredingen
                         self.violationslist.push(violationdata)                  
@@ -315,10 +316,12 @@ export default {
             .then((val) => {
                 if(val.data.status === "OK"){
                     this.violationslist[lengte-1]['address'] = val.data.results[0]['formatted_address']
+                    this.violationslist[lengte-1]['straatnaam'] = val.data.results[0]['address_components'][1].long_name
                 }else{
                     this.errormessage = val.data.status;
                     console.log('kan het adres niet ophalen')
                     this.violationslist[lengte-1]['address'] = 'kon locatie niet ophalen'
+                    this.violationslist[lengte-1]['straatnaam'] = 'kon straatnaam niet ophalen'
                 }
             }).catch(e => {
                 this.errormessage = e.message
