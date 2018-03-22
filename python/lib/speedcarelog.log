@@ -1,38 +1,299 @@
-INFO:root:2018-03-16 11:52:37.507477: message : [Errno 101] Network is unreachable
-INFO:root:2018-03-16 11:52:37.508372: Network down
-INFO:root:2018-03-16 11:52:37.509083: message : lost networkconnection
-INFO:root:2018-03-16 11:53:13.486048: Network up
+INFO:root:2018-03-22 18:31:01.413149: Network down
+INFO:root:2018-03-22 18:31:20.599153: Network up
 DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
 DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
 DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
 DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-03-16 11:53:16.818370: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:53:11/11:53:16.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:53:11/11:53:19.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:53:11/11:53:20.json HTTP/1.1" 200 31
-INFO:root:2018-03-16 11:53:20.908227: close
-INFO:root:2018-03-16 11:53:27.327142: Network up
+INFO:root:2018-03-22 18:31:21.685779: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:31:20/18:31:21.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:31:20/18:31:24.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:31:20/18:31:27.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 18:31:30.514490: Network down
+INFO:root:2018-03-22 18:31:30.515332: Network down
+INFO:root:2018-03-22 18:31:30.516312: message : networkdown since0 seconds
+INFO:root:2018-03-22 18:31:33.555575: Network down
+INFO:root:2018-03-22 18:31:33.557211: Network down
+INFO:root:2018-03-22 18:31:33.558175: message : networkdown since3 seconds
+INFO:root:2018-03-22 18:31:36.577372: Network down
+INFO:root:2018-03-22 18:31:36.579091: Network down
+INFO:root:2018-03-22 18:31:36.580283: message : networkdown since6 seconds
+INFO:root:2018-03-22 18:31:39.655450: Network down
+INFO:root:2018-03-22 18:31:39.656844: Network down
+INFO:root:2018-03-22 18:31:39.657729: message : networkdown since9 seconds
+INFO:root:2018-03-22 18:31:42.603553: Network down
+INFO:root:2018-03-22 18:31:42.604954: Network down
+INFO:root:2018-03-22 18:31:42.606190: message : networkdown since12 seconds
+INFO:root:2018-03-22 18:31:45.545608: Network down
+INFO:root:2018-03-22 18:31:45.546897: Network down
+INFO:root:2018-03-22 18:31:45.547699: message : networkdown since15 seconds
+INFO:root:2018-03-22 18:31:45.548411: message : networktimeout expired
+INFO:root:2018-03-22 18:31:45.549194: close
+INFO:root:2018-03-22 18:32:37.690841: Network up
 DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
 DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
 DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
 DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-03-16 11:53:28.782861: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:53:27/11:53:28.json HTTP/1.1" 200 31
-INFO:root:2018-03-16 11:53:35.503666: message : <urlopen error [Errno -3] Temporary failure in name resolution>
-INFO:root:2018-03-16 11:53:35.504883: message : name 'sys' is not defined
-INFO:root:2018-03-16 11:53:35.512550: close
-INFO:root:2018-03-16 11:56:39.760406: Network up
+INFO:root:2018-03-22 18:32:38.797711: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:32:37/18:32:39.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:32:37/18:32:42.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 18:32:45.521818: Network down
+INFO:root:2018-03-22 18:32:45.524188: Network down
+INFO:root:2018-03-22 18:32:45.525450: message : networkdown since0 seconds
+INFO:root:2018-03-22 18:32:48.588418: Network down
+INFO:root:2018-03-22 18:32:48.589837: Network down
+INFO:root:2018-03-22 18:32:48.619233: message : networkdown since3 seconds
+INFO:root:2018-03-22 18:32:51.571811: Network down
+INFO:root:2018-03-22 18:32:51.573160: Network down
+INFO:root:2018-03-22 18:32:51.574001: message : networkdown since6 seconds
+INFO:root:2018-03-22 18:32:54.531951: Network down
+INFO:root:2018-03-22 18:32:54.533362: Network down
+INFO:root:2018-03-22 18:32:54.534552: message : networkdown since9 seconds
+INFO:root:2018-03-22 18:32:57.574734: Network down
+INFO:root:2018-03-22 18:32:57.576263: Network down
+INFO:root:2018-03-22 18:32:57.577488: message : networkdown since12 seconds
+INFO:root:2018-03-22 18:33:00.521791: Network down
+INFO:root:2018-03-22 18:33:00.523396: Network down
+INFO:root:2018-03-22 18:33:00.524830: message : networkdown since15 seconds
+INFO:root:2018-03-22 18:33:00.526311: message : networktimeout expired
+INFO:root:2018-03-22 18:33:00.530512: close
+INFO:root:2018-03-22 18:33:10.026611: Network down
+INFO:root:2018-03-22 18:33:17.650662: Network up
 DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
 DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
 DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
 DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-03-16 11:56:40.988362: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:56:39/11:56:41.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/16/11:56:39/11:56:43.json HTTP/1.1" 200 31
-INFO:root:2018-03-16 11:56:44.424900: close
+INFO:root:2018-03-22 18:33:18.722107: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:33:17/18:33:19.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:33:17/18:33:22.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:33:17/18:33:25.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 18:33:28.529291: Network down
+INFO:root:2018-03-22 18:33:28.530830: Network down
+INFO:root:2018-03-22 18:33:28.531891: message : networkdown since0 seconds
+INFO:root:2018-03-22 18:33:31.570540: Network down
+INFO:root:2018-03-22 18:33:31.571937: Network down
+INFO:root:2018-03-22 18:33:31.573163: message : networkdown since3 seconds
+INFO:root:2018-03-22 18:33:34.517175: Network down
+INFO:root:2018-03-22 18:33:34.518701: Network down
+INFO:root:2018-03-22 18:33:34.519888: message : networkdown since6 seconds
+INFO:root:2018-03-22 18:33:37.515418: Network down
+INFO:root:2018-03-22 18:33:37.516757: Network down
+INFO:root:2018-03-22 18:33:37.517629: message : networkdown since9 seconds
+INFO:root:2018-03-22 18:33:40.561543: Network down
+INFO:root:2018-03-22 18:33:40.565047: Network down
+INFO:root:2018-03-22 18:33:40.566129: message : networkdown since12 seconds
+INFO:root:2018-03-22 18:33:43.532170: Network down
+INFO:root:2018-03-22 18:33:43.533529: Network down
+INFO:root:2018-03-22 18:33:43.534471: message : networkdown since15 seconds
+INFO:root:2018-03-22 18:33:43.535296: message : networktimeout expired
+INFO:root:2018-03-22 18:33:43.536237: close
+INFO:root:2018-03-22 18:34:00.169647: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+INFO:root:2018-03-22 18:34:12.047314: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-03-22 18:34:13.287817: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:34:12/18:34:13.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:34:12/18:34:16.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:34:12/18:34:19.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:34:12/18:34:22.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 18:34:25.475554: Network down
+INFO:root:2018-03-22 18:34:25.477857: Network down
+INFO:root:2018-03-22 18:34:25.479277: message : networkdown since0 seconds
+INFO:root:2018-03-22 18:34:28.519821: Network down
+INFO:root:2018-03-22 18:34:28.521721: Network down
+INFO:root:2018-03-22 18:34:28.522740: message : networkdown since3 seconds
+INFO:root:2018-03-22 18:34:31.519742: Network down
+INFO:root:2018-03-22 18:34:31.521609: Network down
+INFO:root:2018-03-22 18:34:31.522675: message : networkdown since6 seconds
+INFO:root:2018-03-22 18:34:34.494751: Network down
+INFO:root:2018-03-22 18:34:34.496264: Network down
+INFO:root:2018-03-22 18:34:34.497136: message : networkdown since9 seconds
+INFO:root:2018-03-22 18:34:37.513576: Network down
+INFO:root:2018-03-22 18:34:37.515077: Network down
+INFO:root:2018-03-22 18:34:37.516445: message : networkdown since12 seconds
+INFO:root:2018-03-22 18:34:40.512368: Network down
+INFO:root:2018-03-22 18:34:40.513764: Network down
+INFO:root:2018-03-22 18:34:40.514762: message : networkdown since15 seconds
+INFO:root:2018-03-22 18:34:40.515624: message : networktimeout expired
+INFO:root:2018-03-22 18:34:40.516569: close
+INFO:root:2018-03-22 18:36:53.415836: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-03-22 18:36:54.597135: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:36:53/18:36:54.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:36:53/18:36:57.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:36:53/18:37:00.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 18:37:08.518519: Network down
+INFO:root:2018-03-22 18:37:08.520056: Network down
+INFO:root:2018-03-22 18:37:08.521206: message : networkdown since0 seconds
+INFO:root:2018-03-22 18:37:08.703771: Network down
+INFO:root:2018-03-22 18:37:08.705287: Network down
+INFO:root:2018-03-22 18:37:08.706318: message : networkdown since3 seconds
+INFO:root:2018-03-22 18:37:09.505507: Network down
+INFO:root:2018-03-22 18:37:09.507160: Network down
+INFO:root:2018-03-22 18:37:09.508203: message : networkdown since6 seconds
+INFO:root:2018-03-22 18:37:12.547303: Network down
+INFO:root:2018-03-22 18:37:12.548675: Network down
+INFO:root:2018-03-22 18:37:12.549581: message : networkdown since9 seconds
+INFO:root:2018-03-22 18:37:15.508543: Network down
+INFO:root:2018-03-22 18:37:15.510419: Network down
+INFO:root:2018-03-22 18:37:15.511558: message : networkdown since12 seconds
+INFO:root:2018-03-22 18:37:18.541599: Network down
+INFO:root:2018-03-22 18:37:18.574956: Network down
+INFO:root:2018-03-22 18:37:18.575992: message : networkdown since15 seconds
+INFO:root:2018-03-22 18:37:18.576910: message : networktimeout expired
+INFO:root:2018-03-22 18:37:18.577885: close
+INFO:root:2018-03-22 18:37:54.234786: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-03-22 18:37:55.342434: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:37:54/18:37:55.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:37:54/18:37:58.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:37:54/18:38:01.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:37:54/18:38:04.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 18:38:07.502271: Network down
+INFO:root:2018-03-22 18:38:07.503749: Network down
+INFO:root:2018-03-22 18:38:07.531907: message : networkdown since0 seconds
+INFO:root:2018-03-22 18:38:10.486060: Network down
+INFO:root:2018-03-22 18:38:10.487424: Network down
+INFO:root:2018-03-22 18:38:10.488554: message : networkdown since3 seconds
+INFO:root:2018-03-22 18:38:13.488336: Network down
+INFO:root:2018-03-22 18:38:13.490002: Network down
+INFO:root:2018-03-22 18:38:13.491040: message : networkdown since6 seconds
+INFO:root:2018-03-22 18:38:16.481476: Network down
+INFO:root:2018-03-22 18:38:16.482834: Network down
+INFO:root:2018-03-22 18:38:16.483754: message : networkdown since9 seconds
+INFO:root:2018-03-22 18:38:19.546159: Network down
+INFO:root:2018-03-22 18:38:19.547560: Network down
+INFO:root:2018-03-22 18:38:19.548698: message : networkdown since12 seconds
+INFO:root:2018-03-22 18:38:22.564007: Network down
+INFO:root:2018-03-22 18:38:22.565354: Network down
+INFO:root:2018-03-22 18:38:22.566506: message : networkdown since15 seconds
+INFO:root:2018-03-22 18:38:22.567469: message : networktimeout expired
+INFO:root:2018-03-22 18:38:22.568663: close
+INFO:root:2018-03-22 18:44:39.164667: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-03-22 18:44:40.498594: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:44:39/18:44:40.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:44:39/18:44:43.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:44:39/18:44:46.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:44:39/18:44:49.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:44:39/18:44:52.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 18:44:55.465057: Network down
+INFO:root:2018-03-22 18:44:55.468398: Network down
+INFO:root:2018-03-22 18:44:55.469483: message : networkdown since0 seconds
+INFO:root:2018-03-22 18:44:58.510648: Network down
+INFO:root:2018-03-22 18:44:58.512246: Network down
+INFO:root:2018-03-22 18:44:58.513443: message : networkdown since3 seconds
+INFO:root:2018-03-22 18:45:01.519425: Network down
+INFO:root:2018-03-22 18:45:01.520999: Network down
+INFO:root:2018-03-22 18:45:01.522179: message : networkdown since6 seconds
+INFO:root:2018-03-22 18:45:04.528827: Network down
+INFO:root:2018-03-22 18:45:04.530527: Network down
+INFO:root:2018-03-22 18:45:04.531564: message : networkdown since9 seconds
+INFO:root:2018-03-22 18:45:07.507897: Network down
+INFO:root:2018-03-22 18:45:07.509529: Network down
+INFO:root:2018-03-22 18:45:07.511385: message : networkdown since12 seconds
+INFO:root:2018-03-22 18:45:10.506689: Network down
+INFO:root:2018-03-22 18:45:10.508296: Network down
+INFO:root:2018-03-22 18:45:10.509208: message : networkdown since15 seconds
+INFO:root:2018-03-22 18:45:10.510087: message : networktimeout expired
+INFO:root:2018-03-22 18:45:10.510991: close
+INFO:root:2018-03-22 18:45:33.997779: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-03-22 18:45:35.128260: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:45:35.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:45:38.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:45:41.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:45:44.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 18:45:47.505092: Network down
+INFO:root:2018-03-22 18:45:47.506697: Network down
+INFO:root:2018-03-22 18:45:47.507897: message : networkdown since0 seconds
+INFO:root:2018-03-22 18:45:50.523075: Network down
+INFO:root:2018-03-22 18:45:50.524448: Network down
+INFO:root:2018-03-22 18:45:50.525488: message : networkdown since3 seconds
+INFO:root:2018-03-22 18:45:53.518360: Network down
+INFO:root:2018-03-22 18:45:53.519790: Network down
+INFO:root:2018-03-22 18:45:53.521016: message : networkdown since6 seconds
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:46:01.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:46:02.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:46:02.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:46:05.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:46:08.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/18:45:33/18:46:11.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 18:46:13.832772: close
+INFO:root:2018-03-22 19:30:00.757218: Network up
+DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
+DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+INFO:root:2018-03-22 19:30:01.852166: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:02.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:05.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:08.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 19:30:16.475106: Network down
+INFO:root:2018-03-22 19:30:16.476587: Network down
+INFO:root:2018-03-22 19:30:16.477688: message : networkdown since0 seconds
+INFO:root:2018-03-22 19:30:16.617982: Network down
+INFO:root:2018-03-22 19:30:16.619172: Network down
+INFO:root:2018-03-22 19:30:16.620014: message : networkdown since3 seconds
+INFO:root:2018-03-22 19:30:17.410377: Network down
+INFO:root:2018-03-22 19:30:17.412141: Network down
+INFO:root:2018-03-22 19:30:17.413170: message : networkdown since6 seconds
+INFO:root:2018-03-22 19:30:20.416742: Network down
+INFO:root:2018-03-22 19:30:20.418234: Network down
+INFO:root:2018-03-22 19:30:20.419976: message : networkdown since9 seconds
+INFO:root:2018-03-22 19:30:23.405203: Network down
+INFO:root:2018-03-22 19:30:23.406550: Network down
+INFO:root:2018-03-22 19:30:23.407423: message : networkdown since12 seconds
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:26.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:29.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:32.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:35.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 19:30:38.145548: Network down
+INFO:root:2018-03-22 19:30:38.147258: Network down
+INFO:root:2018-03-22 19:30:38.148581: message : networkdown since0 seconds
+INFO:root:2018-03-22 19:30:41.145153: Network down
+INFO:root:2018-03-22 19:30:41.146863: Network down
+INFO:root:2018-03-22 19:30:41.147897: message : networkdown since3 seconds
+INFO:root:2018-03-22 19:30:44.432324: Network down
+INFO:root:2018-03-22 19:30:44.435425: Network down
+INFO:root:2018-03-22 19:30:44.436645: message : networkdown since6 seconds
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:52.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:53.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/3/22/19:30:00/19:30:53.json HTTP/1.1" 200 31
+INFO:root:2018-03-22 19:30:56.435420: close

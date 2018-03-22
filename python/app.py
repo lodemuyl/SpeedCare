@@ -6,16 +6,12 @@ import serial
 import datetime
 import logging
 import RPi.GPIO as GPIO
-#abs path
-
-abspath = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(abspath)
-#libpath = os.path.join(abspath, 'lib')
-
+#add lib to sys path
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib'))
 #variables
-from lib import variables
+import variables
 #functies
-from lib import functions
+import functions
 #check active
 active = functions.checkActive()
 

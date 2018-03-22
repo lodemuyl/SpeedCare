@@ -11,7 +11,7 @@ import RPi.GPIO as GPIO
 import urllib.request
 import urllib.parse
 import json
-
+import time
 
 GPIO.setmode(GPIO.BCM)
 logdir = os.path.dirname(__file__)
@@ -20,15 +20,28 @@ abslogname = os.path.join(logdir, logname)
 logging.basicConfig(filename=abslogname,level=logging.DEBUG)
 GPIO.setwarnings(False)
 
+#main function
+def main(lines):
+    if lines[0] == "GPRMC":
+        printRMC(lines)
+        pass
+    elif lines[0] == "GPGGA":
+        printGGA(lines)
+        if variables.gewijzigdeparameters >= 6:
+            write()            
+        pass     
+#init firebase
+def initfirebase():
+    firebase_admin.initialize_app(variables.cred, {
+    'databaseURL' : 'https://speedcare-lode.firebaseio.com/',
+    'httpTimeout' : 1
+    })
 #checkactive
 def checkActive():
     network = checknetwork()
     if network:
-        print("checkkkk")
         #firebase credentials
-        firebase_admin.initialize_app(variables.cred, {
-            'databaseURL' : 'https://speedcare-lode.firebaseio.com/'
-        })
+        initfirebase()
         checkproductkey = db.reference('Relations').get()
         try:
             if checkproductkey and checkproductkey[variables.pk]:
@@ -48,33 +61,24 @@ def checkActive():
             GPIO.output(variables.errorled, GPIO.HIGH)
             return False
     else:
+        GPIO.setup(variables.errorled, GPIO.OUT)
+        GPIO.output(variables.errorled, GPIO.HIGH)
         return False
-    
-#main function
-def main(lines):
-    if lines[0] == "GPRMC":
-        printRMC(lines)
-        pass
-    elif lines[0] == "GPGGA":
-        printGGA(lines)
-        if variables.gewijzigdeparameters >= 6:
-            write()            
-        pass     
     
 #check internet connection
 def checknetwork():
     try:
-        socket.setdefaulttimeout(3)
+        #socket.setdefaulttimeout(3)
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
-        print('network')
+        #print('network')
         log('Network up')
         return True
     except Exception as exnetwork:
-        print('Geen netwerk')
-        log('message : ' + str(exnetwork))
+        #print('Geen netwerk')
+        #log('message : ' + str(exnetwork))
         log('Network down')
-        GPIO.setup(variables.errorled, GPIO.OUT)
-        GPIO.output(variables.errorled, GPIO.HIGH)
+        #GPIO.setup(variables.errorled, GPIO.OUT)
+        #GPIO.output(variables.errorled, GPIO.HIGH)
         return False
 
 #logging
@@ -96,41 +100,53 @@ def getSpeedLimit(lat, lon):
         else:
             return gg['SC2']
     except Exception as Exspeed:
-        log('message : ' + str(Exspeed))
-        print('Speedlimitation error')
-        GPIO.output(variables.errorled, GPIO.OUT)
-        GPIO.output(variables.errorled, GPIO.HIGH)
-        sys.exit(1)
+        return False
         
 #wegschrijven naar firebase
 def write():
     try:
-        #current time
-        now = datetime.datetime.now()
-        year = now.year
-        month = now.month
-        day = now.day
-        currdate = str(day) +'/'+ str(month) +'/'+str(year)
-        currtime = str(now.time())
-        writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
-        writedata = {
-            "lat" : variables.lat,
-            "lon" : variables.lon,
-            "snelheid" : variables.snelheid,
-            "maxsnelheid" : str(getSpeedLimit(variables.lat,variables.lon)),
-            "signaal" : variables.kwaliteit,
-            "sattelieten": variables.sattelieten,
-            "navwarning": variables.navwarning,
-            "utc" : variables.tijd
-            }
-        if variables.counter % 2 == 0:
-            write = db.reference(writeref)
-            write.push(writedata)
+        #logging om de 3 seconden
+        if variables.counter % variables.loginterval == 0:
+            #current time
+            speedlim = getSpeedLimit(variables.lat,variables.lon)
+            if speedlim:
+                variables.networktimeoutcounter = 0
+                now = datetime.datetime.now()
+                year = now.year
+                month = now.month
+                day = now.day
+                currdate = str(day) +'/'+ str(month) +'/'+str(year)
+                currtime = str(now.time())
+                writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
+                writedata = {
+                    "lat" : variables.lat,
+                    "lon" : variables.lon,
+                    "snelheid" : variables.snelheid,
+                    "maxsnelheid" : str(speedlim),
+                    "signaal" : variables.kwaliteit,
+                    "sattelieten": variables.sattelieten,
+                    }
+                write = db.reference(writeref)
+                write.push(writedata)
+            elif not speedlim:
+                if checknetwork():
+                    log('message : speedlimitation error')
+                    print('speedlimitation error')
+                    GPIO.output(variables.errorled, GPIO.OUT)
+                    GPIO.output(variables.errorled, GPIO.HIGH)
+                    sys.exit(1)
+                elif not checknetwork():
+                    print('!!!' + str(variables.networktimeoutcounter) + 'seconden timeout')
+                    log('message : networkdown since' + str(variables.networktimeoutcounter) + ' seconds')
+                    if variables.networktimeoutcounter == 15:
+                        print('networktimeout expired')
+                        raise Exception('networktimeout expired')
+                    variables.networktimeoutcounter += variables.loginterval
         variables.counter += 1
     except Exception as exwrite:
         log('message : ' + str(exwrite))
-        print('Write error')
-        GPIO.output(variables.errorled, GPIO.OUT)
+        print('timeout van ' + str(variables.networktimeoutcounter))
+        GPIO.setup(variables.errorled, GPIO.OUT)
         GPIO.output(variables.errorled, GPIO.HIGH)
         sys.exit(1)
 
@@ -143,9 +159,9 @@ def readString():
 		return line
 	    
 #converteren van dateformat utc tijd
-def getTime(string,format,returnFormat):
-	new = time.strftime(returnFormat, time.strptime(string, format))
-	return new
+#def getTime(string,format,returnFormat):
+#	new = time.strftime(returnFormat, time.strptime(string, format))
+#	return new
 
 #lat en long
 def getLatLng(latString,lngString):
@@ -157,17 +173,15 @@ def getLatLng(latString,lngString):
 def printRMC(lines):
     if lines:
         variables.gewijzigdeparameters += 3
-    latlng = getLatLng(lines[3],lines[5])
-    variables.lat = latlng[0]
-    variables.lon = latlng[1]
-    variables.navwarning = lines[2]
-    variables.snelheid = speed(lines[7])
-    print("")
-    print("")
-    print("Lat,Long                       :", variables.lat, lines[4], ", ", variables.lon, lines[6], sep='')
-    print("Snelheid                       :", variables.snelheid)
-    print("Navwarning                     :", variables.navwarning)
-    return
+        latlng = getLatLng(lines[3],lines[5])
+        variables.lat = latlng[0]
+        variables.lon = latlng[1]
+        variables.snelheid = speed(lines[7])
+        print("")
+        print("")
+        print("Lat,Long                       :", variables.lat, lines[4], ", ", variables.lon, lines[6], sep='')
+        print("Snelheid                       :", variables.snelheid)
+        return
     
 #knots to kmph
 def speed(knots):
@@ -178,18 +192,16 @@ def speed(knots):
 def printGGA(lines):
     if lines:
         variables.gewijzigdeparameters += 3
-    #print("tijd                           :", getTime(lines[1], "%H%M%S.%f", "%H:%M:%S"), "UTC")
-    variables.tijd = getTime(lines[1], "%H%M%S.%f", "%H:%M:%S")
-    variables.kwaliteit = variables.signaal[int(lines[6])]
-    variables.hoogte = lines[9]
-    variables.sattelieten = lines[7]
-    print("tijd                           :", variables.tijd , "UTC")
-    print("Kwaliteit signaal              :", variables.kwaliteit)
-    print("Hoogte                         :", variables.hoogte, lines[10],sep="")
-    print("Aantal sattelieten             :", variables.sattelieten)
-    print("")
-    print("")
-    return
+        #variables.tijd = getTime(lines[1], "%H%M%S.%f", "%H:%M:%S")
+        variables.kwaliteit = variables.signaal[int(lines[6])]
+        variables.hoogte = lines[9]
+        variables.sattelieten = lines[7]
+        print("Kwaliteit signaal              :", variables.kwaliteit)
+        print("Hoogte                         :", variables.hoogte, lines[10],sep="")
+        print("Aantal sattelieten             :", variables.sattelieten)
+        print("")
+        print("")
+        return
 
 #checksum 
 def checksum(line):

@@ -1,14 +1,14 @@
+import os
+import sys
+#toevoegen van deze pip3 lib aan python syspath zodat speedcare.service deze lib kan terugvinden.
+sys.path.append('/home/pi/.local/lib/python3.5/site-packages')
 import serial
-import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import datetime
 import time
-import os
 #abspath
 abspath = os.path.dirname(os.path.realpath(__file__))
-#libpath = os.path.join(abspath, 'key.json')
-
 
 #verschil tussen onze tijdszone en utc
 lokaal = 1
@@ -29,9 +29,7 @@ uid = ''
 lat = 0
 lon = 0
 snelheid = 0
-tijd = 0
 sattelieten = 0
-navwarning = ""
 kwaliteit = ""
 hoogte = 0
 gewijzigdeparameters = 0
@@ -44,6 +42,10 @@ timenow = datetime.datetime.now()
 autoritid = timenow.time()
 #counter
 counter = 0
+#networktimeout
+networktimeoutcounter = 0
+#loginterval
+loginterval = 3
 #maxspeedpath
 scriptdir = os.path.dirname(__file__)
 rel_path = "maximumsnelheden.json"
