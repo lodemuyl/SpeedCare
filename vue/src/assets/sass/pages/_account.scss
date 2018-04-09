@@ -30,7 +30,13 @@
         }
     }
     .modal{
-        height: 220px;
+        overflow-y: inherit
+    }
+    .modal-footer{
+        a{
+            background-color: $red;
+            color: $wit
+        }
     }
     .editbutton{        
         top: 50px;

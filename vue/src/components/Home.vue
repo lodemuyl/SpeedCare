@@ -8,43 +8,48 @@
           <div class="slide slide--4"></div>
       </agile>
   </div>
-    <div class="container">
-      <div v-show="loggedin" class="row">
-        <div class="col s12 m12 l4">
-          <div class="card horizontal">
-            <div class="card-stacked">
-              <div class="card-content">
-                <h5>Ritten</h5>
-              </div>
-              <div class="card-action">
-                <a href="#">This is a link</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col s12 m12 l4">
-          <div class="card horizontal">
-            <div class="card-stacked">
-              <div class="card-content">
-                <h5>Rapporten</h5>
-              </div>
-              <div class="card-action">
-                <a href="#">This is a link</a>
+    <div class="container pannelview">
+      <div v-show="loggedin">
+        <div class="row pannelpadding">
+          <router-link to="Ritten">        
+            <div class="col pannelpadding s12 m12 l6 fullcard">
+              <div class="card-panel grijsbackground fullheight">
+                <span class="rood initchar ">{{ aantalritten }}</span>
+                <span class="white-text bold">Ritten deze maand</span>
+                <br>
+                <span class="white-text">Je hebt deze maand al {{ aantalritten }} ritten gereden.<br> Bekijk het overzicht van al jouw ritten waarna je alle ritten in detail kan bekijken.<br> Overtredingen worden tevens geregistreerd en bijgehouden.</span>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="col s12 m12 l4">
-          <div class="card horizontal">
-            <div class="card-stacked">
-              <div class="card-content">
-                <h5>Account</h5>
-              </div>
-              <div class="card-action">
-                <a href="#">This is a link</a>
+          </router-link>
+          <router-link to="Rapporten">
+            <div class="col pannelpadding s12 m12 l6 halfplus">
+              <div class="card-panel groenbackground fullheight">
+                <span class="rood initchar ">{{ aantalovertredingen }}</span>
+                <span class="white-text bold">Overtredingen deze maand</span>
+                <br>
+                <span class="white-text">Je hebt deze maand al {{ aantalovertredingen }} overtredingen in totaal gereden.<br> Elke overtreding die je op de weg begaat wordt geregistreerd en zal worden gebruikt voor jouw rijscore te bepalen.<br> Bij de details van de rit kan je zien waar je de overtreding hebt begaan.</span>
+              
+               </div>
+            </div>
+          </router-link>
+          <router-link to="Account">
+            <div class="col pannelpadding s12 m12 l6 halfminus">
+              <div class="card-panel blauwbackground fullheight">
+               <span class="rood initcharaccount">Account</span>
+                <br>
+                <span class="white-text">Bekijk jouw persoonlijke gegevens.</span>              
               </div>
             </div>
-          </div>
+          </router-link>
+          <router-link to="Over">          
+            <div class="col pannelpadding s12 m12 l12 halfcard">
+              <div class="card-panel groenbackground fullheight">
+               <span class="rood initcharaccount">Speedcare</span>
+                <br>
+                <span class="white-text">Speedcare is een Bachelorproject in opdracht van de ArteveldeHogeschool. </span>
+              </div>
+            </div>
+          </router-link>
         </div>
       </div>
       <div v-show="!loggedin">
@@ -100,14 +105,35 @@
 import Vue from 'vue'
 import VueAgile from 'vue-agile'
 Vue.use(VueAgile)
+import { db } from '../assets/js/firebase'
 export default {
   name: 'Home',
   data () {
     return {
-      loggedin: this.$parent.currentUser
+      loggedin: this.$parent.currentUser,
+      aantalritten: 0,
+      aantalovertredingen: 0
     }
   },
-  created () {    
+  created () {
+    if(this.loggedin){
+      this.ritten();
+      this.overtredingen();
+    }
+  },
+  methods: {
+    ritten: function(){
+        let vandaag = new Date();
+        let all = db.ref(this.$parent.currentUser.uid)  
+        let jaar = vandaag.getFullYear()
+        let maand = vandaag.getMonth()+1
+        all.child(jaar).child(maand).once('value', (snapshot) => {
+          console.log(snapshot.numChildren())
+        })
+    },
+    overtredingen: function(){
+      this.aantalovertredingen = 8
+    }
   }
 }
 </script>

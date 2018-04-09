@@ -3,4 +3,16 @@
         margin-top: 100px;
         margin-bottom: 180px
     }
+    .fullwidth{       
+            a{                
+                &:hover {
+                    -webkit-transition: .2s;
+                    -moz-transition: .2s;
+                    -ms-transition: .2s;
+                    -o-transition: .2s;
+                    transition: .2s;
+                    color: $red!important;
+                }
+            }
+    }
 }

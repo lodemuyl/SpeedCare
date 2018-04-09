@@ -34,13 +34,24 @@
                       <label for="password">Wachtwoord</label>
                       </div>
                   </div>
+                  <div class="row">
+                    <div class="col s12">
+                      <div class="fullwidth"><a v-on:click="forgot">Wachtwoord vergeten?</a></div>
+                    </div>
+                  </div>
+
                   <button tabindex=3 class="btn fullwidth waves-effect waves-light" type="submit" name="action" v-on:click="login">Login</button>                 
                   <div class="fullwidth center"><router-link tabindex=4 to="Activeer" class="">Activeer</router-link></div>
                   <div v-if="errors.length !== 0" class="row">                
                     <div class="input-field col s12 card-panel teal roodbackground wit">
                       <p v-for="error in errors">{{ error }}</p>
                     </div>
-                  </div>  
+                  </div> 
+                  <div v-show="confirm" class="col s12 m12 l12">
+                  <div class="card-panel groenbackground ">
+                    <span class="grijs">{{confirm}}</span>
+                  </div>
+                </div> 
               </div>
           </div>        
       </div>
@@ -60,6 +71,7 @@ export default {
       loaded: true,
       email: null,
       wachtwoord: null,
+      confirm: null,
       errors: []
     }
   },
@@ -70,19 +82,35 @@ export default {
       firebase.auth().signInWithEmailAndPassword(this.email, this.wachtwoord).then(
             (e) => {
               let ref = e.uid + "/actief"
-              db.ref(ref).set(true)              
+              db.ref(ref).set(true)               
+              this.$router.push('/') 
+              location.reload()
+              let lastsignin = this.$parent.currentUser.metadata.lastSignInTime;              
             },
             (err) => {      
                 this.loaded = true;       
                 console.log('niet gelukt message: ' + err.message)
                 this.errors.push(err.message)
             }
-        ).then(()=>{
-          this.loaded = true;
-          this.$router.push('/Account') 
-          location.reload()
-        })
-    }
+        )
+    },
+    forgot: function(){
+      this.errors = [];
+      if(this.email){
+        firebase.auth().sendPasswordResetEmail(this.email).then(()=>{
+          this.confirm = "Er is een email verstuurd naar " + this.email + ". Via deze email kan je je wachtwoor resetten. "
+        },(error=>{
+          this.errors.push(error.message)
+        }))
+      }else{
+        this.errors.push("Gelieve eerst jouw email in te vullen.")
+      }
+    },
+    gmtconvert: function(currtime){
+      let newtime1 = moment(String(currtime)).format('MM/DD/YYYY');
+      let newtime2 = moment(String(currtime)).format('HH:mm')
+      return "Laatst ingelogd op " + newtime1 + " om " + newtime2;
+    },  
   }
 }
 </script>

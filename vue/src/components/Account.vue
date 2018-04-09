@@ -56,8 +56,7 @@
               <div class="input-field col s12 m6 l6">
                 <i class="fa fa-envelope prefix rood"></i>              
                 <input disabled v-bind:value="email" id="Email" type="text" class="validate">
-                <label class="labelacc rood strong" for="Email">
-                Email
+                <label class="labelacc rood strong" for="Email">Email
                 <div class="editbuttoninline">
                     <a v-on:click="modal('email')" class="">
                       <i class="fa fa-pencil"></i>
@@ -68,7 +67,13 @@
               <div class="input-field col s12 m6 l6">
                 <i class="fa fa-unlock-alt prefix rood"></i>
                 <input disabled value="nicetry" id="Wachtwoord" type="password" class="validate">
-                <label class="labelacc rood strong" for="Wachtwoord">Wachtwoord</label>
+                <label class="labelacc rood strong" for="Wachtwoord">Wachtwoord
+                 <div class="editbuttoninline">
+                    <a v-on:click="modal('ww')" class="">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                  </div>
+                </label>
               </div>
               <div class="input-field col s12 m12 l12">
                 <a v-on:click="logout" class="waves-effect waves-light btn fullwidth groenbackground">Logout</a>
@@ -80,9 +85,17 @@
                   <h4 class="rood strong">{{ modalname }} wijzigen</h4>
                   <div class="input-field col s12 m12 l12">
                     <i class="fa fa-edit prefix rood"></i>              
-                    <input v-model="modalvalue" v-bind:placeholder="modalplaceholder" id="Emailmodal" type="text" class="validate">                    
+                    <input v-model="modalvalue" v-bind:type="typetext" v-bind:placeholder="modalplaceholder" id="Emailmodal" type="text" class="validate">                    
                   </div>
+                 <div v-show="showww" class="input-field col s12 m12 l12">
+                    <i class="fa fa-edit prefix rood"></i>              
+                    <input v-model="ww.new" type="password" placeholder="Nieuw wachtwoord" id="nieuwwachtwoord" class="validate">                    
+                </div>                
+                <div v-show="showww" class="input-field col s12 m12 l12">
+                    <i class="fa fa-edit prefix rood"></i>              
+                    <input v-model="ww.confirm" type="password" placeholder="Herhaal nieuw wachtwoord" id="wwherhaal" class="validate">                    
                 </div>
+              </div>
                 <div class="modal-footer">
                   <a v-on:click="modalchange(modalname)" class="modal-action modal-close waves-effect waves-green btn-flat ">Opslaan</a>
                   <a v-on:click="modalchange('annuleer')" class="modal-action modal-close waves-effect waves-green btn-flat ">Annuleren</a>
@@ -91,7 +104,7 @@
                 <div class="row">
               <div v-show="errormessage" class="col s12 m12 l12">
                 <div class="card-panel roodbackground ">
-                  <span class="grijs">{{errormessage}}</span>
+                  <span class="wit">{{errormessage}}</span>
                 </div>
               </div>
             </div>
@@ -114,21 +127,25 @@ export default {
   data () {
     return {
       naam: null,
+      typetext: "text",
       loaded: false,
       email: null,
       profilepicurl: '/static/img/user.93a57c9.png',
       newprofilepic :null,
       modalvalue: null,
       productnummer: null,
-      laatstingelogd: null,
       userid: this.$parent.currentUser.uid,
       modalplaceholder: null,
       modalname: null,
+      showww: false,
+      ww: {
+        "new": null,
+        "confirm": null
+      },
       errormessage: null,
     }
   },
   created(){
-    M.Toast.dismissAll();
     if(this.$parent.currentUser){
       this.getinfo();
     }
@@ -138,73 +155,124 @@ export default {
       opacity: 0.7,
       preventScrolling: false,
       startingTop: '15%',
-      endingTop: '40%' 
+      endingTop: '40%',
+      dismissible: false
+
     };
     elem = document.querySelector('#modalchange');
     instance = M.Modal.init(elem, options);
   },
   methods: {
     modal: function(param){      
-    instance.open();
-    this.errormessage = null
+      instance.open();
+      this.errormessage = null;
+      this.confirmmessage = null;
       if (param === "email"){
         this.modalplaceholder = this.email
         this.modalname = "Email"        
       }else if(param === "naam"){
         this.modalplaceholder = this.naam
         this.modalname = "Naam"
+      }else if(param === "ww"){
+         this.typetext = "password";
+        this.showww = true
+        this.modalplaceholder = "oud wachtwoord"
+        this.modalname = "Wachtwoord"
       }
     },
     modalchange: function(param){
-      if(!param){
-        this.errormessage = "Je moet een waarde invoeren"
-        this.modalvalue = null;
-        this.modalplaceholder = null;
-        this.modalname = null;
-      }else if(param){
+      if(param){
         if(param === "Naam"){
           this.loaded = false;
           this.changedisplayname(this.modalvalue)
         }else if(param === "Email"){
           this.loaded = false;
           this.changeemail(this.modalvalue)
-        }else if(param === "annuleren"){
-          console.log("annuleren")
+        }else if(param === "Wachtwoord"){         
+          this.loaded = false
+          this.changeww(this.modalvalue)
+        }else if(param === "annuleer"){
+          this.showww = false;
           this.modalvalue = null;
           this.modalplaceholder = null;
           this.modalname = null;
+          this.ww.new = null;
+          this.ww.confirm = null;
+          this.typetext = "text";
         }
       }      
     },
     changedisplayname: function(param){
-      firebase.auth().currentUser.updateProfile({
-        displayName: param
-      }).then(() => {
-        this.naam = firebase.auth().currentUser.displayName;
-        this.modalvalue = null;
-        this.modalplaceholder = null;
-        this.loaded = true;
-      }, (error) => {
-        console.log(error)
-        this.errormessage = error.message;
+      if(param){      
+        firebase.auth().currentUser.updateProfile({
+          displayName: param
+        }).then(() => {
+          this.naam = firebase.auth().currentUser.displayName;
+          this.modalvalue = null;
+          this.modalplaceholder = null;
+          this.loaded = true;
+          M.toast({html: "Jouw naam is gewijzigd.", displayLength:6000,classes:"groenbackground"})
+        }, (error) => {
+          console.log(error)
+          this.errormessage = error.message;
+          this.loaded = true
+        });
+      }else{
+        this.errormessage = "Je hebt geen naam ingevoerd"
         this.loaded = true
-      });
+      }
     },
-    changeemail: function(param){          
+    changeemail: function(param){     
+      if(param){
         firebase.auth().currentUser.updateEmail(param).then(() => {
           this.email = firebase.auth().currentUser.email;
           this.modalvalue = null;
           this.modalplaceholder = null;
           this.loaded = true;
+          M.toast({html: "Jouw emailadres is gewijzigd.", displayLength:6000,classes:"groenbackground"})
         }, (error) => {
           console.log(error)
           this.errormessage = error.message
           this.loaded = true
         });
+      }else{             
+        this.errormessage = "Je hebt geen email ingevoerd"
+        this.loaded = true      
+      }
+    },
+    changeww: function(param){
+      if(param){
+        if(this.ww.new && this.ww.new == this.ww.confirm){
+          let newpass = String(this.ww.new)
+          let ver = firebase.auth().currentUser.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(firebase.auth().currentUser.email, param)).then(()=>{
+            firebase.auth().currentUser.updatePassword(newpass).then((ok) => {
+              M.toast({html: "Jouw wachtwoord is gewijzigd.", displayLength:6000,classes:"groenbackground"})
+              this.loaded = true
+            },(error) =>{
+              this.errormessage = "Kon jouw wachtwoord niet wijzigen : " + error
+              this.loaded = true
+            });
+          },
+          (error)=>{
+            this.errormessage = "Jouw oud wachtwoord is niet correct."
+            this.loaded = true
+          })         
+        }else{
+          this.errormessage = "Jouw nieuw wachtwoorden komen niet overeen of zijn leeg."
+          this.loaded = true  
+        }
+        this.ww.new = null
+        this.ww.confirm = null
+        this.modalvalue = null
+        this.typetext = "text";
+      }else{
+        this.errormessage = "Oud wachtwoord niet ingevoerd."
+        this.loaded = true
+      }
+      this.showww = false
     },
     getinfo: function(){      
       let user = this.$parent.currentUser.providerData[0];
-      let lastsignin = this.$parent.currentUser.metadata.lastSignInTime;
       let uid = this.$parent.currentUser.uid
       this.email = user.email;
       this.naam = user.displayName;
@@ -217,8 +285,6 @@ export default {
         this.productnummer = e.val()
         this.loaded = true
       })
-      this.laatstingelogd = this.gmtconvert(lastsignin);
-      M.toast({html: this.laatstingelogd, displayLength:6000,classes:"groenbackground"})
     },
     editprofilepicture: function(){
       this.$refs.fileinput.click();
@@ -245,18 +311,13 @@ export default {
         .then(function(data){
           firebase.auth().currentUser.updateProfile({
               photoURL: data,
-          }).then(function() {
-            console.log('opgeslaan')
+          }).then(function() {            
+            M.toast({html: "Jouw afbeelding is gewijzigd.", displayLength:6000,classes:"groenbackground"})
           }, function(error) {
               this.errors.push(error)
           });
         })
       }
-    },
-    gmtconvert: function(currtime){
-      let newtime1 = moment(String(currtime)).format('MM/DD/YYYY');
-      let newtime2 = moment(String(currtime)).format('HH:mm')
-      return "Laatst ingelogd op " + newtime1 + " om " + newtime2;
     },
     logout: function(){
       let ref = this.userid + "/actief"

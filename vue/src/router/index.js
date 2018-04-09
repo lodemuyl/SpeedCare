@@ -29,7 +29,10 @@ let router = new Router({
     {
       path: '/Disclaimer',
       name: 'Disclaimer',
-      component: Disclaimer
+      component: Disclaimer,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/Login',
@@ -44,7 +47,10 @@ let router = new Router({
     {
       path: '/Over',
       name: 'Over',
-      component: Over
+      component: Over,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/Rapporten',
@@ -103,8 +109,7 @@ router.beforeEach((to, from, next) => {
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   if(requiresAuth && !currentUser) next('Login')
   // bugfix anders zal hij in een ininity loop geraken
-  //else if (!requiresAuth && !currentUser && to.name == "Home") next()
-  else if (!requiresAuth && currentUser && to.name == "Home") next()
+  else if (!requiresAuth && currentUser && to.name == 'Home') next()
   else if (!requiresAuth && currentUser) next('Home')
   else next()
 })

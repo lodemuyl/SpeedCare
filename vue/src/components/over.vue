@@ -2,6 +2,7 @@
   <div class="over">
     <h2 class="pagetitle center">{{ msg }}</h2>
     <div class="container">
+    <img src="../assets/images/over.png" class="overimage">
     <p>Speedcare is een Bachelorproject in opdracht van de ArteveldeHogeschool.
     <br> Het onderwerp van deze opdracht heb ik zelf gekozen en heeft te maken met het welbekende Internet Of Things.
     <br> Dit project bestaat uit een "carlog" systeem die de gewone mens in staat stelt om zijn locaties tijdens het rijden op te slaan, bijkomend kan de app van elke locatie de maximum toegelaten snelheid ophalen.

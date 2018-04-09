@@ -40,30 +40,25 @@ export default {
   data () {
     return {
       msg: 'Ritten',
-      loaded: false,
+      loaded: true,
       config:{
         locale: "nl"
       },
-      logs: {},
       fcEvents : [
       ]
     }
   },
   created (){
-    this.ritten();
+
   },
   methods: {
-    ritten: function(){
-      let vandaag = new Date();
-      let all = db.ref(this.$parent.currentUser.uid)  
+    ritten: function(jaar, maand){
+      this.fcEvents = []
       let self = this
-      all.child(vandaag.getFullYear()).child(vandaag.getMonth()+1).once('value', (snapshot) => {
-        let data = snapshot.val()
-        self.logs = data
-        for (var key in self.logs) {
-          for(var subkey in self.logs[key]){
-            let maand = vandaag.getMonth() + 1
-            let jaar = vandaag.getFullYear()
+      let all = db.ref(this.$parent.currentUser.uid)  
+      all.child(jaar).child(maand).once('value', (snapshot) => {
+         for (var key in snapshot.val()) {
+           for(var subkey in snapshot.val()[key]){
             let ritdate = jaar + '-' + maand + '-' + key
             let ritobject = {
               title : subkey,
@@ -71,9 +66,10 @@ export default {
               cssClass  : 'autoritevent',
             }
             self.fcEvents.push(ritobject)
-          }
+           }
         } 
         self.loaded = true
+        
       })
     },
     eventClick: function(event, jsEvent, pos) {
@@ -81,7 +77,13 @@ export default {
         this.$router.push(path)
     },
     changeMonth: function(start, end, current){
-      console.log('changeMonth', start, end, current)
+      this.loaded = false
+      let jaar = new Date(current).getFullYear();
+      let maand = new Date(current).getMonth() + 1;
+      console.log('s' + jaar)
+      console.log('s' + maand)
+      this.ritten(jaar, maand);
+
     }
   },
   components: {
