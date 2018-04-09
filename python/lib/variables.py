@@ -53,6 +53,8 @@ maxspeedpath = os.path.join(scriptdir, rel_path)
 #maxspeedapi
 appid = 'bngQkvofptY6BhYwJqkR'
 appcode = 'PiLtHYGTE1jPKNQuDp7xxw'
+#gogolegeocodeapi
+key = 'AIzaSyCjDB7jB1CqPueuUcUPXj1LBxMmob3iF1M'
 
 
 

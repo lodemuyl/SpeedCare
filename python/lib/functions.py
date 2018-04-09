@@ -11,7 +11,7 @@ import RPi.GPIO as GPIO
 import urllib.request
 import urllib.parse
 import json
-import time
+import sys
 
 GPIO.setmode(GPIO.BCM)
 logdir = os.path.dirname(__file__)
@@ -38,7 +38,8 @@ def initfirebase():
     })
 #checkactive
 def checkActive():
-    network = checknetwork()
+    network = True
+    #network = checknetwork()
     if network:
         #firebase credentials
         initfirebase()
@@ -65,7 +66,7 @@ def checkActive():
         GPIO.output(variables.errorled, GPIO.HIGH)
         return False
     
-#check internet connection
+#check internet connection      
 def checknetwork():
     try:
         #socket.setdefaulttimeout(3)
@@ -76,11 +77,10 @@ def checknetwork():
     except Exception as exnetwork:
         #print('Geen netwerk')
         #log('message : ' + str(exnetwork))
-        log('Network down')
+        log('Network down' + str(exnetwork))
         #GPIO.setup(variables.errorled, GPIO.OUT)
         #GPIO.output(variables.errorled, GPIO.HIGH)
         return False
-
 #logging
 def log(message):
     now = datetime.datetime.now()
@@ -101,6 +101,39 @@ def getSpeedLimit(lat, lon):
             return gg['SC2']
     except Exception as Exspeed:
         return False
+    
+#ophalen maximumsnelheden
+def getViolationLocation(lat, lng):
+    try:
+        url = 'https://maps.googleapis.com/maps/api/geocode/json?key='+str(variables.key)+'&latlng='+str(lat)+','+str(lng)
+        f = urllib.request.urlopen(url)
+        g = f.read().decode('utf-8')
+        fulljson = json.loads(g)
+        if fulljson["status"] == "OK":
+            adres = fulljson['results'][0]['formatted_address']
+            ac = fulljson['results'][0]['address_components']
+            nummer = ac[0]['long_name']
+            straatnaam = ac[1]['long_name']
+            gemeente = ac[2]['long_name']
+            provincie = ac[3]['long_name']
+            land = ac[5]['long_name']
+            postcode = ac[6]['long_name']
+            obj = {
+                "straat" : straatnaam,
+                "nummer" : nummer,
+                "postcode" : postcode,
+                "gemeente" : gemeente,
+                "provincie" : provincie,
+                "land" : land
+                }
+            return obj
+        else:
+            log('message : fout bij het ophalen violationlocation')
+            return False
+    except Exception as ex:
+       log('message : ' + str(ex))
+       print('message : fout bij het ophalen violationlocation')
+       return False
         
 #wegschrijven naar firebase
 def write():
@@ -126,6 +159,12 @@ def write():
                     "signaal" : variables.kwaliteit,
                     "sattelieten": variables.sattelieten,
                     }
+                if variables.snelheid > speedlim:
+                    violation = getViolationLocation(variables.lat, variables.lon)
+                    if violation:
+                        writedata["overtreding"] = violation
+                    else:
+                        writedata["overtreding"] = "kon locatie van overtreding niet ophalen"
                 write = db.reference(writeref)
                 write.push(writedata)
             elif not speedlim:
@@ -148,6 +187,8 @@ def write():
         print('timeout van ' + str(variables.networktimeoutcounter))
         GPIO.setup(variables.errorled, GPIO.OUT)
         GPIO.output(variables.errorled, GPIO.HIGH)
+        GPIO.setup(variables.runled, GPIO.OUT)
+        GPIO.output(variables.runled, GPIO.LOW)
         sys.exit(1)
 
 #ophalen van alle data afkomstig uit de ultimate gps module

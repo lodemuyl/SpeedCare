@@ -2,7 +2,6 @@
 import os
 import sys
 import serial
-#import pynmea2
 import datetime
 import logging
 import RPi.GPIO as GPIO
@@ -22,8 +21,7 @@ try:
             lines = line.split(",")
             if functions.checksum(line):
                 functions.main(lines)
-except:
-    print('afsluiten')
-    functions.log('close')
+except Exception as ex:
+    functions.log('close' + str(ex))
     GPIO.setup(variables.runled, GPIO.OUT)
     GPIO.output(variables.runled, GPIO.LOW)
