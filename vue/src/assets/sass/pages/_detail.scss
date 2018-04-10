@@ -72,6 +72,21 @@
     .paxspeedtext{
         margin-right: 10px;
     }
+    .overtredingenclick{
+        :hover{
+            cursor: pointer!important;
+        }
+    }
+    .totaalovertredingentext{
+        font-size: 0.8rem
+    }
+    .infowindowextratextdiv{
+        max-width: 200px;
+        .infowindowextratext{
+            font-size: 0.9rem;
+            margin: 5px 0px 0px;
+        }
+    }
     .collapsible{
         height: 30vh;
         overflow: auto;

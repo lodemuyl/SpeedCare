@@ -86,6 +86,8 @@ export default {
       uid: null,
       profilepicurl: '../static/img/user.png',
       mapsapikey: 'AIzaSyCjDB7jB1CqPueuUcUPXj1LBxMmob3iF1M',
+      actiefjaar: "firstclick",
+      actiefsnelheid: null,
     }
   },
   created(){

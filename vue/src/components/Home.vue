@@ -166,7 +166,7 @@ export default {
           })
     },
     overtredingen: function(jaar, maand , all){
-       all.child('aantalovertredingen').once('value', (snapshot)=>{
+       all.child('aantal overtredingen').once('value', (snapshot)=>{
          if(snapshot.exists()){
            this.aantalovertredingen = snapshot.child(jaar).child(maand).val()
          }

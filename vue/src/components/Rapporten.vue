@@ -5,8 +5,8 @@
         <div class="row">
           <div class="col s12 md12 l12">
             <ul id="" class="tabs tabs tabs-fixed-width">
-              <li class="tab col s3"><a id="firstclick" class="active" href="#jaar">Jaar</a></li>
-              <li class="tab col s3"><a href="#snelheid">Snelheidsovertredingen</a></li>
+              <li class="tab col s3"><a :id="actiefjaar" href="#jaar">Jaar</a></li>
+              <li class="tab col s3"><a :id="actiefsnelheid" href="#snelheid">Snelheidsovertredingen</a></li>
             </ul>
           </div>
           <div id="jaar" class="col s12 md12 l12 sw">
@@ -73,6 +73,8 @@ export default {
       msg: 'Rapporten',
       firebaseref: db.ref(this.$parent.currentUser.uid), 
       loadedyear: false,
+      actiefjaar: this.$parent.actiefjaar,
+      actiefsnelheid: this.$parent.actiefsnelheid,
       jaren: [2018],
       maanden:['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
       jaar: moment().format('YYYY'),

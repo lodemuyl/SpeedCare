@@ -30,7 +30,14 @@
                         @click="polylinepointclick($event)"                       
                         ref="polygon">
                     </gmap-polyline>
-                    <info-window :opened="infoWinOpen['open']" :position="infoWinOpen['position']" @closeclick="infoWinOpen['open']=false" class="infowindow"><img :src="infoWinOpen.content.speedim" class="popupspeedim"><span :class="{groen: infoWinOpen.class.groen, rood: infoWinOpen.class.rood}" class="strong">{{ infoWinOpen.content.speed }} </span><span class="strong">km/u</span></info-window>
+                    <info-window :opened="infoWinOpen['open']" :position="infoWinOpen['position']" @closeclick="infoWinOpen['open']=false" class="infowindow">
+                        <img :src="infoWinOpen.content.speedim" class="popupspeedim">
+                        <span :class="{groen: infoWinOpen.class.groen, rood: infoWinOpen.class.rood}" class="strong">{{ infoWinOpen.content.speed }} </span>
+                        <span class="strong">km/u</span>
+                        <div class="infowindowextratextdiv" v-show="infoWinOpen.content.uur">
+                            <p class="infowindowextratext grijs">Om <span class="rood">{{ infoWinOpen.content.uur }}</span> hebt u een overtreding begaan in de <span class="rood">{{ infoWinOpen.content.plaats }}.</span></p>
+                        </div>
+                    </info-window>
                     <gmap-marker :position="startlocation" :icon="icons.start"></gmap-marker>
                     <gmap-marker :position="endlocation" :icon="icons.stop"></gmap-marker>
 
@@ -64,17 +71,17 @@
                             </div>
                         </div>
                     </div>
-                    <p class="subtitle">Overtredingen <span v-show="amountviolations > 0">({{ amountviolations }})</span> </p>
+                    <p class="overtredingenclick subtitle" v-on:click="violationspage"><span>Overtredingen</span> <span v-show="amountviolations.length != 0">({{ amountviolations }} <span class="totaalovertredingentext">in totaal</span>)</span> </p>
                     <div class="row">
                         <div v-show="violations.length">                        
                             <ul class="collapsible">
-                                <li v-for="violation in violations">
-                                   <a class="violationclick" v-on:click="showviolationdetail"> 
+                                <li v-for="violation in uniqueviolations">
+                                   <a class="violationclick" v-on:click="showviolationdetail" :time="violation.tijd" :street="violation.straat" :number="violation.nummer" :city="violation.gemeente" :max="violation.maximumsnelheid" :speed="violation.werkelijkesnelheid" :lat="violation.lat" :lng="violation.lng"> 
                                         <div class="collapsible-header">
                                             <img class ="maxspeedsign" :src="violation.url">
                                             <span class="overtredingstijd">{{ violation.tijd }}</span>
                                             <div class="paxspeedtext">{{ violation.straat }} {{ violation.nummer }}  {{ violation.gemeente }} </div>                                    
-                                            <span class="new badge red">lalala km/u</span>
+                                            <span class="new badge red">{{ violation.werkelijkesnelheid }} km/u</span>
                                         </div>   
                                     </a> 
                                 </li>
@@ -160,6 +167,8 @@ export default {
           "content": {
               "speedim": null,
               "speed" : null,
+              "uur" : null,
+              "plaats" : null
           },
           "class": {
               "groen": true,
@@ -173,7 +182,7 @@ export default {
   },
   created(){
     if (this.checkparam(this.datum, this.tijd)){
-        this.main();
+        this.main(this.datum, this.tijd);
     }else{
         this.$router.push('/Ritten')
     }  
@@ -183,15 +192,14 @@ export default {
     uniqueviolations: function() {
         let filter = [];
         let list = [];
-        for(var i =0; i < this.violationslist.length; i++) {
-            if(filter.indexOf(this.violationslist[i].straatnaam) === -1) {
-                filter.push(this.violationslist[i].straatnaam)
-                list.push(this.violationslist[i])
-            }else{
-                let index = filter.indexOf(this.violationslist[i].straatnaam)
-                if(list[index].tesnel < this.violationslist[i].tesnel){
-                    list.splice(index,1)
-                    list.push(this.violationslist[i])
+        for(var i =0; i < this.violations.length; i++) { 
+            if(filter.indexOf(this.violations[i].straat) === -1) { 
+                filter.push(this.violations[i].straat) 
+                list.push(this.violations[i])  
+            }else{         
+                let index = filter.indexOf(this.violations[i].straat)
+                if(list[index].werkelijkesnelheid < this.violations[i].werkelijkesnelheid){
+                    list[index].werkelijkesnelheid = this.violations[i].werkelijkesnelheid
                 }
             }
         }
@@ -207,11 +215,7 @@ export default {
         if (matchesh == null) return false;
         else return true
       },
-      main: function(){
-          this.getdata(this.datum, this.tijd);
-          //this.getviolations(this.datum, this.tijd);
-      },
-      getdata: function(datum, tijd){
+      main: function(datum, tijd){
         let all = this.firebaseref;
         let iso = moment(datum, "YYYY-MM-DD");
         let jaar = iso.format('YYYY');
@@ -266,14 +270,15 @@ export default {
 
             }).then(()=>{
                 //dan ophalen van overtredingen
-                all.child('overtredingen' + jaar).child(maand).child(dag).child(tijd).once('value', (rit)=>{
+                all.child('overtredingen').child(jaar).child(maand).child(dag).child(tijd).once('value', (rit)=>{
                 if(rit.val() !== null){
                         rit.forEach((overtreding)=>{
                             let key = overtreding.key
                             let log = overtreding.val();
                             let info = Object.values(log)[0];
                             info.tijd = key
-                            info.url = '../static/img/maxspeed/10.png'
+                            info.url = '../static/img/maxspeed/'+ info.maximumsnelheid +'.png'
+                            info.werkelijkesnelheid = Number(info.werkelijkesnelheid).toFixed(2),
                             this.violations.push(info)
                         })
                         //aantalovertredingen
@@ -289,15 +294,34 @@ export default {
             this.$router.push('/Ritten')                  
         }
       },
-      showviolationdetail: function(){
-
+      showviolationdetail: function(event){
+            let lat = Number(event.currentTarget.attributes['lat'].value);
+            let lng = Number(event.currentTarget.attributes['lng'].value);
+            let max = event.currentTarget.attributes['max'].value;
+            let werkelijkesnelheid = event.currentTarget.attributes['speed'].value;
+            this.infoWinOpen.position.lat = lat;
+            this.infoWinOpen.position.lng = lng;
+            this.infoWinOpen.content.speed = Number(werkelijkesnelheid).toFixed(2);
+            this.infoWinOpen.content.speedim = './static/img/maxspeed/' + max + '.png';
+            let plaats = event.currentTarget.attributes['street'].value + " " + event.currentTarget.attributes['number'].value + " te " + event.currentTarget.attributes['city'].value;
+            this.infoWinOpen.content.plaats = plaats;
+            this.infoWinOpen.content.uur = event.currentTarget.attributes['time'].value;
+            if(Number(max) >= werkelijkesnelheid){
+                this.infoWinOpen.class.groen = true;
+                this.infoWinOpen.class.rood = false;
+            }else{
+                this.infoWinOpen.class.groen = false;
+                this.infoWinOpen.class.rood = true;
+            };
+            this.infoWinOpen.open = true;
       },
       polylinepointclick: function(event){
           if(event.vertex){
+            this.infoWinOpen.content.uur = null
+            this.infoWinOpen.content.plaats = null
             let info = this.coordinates[event.vertex -2].info
-            console.log(info)
-        //     this.infoWinOpen.position.lat = event.latLng.lat()
-        //     this.infoWinOpen.position.lng = event.latLng.lng()
+            this.infoWinOpen.position.lat = event.latLng.lat()
+            this.infoWinOpen.position.lng = event.latLng.lng()
              this.infoWinOpen.content.speed = Number(info.werkelijkesnelheid).toFixed(2)
              this.infoWinOpen.content.speedim = './static/img/maxspeed/' + info.maxsnelheid + '.png'
              if(Number(info.maxsnelheid) >= info.werkelijkesnelheid){
@@ -318,7 +342,13 @@ export default {
               "lng" : start.lng,
               "zoom" : 14
           }
-        }
+      },
+      violationspage: function(){
+          this.$parent.actiefjaar = null;
+          this.$parent.actiefsnelheid = "firstclick",
+          this.$router.push('/Rapporten')
+
+      }
   },
   filters: {
       datumnederlands: function(datum){
