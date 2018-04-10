@@ -4,123 +4,38 @@ DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.
 DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
 DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 16:21:05.253204: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 4
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/16:21:04/16:21:05.json HTTP/1.1" 200 31
-DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
-DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
-DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 16:21:23.228150: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/16:21:22/16:21:23.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/16:21:22/16:21:26.json HTTP/1.1" 200 31
-DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
-DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
-DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 17:03:20.309317: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 4
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:03:19/17:03:20.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:03:19/17:03:23.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:03:19/17:03:26.json HTTP/1.1" 200 31
-DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
-DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
-DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 17:04:05.203969: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:04:04/17:04:05.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:04:04/17:04:08.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:04:04/17:04:11.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:04:04/17:04:14.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:04:04/17:04:17.json HTTP/1.1" 200 31
-DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
-DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
-DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 17:04:37.106382: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:04:35/17:04:37.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:04:35/17:04:40.json HTTP/1.1" 200 31
-DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
-DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
-DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 17:05:04.791389: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen2018/4.json HTTP/1.1" 200 4
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen2018/4/9/17:05:03/17:05:05.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:05:03/17:05:05.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen2018/4/9/17:05:03/17:05:08.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:05:03/17:05:08.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen2018/4/9/17:05:03/17:05:11.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:05:03/17:05:11.json HTTP/1.1" 200 31
-DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
-DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
-DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 17:05:23.660208: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:05:22/17:05:24.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:05:22/17:05:27.json HTTP/1.1" 200 31
-DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
-DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
-DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 17:15:47.666465: start
+INFO:root:2018-04-10 22:02:19.276584: start
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 4
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen/2018/4/10/22:02:17/22:02:19.json HTTP/1.1" 200 31
 DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten/2018/4.json HTTP/1.1" 200 4
 DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten/2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:15:46/17:15:47.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:15:46/17:15:50.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:15:46/17:15:53.json HTTP/1.1" 200 31
-DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
-DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
-DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 17:16:16.423211: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten/2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten/2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:16:15/17:16:16.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:16:15/17:16:19.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:16:15/17:16:22.json HTTP/1.1" 200 31
-DEBUG:urllib3.util.retry:Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
-DEBUG:google.auth.transport.requests:Making request: POST https://accounts.google.com/o/oauth2/token
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): accounts.google.com
-DEBUG:urllib3.connectionpool:https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
-DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
-INFO:root:2018-04-09 17:23:46.516772: start
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten/2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten/2018/4.json HTTP/1.1" 200 1
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:23:45/17:23:46.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:23:45/17:23:49.json HTTP/1.1" 200 31
-DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/9/17:23:45/17:23:52.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/10/22:02:17/22:02:19.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen/2018/4/10/22:02:17/22:02:26.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/10/22:02:17/22:02:26.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen/2018/4/10/22:02:17/22:02:27.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/10/22:02:17/22:02:27.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen/2018/4/10/22:02:17/22:02:29.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/10/22:02:17/22:02:29.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen/2018/4/10/22:02:17/22:02:31.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/10/22:02:17/22:02:31.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen/2018/4/10/22:02:17/22:02:33.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/10/22:02:17/22:02:33.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen/2018/4/10/22:02:17/22:02:36.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/10/22:02:17/22:02:36.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantal%20overtredingen/2018/4.json HTTP/1.1" 200 1
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/overtredingen/2018/4/10/22:02:17/22:02:39.json HTTP/1.1" 200 31
+DEBUG:urllib3.connectionpool:https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/4/10/22:02:17/22:02:39.json HTTP/1.1" 200 31

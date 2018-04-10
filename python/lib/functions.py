@@ -164,7 +164,7 @@ def write():
                 currtime = str(now.time())
                 #refs
                 writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
-                writerefovertredingen = variables.uid + '/' + 'overtredingen' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
+                writerefovertredingen = variables.uid + '/' + 'overtredingen' + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
                 writeaantalritten = variables.uid + '/' + 'aantalritten' + '/' + str(year) + '/' + str(month)
                 writeaantalovertredingen = variables.uid + '/' + 'aantal overtredingen' + '/' + str(year) + '/' + str(month)
                 #data die moet worden weggeschreven bijd e gewone logs
@@ -179,6 +179,11 @@ def write():
                 #overtredingen wegschrijven
                 if variables.snelheid > speedlim:
                     violation = getViolationLocation(variables.lat, variables.lon)
+                    violation["werkelijkesnelheid"] = variables.snelheid
+                    violation["maximumsnelheid"] = speedlim
+                    violation["tesnel"] = variables.snelheid - speedlim
+                    violation["lat"] = variables.lat
+                    violation["lng"] = variables.lon
                     connectieovertredingen = db.reference(writerefovertredingen)
                     connectieaantalovertredingen = db.reference(writeaantalovertredingen)
                     def updateovertredingen(current):
