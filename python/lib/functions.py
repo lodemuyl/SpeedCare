@@ -54,6 +54,10 @@ def checkActive():
                 GPIO.setup(variables.runled, GPIO.OUT)
                 GPIO.output(variables.runled,GPIO.HIGH)
                 return True
+        except (KeyboardInterrupt, SystemExit):
+            GPIO.setup(variables.runled, GPIO.OUT)
+            GPIO.output(variables.runled, GPIO.LOW)
+            sys.exit(1)
         except Exception as exactive:
             print('jouw pk is nog niet geactiveerd of bestaat niet')
             log('message : ' + str(exactive))
@@ -74,12 +78,12 @@ def checknetwork():
         #print('network')
         log('Network up')
         return True
+    except (KeyboardInterrupt, SystemExit):
+        GPIO.setup(variables.runled, GPIO.OUT)
+        GPIO.output(variables.runled, GPIO.LOW)
+        sys.exit(1)
     except Exception as exnetwork:
-        #print('Geen netwerk')
-        #log('message : ' + str(exnetwork))
         log('Network down' + str(exnetwork))
-        #GPIO.setup(variables.errorled, GPIO.OUT)
-        #GPIO.output(variables.errorled, GPIO.HIGH)
         return False
 #logging
 def log(message):
@@ -99,6 +103,10 @@ def getSpeedLimit(lat, lon):
             return gg[category]        
         else:
             return gg['SC2']
+    except (KeyboardInterrupt, SystemExit):
+        GPIO.setup(variables.runled, GPIO.OUT)
+        GPIO.output(variables.runled, GPIO.LOW)
+        sys.exit(1)
     except Exception as Exspeed:
         return False
     
@@ -130,6 +138,10 @@ def getViolationLocation(lat, lng):
         else:
             log('message : fout bij het ophalen violationlocation')
             return False
+    except (KeyboardInterrupt, SystemExit):
+        GPIO.setup(variables.runled, GPIO.OUT)
+        GPIO.output(variables.runled, GPIO.LOW)
+        sys.exit(1)
     except Exception as ex:
        log('message : ' + str(ex))
        print('message : fout bij het ophalen violationlocation')
@@ -150,21 +162,41 @@ def write():
                 day = now.day
                 currdate = str(day) +'/'+ str(month) +'/'+str(year)
                 currtime = str(now.time())
+                #refs
                 writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
+                writerefovertredingen = variables.uid + '/' + 'overtredingen' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
+                writeaantalritten = variables.uid + '/' + 'aantalritten' + '/' + str(year) + '/' + str(month)
+                writeaantalovertredingen = variables.uid + '/' + 'aantal overtredingen' + '/' + str(year) + '/' + str(month)
+                #data die moet worden weggeschreven bijd e gewone logs
                 writedata = {
                     "lat" : variables.lat,
                     "lon" : variables.lon,
                     "snelheid" : variables.snelheid,
                     "maxsnelheid" : str(speedlim),
                     "signaal" : variables.kwaliteit,
-                    "sattelieten": variables.sattelieten,
+                    "sattelieten" : variables.sattelieten,
                     }
+                #overtredingen wegschrijven
                 if variables.snelheid > speedlim:
                     violation = getViolationLocation(variables.lat, variables.lon)
+                    connectieovertredingen = db.reference(writerefovertredingen)
+                    connectieaantalovertredingen = db.reference(writeaantalovertredingen)
+                    def updateovertredingen(current):
+                        return current + 1 if current else 1
+                    connectieaantalovertredingen.transaction(updateovertredingen)
                     if violation:
-                        writedata["overtreding"] = violation
+                        writedata["overtreding"] = True
+                        connectieovertredingen.push(violation)
                     else:
-                        writedata["overtreding"] = "kon locatie van overtreding niet ophalen"
+                        writedata["overtreding"] = True
+                        connectieovertredingen.push("Kon locatie niet ophalen.")
+                #increment van aantalritten en aantal overtredingen bij 1e tick
+                if variables.counter == 0:                    
+                    connectieaantalritten = db.reference(writeaantalritten)                  
+                    def updateritten(current):
+                        return current + 1 if current else 1                        
+                    connectieaantalritten.transaction(updateritten)
+                #gewone logs wegschrijven
                 write = db.reference(writeref)
                 write.push(writedata)
             elif not speedlim:
@@ -182,6 +214,10 @@ def write():
                         raise Exception('networktimeout expired')
                     variables.networktimeoutcounter += variables.loginterval
         variables.counter += 1
+    except (KeyboardInterrupt, SystemExit):
+        GPIO.setup(variables.runled, GPIO.OUT)
+        GPIO.output(variables.runled, GPIO.LOW)
+        sys.exit(1)
     except Exception as exwrite:
         log('message : ' + str(exwrite))
         print('timeout van ' + str(variables.networktimeoutcounter))
@@ -198,11 +234,6 @@ def readString():
         		pass 
 		line = variables.ser.readline().decode("utf-8") 
 		return line
-	    
-#converteren van dateformat utc tijd
-#def getTime(string,format,returnFormat):
-#	new = time.strftime(returnFormat, time.strptime(string, format))
-#	return new
 
 #lat en long
 def getLatLng(latString,lngString):

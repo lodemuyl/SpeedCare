@@ -21,7 +21,9 @@ try:
             lines = line.split(",")
             if functions.checksum(line):
                 functions.main(lines)
-except Exception as ex:
-    functions.log('close' + str(ex))
+except (KeyboardInterrupt, SystemExit):
     GPIO.setup(variables.runled, GPIO.OUT)
     GPIO.output(variables.runled, GPIO.LOW)
+    raise
+except Exception as ex:
+    functions.log('close' + str(ex))
