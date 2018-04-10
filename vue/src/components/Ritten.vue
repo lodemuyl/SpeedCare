@@ -59,10 +59,12 @@ export default {
       all.child(jaar).child(maand).once('value', (snapshot) => {
          for (var key in snapshot.val()) {
            for(var subkey in snapshot.val()[key]){
-            let ritdate = jaar + '-' + maand + '-' + key
+            let stringdate = String(jaar + '-' + maand + '-' + key)
+            //naar ISO-8601 standaard voor safari en andere browsers
+            let iso = moment(stringdate,"YYYY-MM-DD")
             let ritobject = {
               title : subkey,
-              start : ritdate,
+              start : iso,
               cssClass  : 'autoritevent',
             }
             self.fcEvents.push(ritobject)
@@ -73,8 +75,10 @@ export default {
       })
     },
     eventClick: function(event, jsEvent, pos) {
-        let path = '/Ritten/' + event.start + '/' + event.title
-        this.$router.push(path)
+      //terug omzetten van iso standaard naar gewoon formaat
+      let normaal = moment(event.start, "YYY-MM-DD")
+      let path = '/Ritten/' + normaal._i + '/' + event.title
+      this.$router.push(path)
     },
     changeMonth: function(start, end, current){
       this.loaded = false

@@ -1,23 +1,40 @@
 <template>
   <div class="home">
-  <div>
+    <div>
       <agile :arrows="false" :speed="750" :autoplaySpeed="8000" :fade="true":autoplay="true" :pauseOnHover="false">
-          <div class="slide slide--1"></div>
-          <div class="slide slide--2"></div>
-          <div class="slide slide--3"></div>
-          <div class="slide slide--4"></div>
+        <div class="slide slide--1"></div>
+        <div class="slide slide--2"></div>
+        <div class="slide slide--3"></div>
+        <div class="slide slide--4"></div>
       </agile>
-  </div>
+    </div>
     <div class="container pannelview">
       <div v-show="loggedin">
-        <div class="row pannelpadding">
+        <div v-show="!loaded">
+          <div id="load">
+            <div class="loadblock">
+              <div class="preloader-wrapper big active">
+                  <div class="spinner-layer spinner-red-only">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div v-show="loaded" class="row pannelpadding">
           <router-link to="Ritten">        
             <div class="col pannelpadding s12 m12 l6 fullcard">
               <div class="card-panel grijsbackground fullheight">
                 <span class="rood initchar ">{{ aantalritten }}</span>
-                <span class="white-text bold">Ritten deze maand</span>
+                <span class="white-text bold">{{ naamritten }} deze maand</span>
                 <br>
-                <span class="white-text">Je hebt deze maand al {{ aantalritten }} ritten gereden.<br> Bekijk het overzicht van al jouw ritten waarna je alle ritten in detail kan bekijken.<br> Overtredingen worden tevens geregistreerd en bijgehouden.</span>
+                <span class="white-text">Je hebt deze maand al {{ aantalritten }} {{ naamritten }} gereden.<br> Bekijk het overzicht van al jouw ritten waarna je alle ritten in detail kan bekijken.<br> Overtredingen worden tevens geregistreerd en bijgehouden.</span>
               </div>
             </div>
           </router-link>
@@ -25,9 +42,9 @@
             <div class="col pannelpadding s12 m12 l6 halfplus">
               <div class="card-panel groenbackground fullheight">
                 <span class="rood initchar ">{{ aantalovertredingen }}</span>
-                <span class="white-text bold">Overtredingen deze maand</span>
+                <span class="white-text bold">{{ naamovertredingen }} deze maand</span>
                 <br>
-                <span class="white-text">Je hebt deze maand al {{ aantalovertredingen }} overtredingen in totaal gereden.<br> Elke overtreding die je op de weg begaat wordt geregistreerd en zal worden gebruikt voor jouw rijscore te bepalen.<br> Bij de details van de rit kan je zien waar je de overtreding hebt begaan.</span>
+                <span class="white-text">Je hebt deze maand al {{ aantalovertredingen }} {{ naamovertredingen }} in totaal gereden.<br> Elke overtreding die je op de weg begaat wordt geregistreerd en zal worden gebruikt voor jouw rijscore te bepalen.</span>
               
                </div>
             </div>
@@ -112,27 +129,50 @@ export default {
     return {
       loggedin: this.$parent.currentUser,
       aantalritten: 0,
-      aantalovertredingen: 0
+      aantalovertredingen: 0,
+      loaded: false     
+    }
+  },
+  computed: {
+    naamritten: function(){
+      if(this.aantalritten == 1){
+        return "rit"
+      }else{
+        return "ritten"
+      }
+    },
+    naamovertredingen: function(){
+      if(this.aantalovertredingen == 1){
+        return "overtreding"
+      }else{
+        return "overtredingen"
+      }
     }
   },
   created () {
     if(this.loggedin){
-      this.ritten();
-      this.overtredingen();
+      let vandaag = new Date();
+      let all = db.ref(this.$parent.currentUser.uid)  
+      let jaar = vandaag.getFullYear()
+      let maand = vandaag.getMonth()+1
+      this.ritten(jaar, maand, all);
+      this.overtredingen(jaar, maand, all);
     }
   },
   methods: {
-    ritten: function(){
-        let vandaag = new Date();
-        let all = db.ref(this.$parent.currentUser.uid)  
-        let jaar = vandaag.getFullYear()
-        let maand = vandaag.getMonth()+1
-        all.child(jaar).child(maand).once('value', (snapshot) => {
-          console.log(snapshot.numChildren())
-        })
+    ritten: function(jaar, maand, all){
+        all.child('aantalritten').child(jaar).child(maand).once('value').then((val)=>{
+          this.aantalritten = val.val()
+          })
     },
-    overtredingen: function(){
-      this.aantalovertredingen = 8
+    overtredingen: function(jaar, maand , all){
+       all.child('aantalovertredingen').once('value', (snapshot)=>{
+         if(snapshot.exists()){
+           this.aantalovertredingen = snapshot.child(jaar).child(maand).val()
+         }
+       }).then(()=>{
+         this.loaded = true
+       })
     }
   }
 }

@@ -21,9 +21,9 @@
         <h2 class="pagetitle center">{{ datum | datumnederlands }}</h2>
         <div class="pannel">
             <div class="leftside">
-                <gmap-map :center="center"  :zoom="14" map-type-id="terrain"  style="width: 100%; height: 100%">
+                <gmap-map  :zoom="ritmetadata.zoom" map-type-id="terrain" :center="ritmetadata.center"  mapTypeId: google.maps.MapTypeId.ROADMAP style="width: 100%; height: 100%">
                     <gmap-polyline class="polyline"
-                        :path="coords" 
+                        :path="coordinates"
                         :editable="routedetail"
                         :dragable ="false"
                         :options="{strokeColor: '#CF2E5E'}" 
@@ -42,13 +42,13 @@
                     <div class="row">
                         <div class="col s12 m6 l6">
                             <div><i class="material-icons rood infoicons">date_range</i><p class="inlineinfo">{{ datum | datumnederlands }}</p></div>
-                            <div><i class="material-icons rood infoicons">access_time</i><p class="inlineinfo">{{ start }} - {{ end }}</p></div>
+                            <div><i class="material-icons rood infoicons">access_time</i><p class="inlineinfo">{{ ritmetadata.start }} - {{ ritmetadata.einde }}</p></div>
                             <div><i class="material-icons rood infoicons">account_circle</i><p class="inlineinfo">{{ user }}</p></div>
                         </div>
                         <div class="col s12 m6 l6">
-                            <div><i class="material-icons rood infoicons">timer</i><p class="inlineinfo">{{ duur }}</p></div>
-                            <div><i class="material-icons rood infoicons">directions_car</i><p class="inlineinfo">{{ highestspeed }} km/u</p></div>
-                            <div><i class="material-icons rood infoicons">assessment</i><p class="inlineinfo">{{ score }} / 100</p></div>
+                            <div><i class="material-icons rood infoicons">timer</i><p class="inlineinfo">{{ ritmetadata.duur }}</p></div>
+                            <div><i class="material-icons rood infoicons">directions_car</i><p class="inlineinfo">{{ ritmetadata.hoogstesnelheid }} km/u</p></div>
+                            <div><i class="material-icons rood infoicons">assessment</i><p class="inlineinfo">lala / 100</p></div>
                         </div>
                     </div>
                     <p class="subtitle">Bekijk gedetailleerde route</p>
@@ -64,23 +64,23 @@
                             </div>
                         </div>
                     </div>
-                    <p class="subtitle">Overtredingen</p>
+                    <p class="subtitle">Overtredingen <span v-show="amountviolations > 0">({{ amountviolations }})</span> </p>
                     <div class="row">
-                        <div v-show="violationslist.length ">                        
+                        <div v-show="violations.length">                        
                             <ul class="collapsible">
-                                <li v-for="overtreding in uniqueviolations">
-                                   <a v-on:click="showviolationdetail" class="violationclick" :speed="overtreding.werkelijkesnelheid" :max="overtreding.maximumsnelheid" :lat="overtreding.lat" :lng="overtreding.lon">
+                                <li v-for="violation in violations">
+                                   <a class="violationclick" v-on:click="showviolationdetail"> 
                                         <div class="collapsible-header">
-                                            <img class ="maxspeedsign" :src="overtreding.url">
-                                            <span class="overtredingstijd">{{ overtreding.tijd }}</span>
-                                            <div class="paxspeedtext">{{overtreding.address}}</div>                                    
-                                            <span class="new badge red">{{ overtreding.werkelijkesnelheid }} km/u</span>
+                                            <img class ="maxspeedsign" :src="violation.url">
+                                            <span class="overtredingstijd">{{ violation.tijd }}</span>
+                                            <div class="paxspeedtext">{{ violation.straat }} {{ violation.nummer }}  {{ violation.gemeente }} </div>                                    
+                                            <span class="new badge red">lalala km/u</span>
                                         </div>   
                                     </a> 
                                 </li>
                             </ul>
                         </div>
-                        <div v-show="!violationslist.length">
+                        <div v-show="!violations.length">
                             <p>U hebt geenovertredingen begaan op deze rit</p>
                         </div>
                     </div>
@@ -122,18 +122,27 @@ export default {
   data () {
     return {
       loaded: false,
+      ritmetadata: {
+          "start": null,
+          "einde": null,
+          "duur": null,
+          "hoogstesnelheid": null,
+          "center": {
+            "lat": 10,
+            "lng": 10
+          },
+          "zoom": 11
+      },
+      amountviolations: 0,
+      coordinates: [],
+      violations: [],    
       routedetail: false,
       firebaseref: db.ref(this.$parent.currentUser.uid),
       icons: {
           "start": '/static/img/icons/start.png',
           "stop": '/static/img/icons/end.png'
       },
-      center: {
-          "lat": 10,
-          "lng": 10
-      },
       user: this.$parent.currentUser.displayName,
-      logs: {},
       startlocation: {
           "lat": 10,
           "lng": 10
@@ -142,7 +151,6 @@ export default {
           "lat": 10,
           "lng": 10
       },
-      start: null,
       infoWinOpen: {
           "open": false,
           "position": {
@@ -152,27 +160,20 @@ export default {
           "content": {
               "speedim": null,
               "speed" : null,
-
           },
           "class": {
               "groen": true,
               "rood": false
           }
       },
-      duur: null,
-      end: null,
-      highestspeed: 0,
-      violationslist: [],
-      score: 0,
       datum: this.$route.params.datum,
       tijd: this.$route.params.tijd,
       errormessage: null,
-      coords: []
     }
   },
   created(){
     if (this.checkparam(this.datum, this.tijd)){
-        this.violations(this.datum, this.tijd);
+        this.main();
     }else{
         this.$router.push('/Ritten')
     }  
@@ -180,8 +181,8 @@ export default {
   computed: {
     //overtredingsduplicaten verwijderen en hoogste snelheid loggen
     uniqueviolations: function() {
-    let filter = [];
-    let list = [];
+        let filter = [];
+        let list = [];
         for(var i =0; i < this.violationslist.length; i++) {
             if(filter.indexOf(this.violationslist[i].straatnaam) === -1) {
                 filter.push(this.violationslist[i].straatnaam)
@@ -204,153 +205,102 @@ export default {
         let matchesh = /^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/.exec(tijd);
         if (matchesd == null) return false;
         if (matchesh == null) return false;
-        let m = matchesd[2];
-        let y = matchesd[1] - 1;
-        let d = matchesd[3];
-        let h = matchesh[1];
-        let min = matchesh[2];
-        let s = matchesh[3];
-        let composedDate = new Date(y, m, d, h, min, s);
-        //tijd
-        return composedDate.getDate() == d &&
-               composedDate.getMonth() == m &&
-               composedDate.getFullYear() == y &&
-               composedDate.getHours() == h &&
-               composedDate.getMinutes() == min &&
-               composedDate.getSeconds() == s;
-
-
+        else return true
       },
-      violations: function(datum, tijd){
-          if(datum && tijd){
-            let all = this.firebaseref
-            let ritdate = new Date(datum)
-            let jaar = ritdate.getFullYear();
-            let maand = ritdate.getMonth()+1;
-            let dag = ritdate.getDate();
-            let self = this;
-            let keys = [];
-            let data = {};
-            all.child(jaar).child(maand).child(dag).child(tijd).once('value', (snapshot) => {
-                snapshot.forEach(function(childSnapshot) { 
-                    let key = childSnapshot.key;  
-                    let childData = childSnapshot.val();
-                    let childData2 = Object.values(childData)[0];
-                    (childData2['snelheid'] > self.highestspeed) ? (self.highestspeed = Number(childData2['snelheid']).toFixed(2)) : false;
-                    //elke log wegschrijven in eigen object voor verdere functies 
-                    let datacontent = {
-                        'lat': childData2['lat'],
-                        'lon': childData2['lon'],
-                        'maxsnelheid': childData2['maxsnelheid'],
-                        'werkelijkesnelheid': childData2['snelheid'],
-                        'signaal': childData2['signaal'],
-                        'tijd' : key
-                    }
-                    data[key] = datacontent
-                    //array vullen voor een lijst van alle tijdspunten voor zo het center te bepalen
-                    keys.push(key);
-                    //lat en long wegschrijven naar de coords array voor de route op de map weer te geven
-                    let coords = {
-                        'lat': Number(childData2['lat']),
-                        'lng': Number(childData2['lon']),
-                        'info': datacontent
-                    }
-                    self.coords.push(coords)
-                    if(childData2['snelheid'] > childData2['maxsnelheid']){
-                        let tesnel = Number(childData2['snelheid']) - Number(childData2['maxsnelheid']);
-                        //violation logs
-                        let violationdata = {
-                            'werkelijkesnelheid': Number(childData2['snelheid']).toFixed(2),
-                            'maximumsnelheid': childData2['maxsnelheid'],
-                            'url': '../static/img/maxspeed/' + childData2['maxsnelheid'] + '.png',
-                            'lat': childData2['lat'],
-                            'lon': childData2['lon'],
-                            'tijd': key,
-                            'tesnel':  tesnel.toFixed(2),
-                            'address': 'geen adres',
-                            'straatnaam': 'geen straatnaam'
+      main: function(){
+          this.getdata(this.datum, this.tijd);
+          //this.getviolations(this.datum, this.tijd);
+      },
+      getdata: function(datum, tijd){
+        let all = this.firebaseref;
+        let iso = moment(datum, "YYYY-MM-DD");
+        let jaar = iso.format('YYYY');
+        let maand = iso.format('M');
+        let dag = iso.format('D');
+        if(datum && tijd){
+            all.child(jaar).child(maand).child(dag).child(tijd).once('value', (rit)=>{
+                //ophalen van gewone rittendata
+                if(rit.val() !== null){
+                    //toekennen vertrekmoment
+                    this.ritmetadata.start = tijd
+                    //ophalen alle logs
+                    rit.forEach((timestamp)=>{
+                        let key = timestamp.key;
+                        let log = timestamp.val();
+                        let info = Object.values(log)[0];
+                        //maximumsnelheid toekennen
+                        (info['snelheid'] > this.ritmetadata.hoogstesnelheid) ? (this.ritmetadata.hoogstesnelheid = Number(info['snelheid']).toFixed(2)) : false;
+                        //aangepaste objecten toevoegen aan array voor route weer te geven
+                        let pointinfo = {
+                            'lat': info['lat'],
+                            'lon': info['lon'],
+                            'maxsnelheid': info['maxsnelheid'],
+                            'werkelijkesnelheid': info['snelheid'],
+                            'signaal': info['signaal'],
+                            'tijd' : key
+                            };
+                        let objcoordinates ={
+                            'lat': Number(info['lat']),
+                            'lng': Number(info['lon']),
+                            'info': pointinfo
                         };
-                        //assign van alle overtredingen
-                        self.violationslist.push(violationdata)                  
-                        //ophalen van locatie van overtredingen
-                        self.getstreetname(Number(childData2['lat']), Number(childData2['lon']), self.violationslist.length)
-                    }                   
-
-                });
-                if(Object.keys(data).length === 0){
-                    self.logs = null;
+                        this.coordinates.push(objcoordinates)
+                     })
+                     //toekennen einde rit + duur
+                    let laatste  = this.coordinates[this.coordinates.length - 1]
+                    let eerste = this.coordinates[0]                                 
+                    this.ritmetadata.einde = laatste.info.tijd;
+                    this.ritmetadata.duur = moment.utc(moment(this.ritmetadata.einde,"HH:mm:ss").diff(moment(this.ritmetadata.start,"HH:mm:ss"))).format("HH:mm:ss")
+                    //registreren start en eindmarker
+                    this.startlocation.lat = eerste.lat;
+                    this.startlocation.lng = eerste.lng;
+                    this.endlocation.lat = laatste.lat;
+                    this.endlocation.lng = laatste.lng;
+                    //center van view
+                    this.ritmetadata.center.lat = this.centermap().lat;
+                    this.ritmetadata.center.lng = this.centermap().lng;
+                    this.ritmetadata.zoom = this.centermap().zoom;
                 }else{
-                    self.logs = data;
-                    //start en stop tijd
-                    self.start = Object.keys(data)[0]
-                    self.end = Object.keys(data)[Object.keys(data).length - 1]
-                    //start en stop locatie
-                    Vue.set(self.startlocation, "lat", Number(data[self.start]["lat"]))
-                    Vue.set(self.startlocation, "lng", Number(data[self.start]["lon"]))
-                    Vue.set(self.endlocation, "lat", Number(data[self.end]["lat"]))
-                    Vue.set(self.endlocation, "lng", Number(data[self.end]["lon"]))
-                    //verschil in tijdseenheden voor duurpebaling 
-                    let start = new Date("01/01/2010 " + self.start);
-                    let end = new Date("01/01/2010 " + self.end);
-                    let difference = end - start;
-                    let diff_result = new Date(difference);
-                    diff_result.setHours(diff_result.getHours()-1);
-                    self.duur =  moment(diff_result).locale('nl').format('LTS')
-                    this.getcenter(data, keys);
-                    this.getscore()
+                     this.$router.push('/Ritten')
+                }              
+
+            }).then(()=>{
+                //dan ophalen van overtredingen
+                all.child('overtredingen' + jaar).child(maand).child(dag).child(tijd).once('value', (rit)=>{
+                if(rit.val() !== null){
+                        rit.forEach((overtreding)=>{
+                            let key = overtreding.key
+                            let log = overtreding.val();
+                            let info = Object.values(log)[0];
+                            info.tijd = key
+                            info.url = '../static/img/maxspeed/10.png'
+                            this.violations.push(info)
+                        })
+                        //aantalovertredingen
+                        this.amountviolations = this.violations.length
+                }else{
 
                 }
+            })
                 this.loaded = true
             })
-          }else{
+
+        }else{
             this.$router.push('/Ritten')                  
-          }
-      },
-      getstreetname: function(lat, lon, lengte){  
-            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?`, {
-                params: {
-                    key: this.$parent.mapsapikey,
-                    latlng: lat + ',' + lon
-                }       
-            })
-            .then((val) => {
-                if(val.data.status === "OK"){
-                    this.violationslist[lengte-1]['address'] = val.data.results[0]['formatted_address']
-                    this.violationslist[lengte-1]['straatnaam'] = val.data.results[0]['address_components'][1].long_name
-                }else{
-                    this.errormessage = val.data.status;
-                    console.log('kan het adres niet ophalen')
-                    this.violationslist[lengte-1]['address'] = 'kon locatie niet ophalen'
-                    this.violationslist[lengte-1]['straatnaam'] = 'kon straatnaam niet ophalen'
-                }
-            }).catch(e => {
-                this.errormessage = e.message
-            })         
-      },
-      getcenter: function(data, keys){
-        let centernumber = 0
-        if(Object.keys(data).length == 1){
-            centernumber = 0
-        }else if(Object.keys(data).length % 2 == 0){
-            centernumber = (Object.keys(data).length / 2)-1
-        }else if(Object.keys(data).length % 2 != 0){
-            centernumber = Math.round((Object.keys(data).length / 2)-1)
         }
-        let key = keys[centernumber]
-        let centerobjectkey = data[key]
-        let lat = parseFloat(centerobjectkey['lat'])
-        let lng = parseFloat(centerobjectkey['lon'])
-        this.center['lat'] = lat
-        this.center['lng'] = lng
+      },
+      showviolationdetail: function(){
+
       },
       polylinepointclick: function(event){
           if(event.vertex){
-            let info = this.coords[event.vertex].info
-            this.infoWinOpen.position.lat = event.latLng.lat()
-            this.infoWinOpen.position.lng = event.latLng.lng()
-            this.infoWinOpen.content.speed = Number(info.werkelijkesnelheid).toFixed(2)
-            this.infoWinOpen.content.speedim = './static/img/maxspeed/' + info.maxsnelheid + '.png'
-            if(Number(info.maxsnelheid) >= info.werkelijkesnelheid){
+            let info = this.coordinates[event.vertex -2].info
+            console.log(info)
+        //     this.infoWinOpen.position.lat = event.latLng.lat()
+        //     this.infoWinOpen.position.lng = event.latLng.lng()
+             this.infoWinOpen.content.speed = Number(info.werkelijkesnelheid).toFixed(2)
+             this.infoWinOpen.content.speedim = './static/img/maxspeed/' + info.maxsnelheid + '.png'
+             if(Number(info.maxsnelheid) >= info.werkelijkesnelheid){
                 this.infoWinOpen.class.groen = true
                 this.infoWinOpen.class.rood = false
              }else{
@@ -358,55 +308,24 @@ export default {
                 this.infoWinOpen.class.rood = true
              }
             this.infoWinOpen.open = true
-          }else{
-              this.infoWinOpen.open = false
-              console.log("tussenliggend punt")
+        }
+      },
+      centermap: function(){      
+          let start = this.startlocation
+          let end = this.endlocation
+          return {
+              "lat" : start.lat,
+              "lng" : start.lng,
+              "zoom" : 14
           }
-      },
-      showviolationdetail: function(event){
-        let lat = Number(event.currentTarget.attributes['lat'].value)
-        let lng = Number(event.currentTarget.attributes['lng'].value)
-        let max = event.currentTarget.attributes['max'].value
-        let werkelijkesnelheid = event.currentTarget.attributes['speed'].value
-        this.infoWinOpen.position.lat = lat
-        this.infoWinOpen.position.lng = lng
-        this.infoWinOpen.content.speed = Number(werkelijkesnelheid).toFixed(2)
-        this.infoWinOpen.content.speedim = './static/img/maxspeed/' + max + '.png'
-        if(Number(max) >= werkelijkesnelheid){
-            this.infoWinOpen.class.groen = true
-            this.infoWinOpen.class.rood = false
-        }else{
-            this.infoWinOpen.class.groen = false
-            this.infoWinOpen.class.rood = true
         }
-        this.infoWinOpen.open = true
-      },
-      getscore: function(){
-        if(this.violationslist.length > 0){
-            let coefficient = 1;
-            let scoreopaantal = 100 - ((this.violationslist.length / this.coords.length)*100)
-            let totaaltesnel = 0
-            this.violationslist.forEach((e)=>{
-                totaaltesnel += Number(e.tesnel)
-            })
-            let gemiddeldtesnel = totaaltesnel / this.violationslist.length
-            if(gemiddeldtesnel < 10 && gemiddeldtesnel > 5){
-                coefficient = 0.98
-            }else if(gemiddeldtesnel >= 10 && gemiddeldtesnel < 20){
-                coefficient = 0.9
-            }else if(gemiddeldtesnel > 20){
-                coefficient = 0.8
-            }
-            this.score = Number(scoreopaantal * coefficient).toFixed(2)
-        }else{
-            this.score = 100
-        }
-      }
   },
   filters: {
       datumnederlands: function(datum){
-            if(datum){              
-                return moment(datum).locale('nl').format('LL')
+            if(datum){
+               let iso = moment(datum, "YYYY-MM-DD")
+               let nederlands = iso.locale('nl').format('LL')
+               return nederlands
             }else{
                 return false
             }

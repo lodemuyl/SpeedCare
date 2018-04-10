@@ -1,12 +1,19 @@
-
-@import url(https://fonts.googleapis.com/css?family=Montserrat);
+$font-dir: '~@/assets/fonts/';
+@font-face {
+  font-family: 'Montserrat'; 
+  font-style: normal;
+  font-weight: 400;   
+  src: url($font-dir + 'Montserrat-Regular.woff2') format('woff2'),
+       url($font-dir + 'Montserrat-Regular.woff') format('woff'),
+       url($font-dir + 'Montserrat-Regular.ttf') format('truetype');
+}
 $montserat : 'Montserrat';
 @font-face {
-    font-family: 'Material';
+    font-family: 'Material'; 
     font-style: normal;
     font-weight: 400;   
-    src: url(https://rawgit.com/google/material-design-icons/master/iconfont/MaterialIcons-Regular.woff2) format('woff2'),
-         url(https://rawgit.com/google/material-design-icons/master/iconfont/MaterialIcons-Regular.woff) format('woff'),
-         url(https://rawgit.com/google/material-design-icons/master/iconfont/MaterialIcons-Regular.ttf) format('truetype');
+    src: url($font-dir + 'MaterialIcons-Regular.woff2') format('woff2'),
+         url($font-dir + 'MaterialIcons-Regular.woff') format('woff'),
+         url($font-dir + 'MaterialIcons-Regular.ttf') format('truetype');
   }
 $material : 'Material';
