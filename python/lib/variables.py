@@ -44,6 +44,7 @@ autoritid = timenow.time()
 counter = 0
 #networktimeout
 networktimeoutcounter = 0
+timeouttime = 30
 #loginterval
 loginterval = 3
 #maxspeedpath
@@ -55,6 +56,10 @@ appid = 'bngQkvofptY6BhYwJqkR'
 appcode = 'PiLtHYGTE1jPKNQuDp7xxw'
 #gogolegeocodeapi
 key = 'AIzaSyCjDB7jB1CqPueuUcUPXj1LBxMmob3iF1M'
+
+
+
+
 
 
 

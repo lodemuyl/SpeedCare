@@ -32,19 +32,30 @@ def main(lines):
         pass     
 #init firebase
 def initfirebase():
-    firebase_admin.initialize_app(variables.cred, {
-    'databaseURL' : 'https://speedcare-lode.firebaseio.com/',
-    'httpTimeout' : 1
-    })
+    try:
+        firebase_admin.initialize_app(variables.cred, {
+        'databaseURL' : 'https://speedcare-lode.firebaseio.com/',
+        'httpTimeout' : False
+        })
+    except (KeyboardInterrupt, SystemExit):
+        GPIO.setup(variables.runled, GPIO.OUT)
+        GPIO.output(variables.runled, GPIO.LOW)
+        sys.exit(1)
+    except Exception as active:
+        log('message : initprobleem' + str(active))
+        GPIO.setup(variables.errorled, GPIO.OUT)
+        GPIO.output(variables.errorled, GPIO.HIGH)
+        return False
 #checkactive
 def checkActive():
-    network = True
-    #network = checknetwork()
+    network = checknetwork()
     if network:
-        #firebase credentials
-        initfirebase()
-        checkproductkey = db.reference('Relations').get()
         try:
+            if(variables.counter == 0):            
+                #firebase credentials
+                initfirebase()
+                checkproductkey = db.reference('Relations').get()
+        
             if checkproductkey and checkproductkey[variables.pk]:
                 variables.uid = checkproductkey[variables.pk].get('user')
                 print('start')
@@ -58,9 +69,9 @@ def checkActive():
             GPIO.setup(variables.runled, GPIO.OUT)
             GPIO.output(variables.runled, GPIO.LOW)
             sys.exit(1)
-        except Exception as exactive:
+        except Exception as active:
             print('jouw pk is nog niet geactiveerd of bestaat niet')
-            log('message : ' + str(exactive))
+            log('message : ' + str(active))
             log('pk not active')
             GPIO.setup(variables.errorled, GPIO.OUT)
             GPIO.output(variables.errorled, GPIO.HIGH)
@@ -72,11 +83,10 @@ def checkActive():
     
 #check internet connection      
 def checknetwork():
-    try:
-        #socket.setdefaulttimeout(3)
+    try:        
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
-        #print('network')
-        log('Network up')
+        if variables.counter == 0:
+            log('Network up')
         return True
     except (KeyboardInterrupt, SystemExit):
         GPIO.setup(variables.runled, GPIO.OUT)
@@ -108,6 +118,7 @@ def getSpeedLimit(lat, lon):
         GPIO.output(variables.runled, GPIO.LOW)
         sys.exit(1)
     except Exception as Exspeed:
+        log('message : speedlimerror' + str(exnetwork))
         return False
     
 #ophalen maximumsnelheden
@@ -153,9 +164,10 @@ def write():
         #logging om de 3 seconden
         if variables.counter % variables.loginterval == 0:
             #current time
-            speedlim = getSpeedLimit(variables.lat,variables.lon)
-            if speedlim:
+            connectioncheck = checknetwork()            
+            if connectioncheck:
                 variables.networktimeoutcounter = 0
+                speedlim = getSpeedLimit(variables.lat,variables.lon)                
                 now = datetime.datetime.now()
                 year = now.year
                 month = now.month
@@ -204,20 +216,13 @@ def write():
                 #gewone logs wegschrijven
                 write = db.reference(writeref)
                 write.push(writedata)
-            elif not speedlim:
-                if checknetwork():
-                    log('message : speedlimitation error')
-                    print('speedlimitation error')
-                    GPIO.output(variables.errorled, GPIO.OUT)
-                    GPIO.output(variables.errorled, GPIO.HIGH)
-                    sys.exit(1)
-                elif not checknetwork():
-                    print('!!!' + str(variables.networktimeoutcounter) + 'seconden timeout')
-                    log('message : networkdown since' + str(variables.networktimeoutcounter) + ' seconds')
-                    if variables.networktimeoutcounter == 15:
-                        print('networktimeout expired')
-                        raise Exception('networktimeout expired')
-                    variables.networktimeoutcounter += variables.loginterval
+            elif not connectioncheck:
+                print('!!!' + str(variables.networktimeoutcounter) + 'seconden timeout')
+                log('message : networkdown since' + str(variables.networktimeoutcounter) + ' seconds')
+                if variables.networktimeoutcounter == variables.timeouttime:
+                    print('networktimeout expired')
+                    raise Exception('networktimeout expired')
+                variables.networktimeoutcounter += variables.loginterval
         variables.counter += 1
     except (KeyboardInterrupt, SystemExit):
         GPIO.setup(variables.runled, GPIO.OUT)
@@ -292,7 +297,7 @@ def checksum(line):
 	except:
 		print("Error in string")
 		log('error in string')
-		GPIO.setup(variables.errorled, GPIO.OUT)
+		GPIO.setup(variables.errorled, GePIO.OUT)
 		GPIO.output(variables.errorled, GPIO.HIGH)
 		return False
 	
@@ -307,3 +312,4 @@ def checksum(line):
 		GPIO.setup(variables.errorled, GPIO.OUT)
 		GPIO.output(variables.errorled, GPIO.HIGH)
 		return False
+
