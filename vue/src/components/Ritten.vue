@@ -84,8 +84,6 @@ export default {
       this.loaded = false
       let jaar = new Date(current).getFullYear();
       let maand = new Date(current).getMonth() + 1;
-      console.log('s' + jaar)
-      console.log('s' + maand)
       this.ritten(jaar, maand);
 
     }

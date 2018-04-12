@@ -3,25 +3,46 @@
         background-color: $beige!important; 
         overflow-x: hidden
     }
-    .collapsible{
-        color: $red;
-        border-color: $grey;
-        li{   
-            margin-bottom: 2px;  
-            .collapsible-header{
-                background-color: $grey!important;
-                color: $beige;
-                border-color: $grey;        
-            }
-            .collapsible-body{
-                color: $beige;
-                background-color: $grey;
-                border-bottom-color: $grey;
+
+    #snelheid{
+        .dag{
+            border: 1px solid $grey
+        }
+        .dagnaam{
+            color: $red;
+            font-weight: 500;
+        }
+        .ritten{
+            padding-left: 40px;
+            .overtreding{
+                padding-left: 40px;
             }
         }
-    }    
-    #jaar{
+    }
+    .overtredingenmaand{
+        margin-bottom: 30px!important
+    }
+    #jaar,#snelheid{
+        .collapsible{
+            margin-top: 30px;
+            color: $red;
+            border-color: $grey;
+            li{   
+                margin-bottom: 2px;  
+                .collapsible-header{
+                    background-color: $grey!important;
+                    color: $beige;
+                    border-color: $grey;        
+                }
+                .collapsible-body{
+                    color: $beige;
+                    background-color: $grey;
+                    border-bottom-color: $grey;
+                }
+            }
+        } 
         .card{
+            min-height: 600px;
             background-color: $blue!important;
             .card-title{
                 color: $beige
@@ -29,4 +50,59 @@
             }
         }
     }
+    .periode{
+        margin: 40px 0px 10px ;
+        color: $grey;
+        font-weight: 500
+    }
+    .noviolations{
+        padding: 24px
+    }
+    .selectperiode{
+        .select-dropdown{
+            border-bottom: 0px!important
+        }
+        ul{           
+            background-color: $grey;
+            .optgroup{
+                &:hover{
+                    background-color: $grey;                  
+                }
+                span{
+                    color: $red!important;
+                }
+                font-weight: 600;
+                border-top: 0px;
+            }
+            .optgroup-option{
+                &:hover{
+                    background-color: $grey;
+                    span{
+                        -webkit-transition: .2s;
+                        -moz-transition: .2s;
+                        -ms-transition: .2s;
+                        -o-transition: .2s;
+                        transition: .2s;
+                        color: $red!important;
+                    }  
+                }
+                span{
+                    color: $wit!important;
+                }                
+            }
+        }
+        input{
+            color: $green
+        }
+        .select-dropdown{
+            border-bottom: 1px solid $green!important
+        }
+        .caret{
+            fill: $green!important;
+        }
+    }
+        .spinnerwhite{
+            border-color: white!important
+        }
+   
 }

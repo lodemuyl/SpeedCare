@@ -162,8 +162,10 @@ export default {
   methods: {
     ritten: function(jaar, maand, all){
         all.child('aantalritten').child(jaar).child(maand).once('value').then((val)=>{
-          this.aantalritten = val.val()
-          })
+          if(val.val()){
+            this.aantalritten = val.val()
+          }
+        })
     },
     overtredingen: function(jaar, maand , all){
        all.child('aantal overtredingen').once('value', (snapshot)=>{
