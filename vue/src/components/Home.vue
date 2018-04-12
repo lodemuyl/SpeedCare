@@ -38,7 +38,7 @@
               </div>
             </div>
           </router-link>
-          <router-link to="Rapporten">
+          <div v-on:click="routerovertredingen">
             <div class="col pannelpadding s12 m12 l6 halfplus">
               <div class="card-panel groenbackground fullheight">
                 <span class="rood initchar ">{{ aantalovertredingen }}</span>
@@ -48,7 +48,7 @@
               
                </div>
             </div>
-          </router-link>
+          </div>
           <router-link to="Account">
             <div class="col pannelpadding s12 m12 l6 halfminus">
               <div class="card-panel blauwbackground fullheight">
@@ -175,6 +175,11 @@ export default {
        }).then(()=>{
          this.loaded = true
        })
+    },
+    routerovertredingen: function(){
+      this.$parent.actiefoverzicht = null;
+      this.$parent.actiefsnelheid = "firstclick",
+      this.$router.push('/Rapporten')
     }
   }
 }

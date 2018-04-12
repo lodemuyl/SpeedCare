@@ -1,4 +1,7 @@
-.rittencalender{    
+.rittencalender{  
+    .full-calendar-header,.header-center{
+        flex: none;
+    }  
     background-color: $beige;
     .autoritevent,.body-item{
         background-color: $red!important;

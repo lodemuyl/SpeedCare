@@ -19,30 +19,29 @@
     </div>
     <div v-show="loaded">
       <h2 class="pagetitle center">{{ msg }}</h2>
-      <full-calendar :config="config" :editable="true" firstDay=1  @changeMonth="changeMonth" @eventClick="eventClick" :events="fcEvents" class="rittencalender"></full-calendar>
+      <full-calendar lang="fr" :config="config" :editable="true" firstDay=1  @changeMonth="changeMonth" @eventClick="eventClick" :events="fcEvents" class="rittencalender"></full-calendar>
     </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import Vue from 'vue'
-import 'moment/locale/nl';
-import moment from 'moment'
-import 'vue-fullcalendar/src/dataMap/langSets'
+import Vue from 'vue';
+import moment from 'moment';
 import fullCalendar from 'vue-fullcalendar'
-import { alldata } from '../assets/js/firebase'
-import { actief } from '../assets/js/firebase'
-import { db } from '../assets/js/firebase'
-Vue.component('full-calendar', fullCalendar)
+import { alldata } from '../assets/js/firebase';
+import { actief } from '../assets/js/firebase';
+import { db } from '../assets/js/firebase';
+import 'vue-fullcalendar/src/dataMap/langSets';
+Vue.component('full-calendar', fullCalendar);
 export default {
   name: 'Ritten',
   data () {
     return {
       msg: 'Ritten',
       loaded: true,
-      config:{
-        locale: "nl"
+      config: {
+        lang: 'fr',
       },
       fcEvents : [
       ]

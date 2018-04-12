@@ -55,7 +55,7 @@
                         <div class="col s12 m6 l6">
                             <div><i class="material-icons rood infoicons">timer</i><p class="inlineinfo">{{ ritmetadata.duur }}</p></div>
                             <div><i class="material-icons rood infoicons">directions_car</i><p class="inlineinfo">{{ ritmetadata.hoogstesnelheid }} km/u</p></div>
-                            <div><i class="material-icons rood infoicons">assessment</i><p class="inlineinfo">lala / 100</p></div>
+                            <div><i class="material-icons rood infoicons">assessment</i><p class="inlineinfo">{{ score }} / 100</p></div>
                         </div>
                     </div>
                     <p class="subtitle">Bekijk gedetailleerde route</p>
@@ -88,9 +88,17 @@
                             </ul>
                         </div>
                         <div v-show="!violations.length">
-                            <p>U hebt geenovertredingen begaan op deze rit</p>
+                            <p>U hebt geen overtredingen begaan op deze rit</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="topside">
+            <div class="container">
+                <div class="row">               
+                    <p class="subtitle">Overtredingen uitgedrukt in percentage.</p>
+                    <chartjs-doughnut  :datalabel="'rapport'" :option="options" :labels="labels" :data="data" :scalesdisplay="scale" :backgroundcolor="backgroundcolor" :bordercolor="'rgba(72,72,72,0.8)'" :hoverbackgroundcolor="backgroundcolor" :hoverbordercolor="'rgba(72,72,72,0.8)'"></chartjs-doughnut>
                 </div>
             </div>
         </div>
@@ -99,7 +107,7 @@
                 <div class="card-panel roodbackground ">
                     <span class="grijs">{{errormessage}}</span>
                 </div>
-            </div>
+            </div> 
         </div>
     </div>
   </div>
@@ -154,6 +162,22 @@ export default {
           "lat": 10,
           "lng": 10
       },
+      labels: [],
+      scale: false,
+      data: [],
+      backgroundcolor: ['rgba(80,185,72, 0.8)','rgba(183,200,55, 0.8)','rgba(252,196,0, 0.8)','rgba(237,122,27,0.8)','rgba(198,0,15,0.8)'],
+      options:{
+        responsive: true,
+        beginAtZero: false,
+        border: false,
+        legend: {
+            position: 'left',
+            display: true,
+            labels: {
+                fontColor: '#ffffff'
+            }
+        }
+      },
       endlocation: {
           "lat": 10,
           "lng": 10
@@ -174,6 +198,20 @@ export default {
               "groen": true,
               "rood": false
           }
+      },
+      score: 0,
+      overtredingscategorie: {
+          "zwak": 0,
+          "medium": 0,
+          "zwaar": 0,
+          "zeerzwaar": 0
+      },
+      overtredingspercentages: {
+          "zwak": 0,
+          "medium": 0,
+          "zwaar": 0,
+          "zeerzwaar": 0,
+          "overtredingentotaal": 0
       },
       datum: this.$route.params.datum,
       tijd: this.$route.params.tijd,
@@ -273,21 +311,34 @@ export default {
                 all.child('overtredingen').child(jaar).child(maand).child(dag).child(tijd).once('value', (rit)=>{
                 if(rit.val() !== null){
                         rit.forEach((overtreding)=>{
-                            let key = overtreding.key
+                            let key = overtreding.key;
                             let log = overtreding.val();
                             let info = Object.values(log)[0];
-                            info.tijd = key
-                            info.url = '../static/img/maxspeed/'+ info.maximumsnelheid +'.png'
-                            info.werkelijkesnelheid = Number(info.werkelijkesnelheid).toFixed(2),
-                            this.violations.push(info)
+                            info.tijd = key;
+                            info.url = '../static/img/maxspeed/'+ info.maximumsnelheid +'.png';
+                            info.werkelijkesnelheid = Number(info.werkelijkesnelheid).toFixed(2);
+                            let tesnel = Number(info.tesnel);
+                            this.violations.push(info);
+                            if(tesnel <= 5){
+                                this.overtredingscategorie.zwak += 1
+                            }else if(tesnel > 5 && tesnel <= 10){
+                                this.overtredingscategorie.medium += 1
+                            }
+                            else if(tesnel > 10 && tesnel <= 20){
+                                this.overtredingscategorie.zwaar += 1    
+                            }else if(tesnel > 20){
+                                this.overtredingscategorie.zeerzwaar += 1 
+                            }       
                         })
                         //aantalovertredingen
                         this.amountviolations = this.violations.length
                 }else{
 
                 }
-            })
+            }).then(()=>{
+                this.ritscore();
                 this.loaded = true
+            })
             })
 
         }else{
@@ -344,10 +395,35 @@ export default {
           }
       },
       violationspage: function(){
-          this.$parent.actiefjaar = null;
+          this.$parent.actiefoverzicht = null;
           this.$parent.actiefsnelheid = "firstclick",
           this.$router.push('/Rapporten')
 
+      },
+      ritscore: function(){
+          let aantallogs = Number(this.coordinates.length)
+          let aantalovertredingen = ((Number(this.amountviolations) / aantallogs) * 100).toFixed(2)
+          let zwak = Number((this.overtredingscategorie.zwak / aantallogs) * 100).toFixed(2)
+          let medium = Number((this.overtredingscategorie.medium / aantallogs) * 100).toFixed(2)
+          let zwaar = Number((this.overtredingscategorie.zwaar / aantallogs) * 100).toFixed(2)
+          let zeerzwaar = Number((this.overtredingscategorie.zeerzwaar / aantallogs) * 100).toFixed(2)
+          this.overtredingspercentages.overtredingentotaal =  aantalovertredingen
+          this.overtredingspercentages.zwak =  zwak
+          this.overtredingspercentages.medium =  medium
+          this.overtredingspercentages.zwaar =  zwaar
+          this.overtredingspercentages.zeerzwaar =  zeerzwaar  
+          let safe = Number(100-aantalovertredingen)
+          this.score = safe 
+          this.labels.push("Geen overtredingen");
+          this.labels.push("Zwakke overtredingen (- 5 km/h)");
+          this.labels.push("Medium overtredingen (5 - 10km/h)")
+          this.labels.push("Zware overtredingen (10 - 20 km/h)")
+          this.labels.push("Zeer zware overtredingen (20 - km/h)")
+          this.data.push(safe )
+          this.data.push(zwak )
+          this.data.push(medium )
+          this.data.push(zwaar )
+          this.data.push(zeerzwaar)
       }
   },
   filters: {
