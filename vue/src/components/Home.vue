@@ -1,7 +1,13 @@
 <template>
   <div class="home">
     <div>
-      <agile :arrows="false" :speed="750" :autoplaySpeed="8000" :fade="true":autoplay="true" :pauseOnHover="false">
+      <agile :speed='2000'
+        :fade="true"
+        :autoplay="true"
+        :autoplaySpeed="8000"
+        :arrows="false"
+        :pauseOnHover="false"
+        :mobileFirst="true">
         <div class="slide slide--1"></div>
         <div class="slide slide--2"></div>
         <div class="slide slide--3"></div>
@@ -73,7 +79,7 @@
           <div class="columns is-mobile">
             <div class="column is-10 is-offset-1">
               <h1 class="center blauw titlefrontpage">SPEEDCARE</h1>
-              <p class="center subtitle">SpeedCare is een systeem die de snelheid en locatie van jouw auto zal vastleggen. <br>Aan de hand van de maximumsnelheden kan je zien waar je te snel gereden hebt.<br>Indien jouw gps dongle nog niet geactiveerd is moet je deze eerst <router-link to="activeer" class="link">activeren</router-link>.<br>Indien je deze wel al hebt geactiveerd kan je gewoon <router-link to="login" class="link">inloggen</router-link>.</p>
+              <p class="center subtitle subfront">SpeedCare is een systeem die de snelheid en locatie van jouw auto zal vastleggen. <br>Aan de hand van de maximumsnelheden kan je zien waar je te snel gereden hebt.<br>Indien jouw gps dongle nog niet geactiveerd is moet je deze eerst <router-link to="activeer" class="link nounderline">activeren</router-link>.<br>Indien je deze wel al hebt geactiveerd kan je gewoon <router-link to="login" class="link nounderline">inloggen</router-link>.</p>
             </div>
           </div>
           <div class="columns is-mobile logotext">
@@ -130,7 +136,7 @@ export default {
       loggedin: this.$parent.currentUser,
       aantalritten: 0,
       aantalovertredingen: 0,
-      loaded: false     
+      loaded: false,   
     }
   },
   computed: {

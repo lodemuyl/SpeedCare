@@ -19,7 +19,7 @@
     </div>
     <div v-show="loaded">
       <h2 class="pagetitle center">{{ msg }}</h2>
-      <full-calendar lang="fr" :config="config" :editable="true" firstDay=1  @changeMonth="changeMonth" @eventClick="eventClick" :events="fcEvents" class="rittencalender"></full-calendar>
+      <full-calendar lang="en" :config="config" :editable="true" firstDay=1  @changeMonth="changeMonth" @eventClick="eventClick" :events="fcEvents" class="rittencalender"></full-calendar>
     </div>
   </div>
 </template>
@@ -41,14 +41,11 @@ export default {
       msg: 'Ritten',
       loaded: true,
       config: {
-        lang: 'fr',
+        lang: 'nl',
       },
       fcEvents : [
       ]
     }
-  },
-  created (){
-
   },
   methods: {
     ritten: function(jaar, maand){
