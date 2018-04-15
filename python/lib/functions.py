@@ -37,6 +37,7 @@ def initfirebase():
         'databaseURL' : 'https://speedcare-lode.firebaseio.com/',
         'httpTimeout' : False
         })
+        variables.init = True
     except (KeyboardInterrupt, SystemExit):
         GPIO.setup(variables.runled, GPIO.OUT)
         GPIO.output(variables.runled, GPIO.LOW)
@@ -51,7 +52,7 @@ def checkActive():
     network = checknetwork()
     if network:
         try:
-            if(variables.counter == 0):            
+            if(variables.init == False):            
                 #firebase credentials
                 initfirebase()
                 checkproductkey = db.reference('Relations').get()
@@ -118,7 +119,7 @@ def getSpeedLimit(lat, lon):
         GPIO.output(variables.runled, GPIO.LOW)
         sys.exit(1)
     except Exception as Exspeed:
-        log('message : speedlimerror' + str(exnetwork))
+        log('message : speedlimerror' + str(Exspeed))
         return False
     
 #ophalen maximumsnelheden
@@ -209,7 +210,7 @@ def write():
                         connectieovertredingen.push("Kon locatie niet ophalen.")
                 #increment van aantalritten en aantal overtredingen bij 1e tick
                 if variables.counter == 0:                    
-                    connectieaantalritten = db.reference(writeaantalritten)                  
+                    connectieaantalritten = db.reference(writeaantalritten)                
                     def updateritten(current):
                         return current + 1 if current else 1                        
                     connectieaantalritten.transaction(updateritten)
