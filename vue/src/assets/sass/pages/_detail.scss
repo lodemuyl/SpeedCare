@@ -102,5 +102,18 @@
     .infoicons{
         font-weight: 500;
     }
+    .topside{
+        border-top: 1px solid white;
+        .subtitle{
+            margin-top: 0px!important;
+            padding-top: 1rem
+        };
+        background-color: $grey;
+        display:block;
+        width: 100vw;
+        .chartjs-render-monitor{
+            margin-bottom: 1rem;
+        }
+    }
 
 }

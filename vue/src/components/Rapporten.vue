@@ -5,13 +5,13 @@
         <div class="row">
           <div class="col s12 md12 l12">
             <ul id="" class="tabs tabs tabs-fixed-width">
-              <li class="tab col s3"><a :id="actiefjaar" href="#jaar">Jaar</a></li>
-              <li class="tab col s3"><a :id="actiefsnelheid" href="#snelheid" v-on:click="speedviolations">Snelheidsovertredingen</a></li>
+              <li class="tab col s3"><a :id="actiefoverzicht" href="#overzicht">Overzicht</a></li>
+              <li class="tab col s3"><a :id="actiefsnelheid" href="#snelheid">Snelheidsovertredingen</a></li>
             </ul>
           </div>
-          <div id="jaar" class="col s12 md12 l12 sw">        
-            <div class="card" v-for="jaar in jaren">
-                  <div v-show="!loadedyear">
+          <div id="overzicht" class="col s12 md12 l12 sw">        
+            <div class="card">
+                  <div v-show="!loadoverzicht">
                       <div id="load">
                             <div class="loadblock">
                                 <div class="preloader-wrapper big active">
@@ -28,16 +28,47 @@
                             </div>
                       </div>
                   </div>  
-                  <div v-show="loadedyear" class="card-content white-text">
-                    <span class="card-title halfstrong">2018</span>
-                    <ul class="collapsible ">
-                      <li v-for="maand in maanden" v-bind:value="jaar">
-                        <div class="collapsible-header halfstrong">{{ maand }}</div>
-                        <div class="collapsible-body">
-                          <chartjs-horizontal-bar :option="options" :bordercolor="mybordercolor" :backgroundcolor="mybackgroundcolor" :datalabel="mylabel" :labels="mylabels" :data="mydata"></chartjs-horizontal-bar>
-                        </div>
-                      </li>
-                    </ul>
+                  <div v-show="loadoverzicht" class="card-content white-text">
+                    <span class="card-title halfstrong">Overzicht  {{ month }}</span>
+                    <p>Hier krijgt u een percentueel overzicht van alle overtredingen.</p>
+                    <table>
+                      <thead>
+                        <tr>
+                            <th></th>
+                            <th v-for="(percent, key) in percentages">{{key}}</th>                
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><img :src="'../static/img/maxspeed/10.png'"></td>
+                          <td v-for="speed in percentages" v-bind:class="{'rood bold': colorcondition(speed['10'])}" >{{ speed['10'] | percentfilter }}</td>
+                        </tr>
+                        <tr>
+                          <td><img :src="'../static/img/maxspeed/30.png'"></td>
+                          <td v-for="speed in percentages"  v-bind:class="{'rood bold': colorcondition(speed['30'])}" >{{speed['30'] | percentfilter }}</td>
+                        </tr>
+                        <tr>
+                          <td><img :src="'../static/img/maxspeed/50.png'"></td>
+                          <td v-for="speed in percentages"  v-bind:class="{'rood bold': colorcondition(speed['50'])}" >{{speed['50'] | percentfilter }}</td>
+                        </tr>
+                        <tr>
+                          <td><img :src="'../static/img/maxspeed/70.png'"></td>
+                          <td v-for="speed in percentages"  v-bind:class="{'rood bold': colorcondition(speed['70'])}" >{{speed['70'] | percentfilter }}</td>
+                        </tr>
+                         <tr>
+                          <td><img :src="'../static/img/maxspeed/90.png'"></td>
+                          <td v-for="speed in percentages"  v-bind:class="{'rood bold': colorcondition(speed['90'])}" >{{speed['90'] | percentfilter }}</td>
+                        </tr> 
+                        <tr>
+                          <td><img :src="'../static/img/maxspeed/100.png'"></td>
+                          <td v-for="speed in percentages"  v-bind:class="{'rood bold': colorcondition(speed['100'])}" >{{speed['100'] | percentfilter }}</td>
+                        </tr>   
+                        <tr>
+                          <td><img :src="'../static/img/maxspeed/120.png'"></td>
+                          <td v-for="speed in percentages"  v-bind:class="{'rood bold': colorcondition(speed['120'])}" >{{speed['120'] | percentfilter }}</td>
+                        </tr>                       
+                      </tbody>
+                    </table>
                   </div>
             </div>
           </div>
@@ -64,16 +95,15 @@
                     </div>
                     <div v-show="loadedspeed" class="card-content white-text">
                       <span class="card-title halfstrong overtredingenmaand">Overtredingen {{ month }}</span>
-                        <div class="dag" v-for="overtreding in overtredingenlist">
+                        <div  v-for="overtreding in overtredingenlist">
                           <p class="dagnaam">{{overtreding.dagnaam}}</p>
                           <div class="ritten" v-for="rit in overtreding.ritten">
-                            <p>{{rit.rit}}</p>
-                            <div class="overtreding" v-for="tijdstip in rit.logs">
-                              <p>overtreding om  {{ tijdstip.tijd }} op de {{tijdstip.info.straat}}</p>                            
+                            <p>Rit van {{rit.rit}}</p>
+                            <div class="collection overtredingcollection" v-for="tijdstip in rit.logs">
+                              <div class="collection-item"><p><img :src="'../static/img/maxspeed/' + tijdstip.info.maximumsnelheid + '.png'"></p><p>{{tijdstip.info.straat}}  {{tijdstip.info.nummer}}  {{tijdstip.info.postcode}} {{tijdstip.info.gemeente}}</p><p> om {{tijdstip.tijd}}</p><p class="right"><span class="rood">{{tijdstip.info.werkelijkesnelheid}}</span> km/h</p></div>
                             </div>
-                          </div>
-                         
-                        </div>                  
+                          </div>                        
+                        </div>                
                     </div>
                   </div>
                 </div>          
@@ -100,51 +130,85 @@ export default {
       msg: 'Rapporten',
       user: this.$parent.currentUser.providerData[0].displayName,
       firebaseref: db.ref(this.$parent.currentUser.uid), 
-      loadedyear: false,
+      loadoverzicht: false,
       loadedspeed: false,
-      actiefjaar: this.$parent.actiefjaar,
+      actiefoverzicht: this.$parent.actiefoverzicht,
       actiefsnelheid: this.$parent.actiefsnelheid,
-      jaren: [2018],
       overtredingen: true,
+      overtredingenaantal: 0,
       overtredingenlist: [],
+      overtredingscategorie:{
+        "0 tot 5 km/h": {
+          "10": 0,
+          "30": 0,
+          "50": 0,
+          "70": 0,
+          "90": 0,
+          "100": 0,
+          "120": 0,
+        },
+        "5 tot 10 km/h":  {
+          "10": 0,
+          "30": 0,
+          "50": 0,
+          "70": 0,
+          "90": 0,
+          "100": 0,
+          "120": 0,
+        },
+        "10 tot 20 km/h":  {
+          "10": 0,
+          "30": 0,
+          "50": 0,
+          "70": 0,
+          "90": 0,
+          "100": 0,
+          "120": 0,
+        },
+        "+20 km/h":  {
+          "10": 0,
+          "30": 0,
+          "50": 0,
+          "70": 0,
+          "90": 0,
+          "100": 0,
+          "120": 0,
+        },
+      },
       maanden:['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
-      jaar: moment().format('YYYY'),
       month:  moment(moment(), "YYYY-MM").locale('nl').format('MMMM YYYY'),
       options:{
         responsive: true
       },
-      mybackgroundcolor:'#84AE99',
-      mybordercolor: '#84AE99',
-      mylabel : 'Rijscore',
-      mylabels : ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
-      mydata : [100, 40, 60, 20, 11, 44, 49, 77, 67, 5, 70, 44],
       
     }
   },
   created(){
-    this.getdates();
+    this.speedviolations();
   },
   mounted(){
     //materialize initialization
     var tabs = document.querySelector('.tabs'); 
-    var firstclick = document.querySelector('#firstclick'); 
-    var collapsible = document.querySelector('.collapsible');
-    let optionstab = {
-    };
-    var optionsselect = {
-      classes: "selectperiode"
-    };
-    var optionscollapsible = {
-    };  
-    var instance = M.Collapsible.init(collapsible,optionscollapsible);     
+    var firstclick = document.querySelector('#firstclick');     
     this.$nextTick(function(){ 
-      var tab = M.Tabs.init(tabs,optionstab);    
+      var tab = M.Tabs.init(tabs);    
       tab.updateTabIndicator();
       firstclick.click();            
     })
   },
-  updated(){
-
+  computed: {
+    percentages: function(){
+      let aantalovertredingen = this.overtredingenaantal
+      let percentage = {}
+      Object.keys(this.overtredingscategorie).forEach(key => {        
+        percentage[key] = {}
+       Object.keys(this.overtredingscategorie[key]).forEach(waarde =>{ 
+         let huidigewaarde =  this.overtredingscategorie[key][waarde];
+         percentage[key][waarde] = ((huidigewaarde / aantalovertredingen) * 100).toFixed(2);
+       })
+      });
+      return percentage
+    }
   },
   methods: {
     speedviolations: function(){
@@ -156,7 +220,7 @@ export default {
       this.overtredingenlist = []
       all.child('overtredingen').child(jaar).child(maand).once('value', (snapshot)=>{
         let list= {}
-      //ophalen van gewone rittendata
+      //ophalen van gewone rittendata overtredingen
         if(snapshot.val() !== null){   
               snapshot.forEach((dag)=>{
               let dagnummer = dag.key
@@ -175,7 +239,25 @@ export default {
                   infoobj["info"] = []
                   ritobj["logs"].push(infoobj)
                   info.forEach((snapshot)=>{
-                   infoobj["info"] = snapshot.val()
+                   let val = snapshot.val();
+                   let maxspeed = val.maximumsnelheid;
+                   let werkelijkesnelheid = val.werkelijkesnelheid
+                   let tesnel = val.tesnel
+                   this.overtredingenaantal += 1;
+
+                   //this.overtredingscategorie[maxspeed] += 1
+                   if(tesnel <= 5){
+                      this.overtredingscategorie["0 tot 5 km/h"][maxspeed] += 1
+                   }else if(tesnel > 5 && tesnel <= 10){
+                      this.overtredingscategorie["5 tot 10 km/h"][maxspeed] += 1
+                   }else if(tesnel > 10 && tesnel <= 20){
+                      this.overtredingscategorie["10 tot 20 km/h"][maxspeed] += 1
+                   }else if(tesnel > 20){
+                     this.overtredingscategorie["+20 km/h"][maxspeed] += 1
+                   };
+
+                   infoobj["info"] = val;
+                   infoobj["info"].werkelijkesnelheid =  Number(werkelijkesnelheid).toFixed(2);               
                   })
                 })
               })
@@ -185,15 +267,23 @@ export default {
           this.overtredingen = false; 
         }   
       }).then(()=>{
-        this.loadedspeed = true
+        this.loadoverzicht = true;
+        this.loadedspeed = true;
       })     
     },
-    getdates: function(){
-      let all = this.firebaseref;
-      let dates = {}
-      this.loadedyear = true
-    }
+    colorcondition: function(param){
+      if(param > 0.00){
+        return true
+      }else{
+        return false
+      }
+    }    
 
+  },
+  filters: {
+    percentfilter: function(waarde){
+      return waarde + ' %'
+    }
   }
 }
 </script>

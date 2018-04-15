@@ -10,19 +10,19 @@
         }
         .dagnaam{
             color: $red;
-            font-weight: 500;
+            font-weight: 500
         }
         .ritten{
-            padding-left: 40px;
-            .overtreding{
-                padding-left: 40px;
-            }
+            padding-left: 20px;
         }
     }
     .overtredingenmaand{
         margin-bottom: 30px!important
     }
-    #jaar,#snelheid{
+    #overzicht,#snelheid{
+        th{
+            color: $grey
+        }
         .collapsible{
             margin-top: 30px;
             color: $red;
@@ -42,7 +42,8 @@
             }
         } 
         .card{
-            min-height: 600px;
+            max-height: 600px;
+            overflow: auto;
             background-color: $blue!important;
             .card-title{
                 color: $beige
@@ -55,52 +56,29 @@
         color: $grey;
         font-weight: 500
     }
+    img{
+        height: 20px;
+        margin-right: 15px;
+        position: relative;
+        top: 3px;
+    }
+    .overtredingcollection{
+        p{
+            display: inline;
+            font-weight:100
+        }
+        padding-left: 20px;
+        border: 0px;
+        margin: 1px;
+        .collection-item{
+            padding: 3px 15px;
+            background-color: $grey;
+        }
+    }
     .noviolations{
         padding: 24px
     }
-    .selectperiode{
-        .select-dropdown{
-            border-bottom: 0px!important
-        }
-        ul{           
-            background-color: $grey;
-            .optgroup{
-                &:hover{
-                    background-color: $grey;                  
-                }
-                span{
-                    color: $red!important;
-                }
-                font-weight: 600;
-                border-top: 0px;
-            }
-            .optgroup-option{
-                &:hover{
-                    background-color: $grey;
-                    span{
-                        -webkit-transition: .2s;
-                        -moz-transition: .2s;
-                        -ms-transition: .2s;
-                        -o-transition: .2s;
-                        transition: .2s;
-                        color: $red!important;
-                    }  
-                }
-                span{
-                    color: $wit!important;
-                }                
-            }
-        }
-        input{
-            color: $green
-        }
-        .select-dropdown{
-            border-bottom: 1px solid $green!important
-        }
-        .caret{
-            fill: $green!important;
-        }
-    }
+
         .spinnerwhite{
             border-color: white!important
         }

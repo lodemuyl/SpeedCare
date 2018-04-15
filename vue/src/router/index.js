@@ -27,14 +27,6 @@ let router = new Router({
       redirect: '/Home'
     },
     {
-      path: '/Disclaimer',
-      name: 'Disclaimer',
-      component: Disclaimer,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
       path: '/Login',
       name: 'Login',
       component: Login
@@ -43,14 +35,6 @@ let router = new Router({
       path: '/Activeer',
       name: 'Activeer',
       component: Activeer
-    },
-    {
-      path: '/Over',
-      name: 'Over',
-      component: Over,
-      meta: {
-        requiresAuth: true
-      }
     },
     {
       path: '/Rapporten',
@@ -97,19 +81,44 @@ let router = new Router({
         requiresAuth: true
       }
     },
+     {
+      path: '/Over',
+      name: 'Over',
+      component: Over,
+      meta: {
+        requiresAuth: false
+      }
+    },
     {
-       path: '/*',
-       name: 'Notfound',
-       component: Notfound
-     }
+      path: '/Disclaimer',
+      name: 'Disclaimer',
+      component: Disclaimer,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: '/*',
+      name: 'Notfound',
+      component: Notfound,
+      meta: {
+        requiresAuth: false
+      }
+    },
   ]
 })
 router.beforeEach((to, from, next) => {
+  //ingelogd of niet
   let currentUser = firebase.auth().currentUser;
+  //kijken naar de route waar naartoe en zien of deze auth bevat ja of neen
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  //als je niet ingelogd bent en de route is requireauth dan ...
   if(requiresAuth && !currentUser) next('Login')
-  // bugfix anders zal hij in een ininity loop geraken
+  else if (!requiresAuth && currentUser && to.name == 'Over') next()
+  else if (!requiresAuth && currentUser && to.name == 'Disclaimer') next()
+  // als auth niet moet en wel ingelogd en route naar is home 
   else if (!requiresAuth && currentUser && to.name == 'Home') next()
+  // als auth niet moet en wel ingelogd 
   else if (!requiresAuth && currentUser) next('Home')
   else next()
 })

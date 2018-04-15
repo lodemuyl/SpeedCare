@@ -8,7 +8,7 @@ const app = firebase.initializeApp({
   storageBucket: "speedcare-lode.appspot.com",
   messagingSenderId: "924949047923"
 })
-  export const db = app.database()
+export const db = app.database()
 
 
   
