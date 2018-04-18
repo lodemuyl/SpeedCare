@@ -17,7 +17,7 @@ GPIO.setmode(GPIO.BCM)
 logdir = os.path.dirname(__file__)
 logname = "speedcarelog.log"
 abslogname = os.path.join(logdir, logname)
-logging.basicConfig(filename=abslogname,level=logging.DEBUG)
+logging.basicConfig(filename=abslogname,level=logging.DEBUG, format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s')
 GPIO.setwarnings(False)
 
 #main function
@@ -43,7 +43,7 @@ def initfirebase():
         GPIO.output(variables.runled, GPIO.LOW)
         sys.exit(1)
     except Exception as active:
-        log('message : initprobleem' + str(active))
+        logging.info('message : initprobleem' + str(active))
         GPIO.setup(variables.errorled, GPIO.OUT)
         GPIO.output(variables.errorled, GPIO.HIGH)
         return False
@@ -55,16 +55,15 @@ def checkActive():
             if(variables.init == False):            
                 #firebase credentials
                 initfirebase()
-                checkproductkey = db.reference('Relations').get()
-        
+                checkproductkey = db.reference('Relations').get()        
             if checkproductkey and checkproductkey[variables.pk]:
                 variables.uid = checkproductkey[variables.pk].get('user')
                 print('start')
-                log('start')
+                logging.info('start')
                 GPIO.setup(variables.errorled, GPIO.OUT)
                 GPIO.output(variables.errorled, GPIO.LOW)
                 GPIO.setup(variables.runled, GPIO.OUT)
-                GPIO.output(variables.runled,GPIO.HIGH)
+                GPIO.output(variables.runled,GPIO.HIGH)                
                 return True
         except (KeyboardInterrupt, SystemExit):
             GPIO.setup(variables.runled, GPIO.OUT)
@@ -72,12 +71,12 @@ def checkActive():
             sys.exit(1)
         except Exception as active:
             print('jouw pk is nog niet geactiveerd of bestaat niet')
-            log('message : ' + str(active))
-            log('pk not active')
+            logging.info('jouw pk is nog niet geactiveerd of bestaat niet' + str(active))            
             GPIO.setup(variables.errorled, GPIO.OUT)
             GPIO.output(variables.errorled, GPIO.HIGH)
             return False
-    else:
+    else:        
+        logging.info('network down')
         GPIO.setup(variables.errorled, GPIO.OUT)
         GPIO.output(variables.errorled, GPIO.HIGH)
         return False
@@ -87,20 +86,16 @@ def checknetwork():
     try:        
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
         if variables.counter == 0:
-            log('Network up')
+            logging.info('Network up')
         return True
     except (KeyboardInterrupt, SystemExit):
         GPIO.setup(variables.runled, GPIO.OUT)
         GPIO.output(variables.runled, GPIO.LOW)
         sys.exit(1)
     except Exception as exnetwork:
-        log('Network down' + str(exnetwork))
+        logging.info('Network down' + str(exnetwork))
         return False
-#logging
-def log(message):
-    now = datetime.datetime.now()
-    logging.info(str(now) + ': ' + message)
-
+  
 #ophalen maximumsnelheden
 def getSpeedLimit(lat, lon):
     try:
@@ -119,7 +114,7 @@ def getSpeedLimit(lat, lon):
         GPIO.output(variables.runled, GPIO.LOW)
         sys.exit(1)
     except Exception as Exspeed:
-        log('message : speedlimerror' + str(Exspeed))
+        logging.info('message : speedlimerror' + str(Exspeed))
         return False
     
 #ophalen maximumsnelheden
@@ -148,26 +143,26 @@ def getViolationLocation(lat, lng):
                 }
             return obj
         else:
-            log('message : fout bij het ophalen violationlocation')
+            logging.info('message : fout bij het ophalen violationlocation')
             return False
     except (KeyboardInterrupt, SystemExit):
         GPIO.setup(variables.runled, GPIO.OUT)
         GPIO.output(variables.runled, GPIO.LOW)
         sys.exit(1)
     except Exception as ex:
-       log('message : ' + str(ex))
+       logging.info('message : ' + str(ex))
        print('message : fout bij het ophalen violationlocation')
        return False
         
 #wegschrijven naar firebase
-def write():
+def write():    
     try:
         #logging om de 3 seconden
         if variables.counter % variables.loginterval == 0:
             #current time
             connectioncheck = checknetwork()            
             if connectioncheck:
-                variables.networktimeoutcounter = 0
+                variables.networktimeoutcounter = 0                
                 speedlim = getSpeedLimit(variables.lat,variables.lon)                
                 now = datetime.datetime.now()
                 year = now.year
@@ -219,7 +214,7 @@ def write():
                 write.push(writedata)
             elif not connectioncheck:
                 print('!!!' + str(variables.networktimeoutcounter) + 'seconden timeout')
-                log('message : networkdown since' + str(variables.networktimeoutcounter) + ' seconds')
+                logging.info('message : networkdown since' + str(variables.networktimeoutcounter) + ' seconds')
                 if variables.networktimeoutcounter == variables.timeouttime:
                     print('networktimeout expired')
                     raise Exception('networktimeout expired')
@@ -230,7 +225,7 @@ def write():
         GPIO.output(variables.runled, GPIO.LOW)
         sys.exit(1)
     except Exception as exwrite:
-        log('message : ' + str(exwrite))
+        logging.info('message : ' + str(exwrite))
         print('timeout van ' + str(variables.networktimeoutcounter))
         GPIO.setup(variables.errorled, GPIO.OUT)
         GPIO.output(variables.errorled, GPIO.HIGH)
@@ -240,12 +235,20 @@ def write():
 
 #ophalen van alle data afkomstig uit de ultimate gps module
 def readString():
-	while 1:
-		while variables.ser.read().decode("utf-8") != '$': 
-        		pass 
-		line = variables.ser.readline().decode("utf-8") 
-		return line
-
+    try:
+        while 1:
+            while variables.ser.read().decode("utf-8") != '$':
+                pass
+            line = variables.ser.readline().decode("utf-8")
+            return line
+    except Exception as ex:
+        logging.info('message : ' + str(ex))
+        print('message : no gps stream')
+        GPIO.setup(variables.errorled, GPIO.OUT)
+        GPIO.output(variables.errorled, GPIO.HIGH)
+        GPIO.setup(variables.runled, GPIO.OUT)
+        GPIO.output(variables.runled, GPIO.LOW)
+        sys.exit(1)
 #lat en long
 def getLatLng(latString,lngString):
 	lat = latString[:2].lstrip('0') + "." + "%.7s" % str(float(latString[2:])*1.0/60.0).lstrip("0.")
@@ -254,17 +257,26 @@ def getLatLng(latString,lngString):
     
 #rmc
 def printRMC(lines):
-    if lines:
-        variables.gewijzigdeparameters += 3
-        latlng = getLatLng(lines[3],lines[5])
-        variables.lat = latlng[0]
-        variables.lon = latlng[1]
-        variables.snelheid = speed(lines[7])
-        print("")
-        print("")
-        print("Lat,Long                       :", variables.lat, lines[4], ", ", variables.lon, lines[6], sep='')
-        print("Snelheid                       :", variables.snelheid)
-        return
+    try:
+        if lines:
+            variables.gewijzigdeparameters = float(variables.gewijzigdeparameters) + 3
+            latlng = getLatLng(lines[3],lines[5])
+            variables.lat = float(latlng[0])
+            variables.lon = float(latlng[1])
+            variables.snelheid = speed(float(lines[7]))
+            print("")
+            print("")
+            print("Lat,Long                       :", variables.lat, lines[4], ", ", variables.lon, lines[6], sep='')
+            print("Snelheid                       :", variables.snelheid)
+            return
+    except Exception as ex:
+        logging.info('message : ' + str(ex))
+        print('message : no rmc lines')
+        GPIO.setup(variables.errorled, GPIO.OUT)
+        GPIO.output(variables.errorled, GPIO.HIGH)
+        GPIO.setup(variables.runled, GPIO.OUT)
+        GPIO.output(variables.runled, GPIO.LOW)
+        sys.exit(1)
     
 #knots to kmph
 def speed(knots):
@@ -273,44 +285,26 @@ def speed(knots):
 
 #gga
 def printGGA(lines):
-    if lines:
-        variables.gewijzigdeparameters += 3
-        #variables.tijd = getTime(lines[1], "%H%M%S.%f", "%H:%M:%S")
-        variables.kwaliteit = variables.signaal[int(lines[6])]
-        variables.hoogte = lines[9]
-        variables.sattelieten = lines[7]
-        print("Kwaliteit signaal              :", variables.kwaliteit)
-        print("Hoogte                         :", variables.hoogte, lines[10],sep="")
-        print("Aantal sattelieten             :", variables.sattelieten)
-        print("")
-        print("")
-        return
+    try:
+        if lines:
+            variables.gewijzigdeparameters = float(variables.gewijzigdeparameters) + 3
+            #variables.tijd = getTime(lines[1], "%H%M%S.%f", "%H:%M:%S")
+            variables.kwaliteit = variables.signaal[int(lines[6])]
+            variables.hoogte = lines[9]
+            variables.sattelieten = lines[7]
+            print("Kwaliteit signaal              :", variables.kwaliteit)
+            print("Hoogte                         :", variables.hoogte, lines[10],sep="")
+            print("Aantal sattelieten             :", variables.sattelieten)
+            print("")
+            print("")
+            return
+    except Exception as ex:
+        logging.info('message : ' + str(ex))
+        print('message : no gga stream')
+        GPIO.setup(variables.errorled, GPIO.OUT)
+        GPIO.output(variables.errorled, GPIO.HIGH)
+        GPIO.setup(variables.runled, GPIO.OUT)
+        GPIO.output(variables.runled, GPIO.LOW)
+        sys.exit(1)
 
-#checksum 
-def checksum(line):
-	checkString = line.partition("*")
-	checksum = 0
-	for c in checkString[0]:
-		checksum ^= ord(c)
-
-	try: 
-		inputChecksum = int(checkString[2].rstrip(), 16);
-	except:
-		print("Error in string")
-		log('error in string')
-		GPIO.setup(variables.errorled, GePIO.OUT)
-		GPIO.output(variables.errorled, GPIO.HIGH)
-		return False
-	
-	if checksum == inputChecksum:
-		return True
-	else:
-		print("=====================================================================================")
-		print("===================================error!============================================")
-		print("=====================================================================================")
-		print(hex(checksum), "!=", hex(inputChecksum))
-		log('Checksum error')
-		GPIO.setup(variables.errorled, GPIO.OUT)
-		GPIO.output(variables.errorled, GPIO.HIGH)
-		return False
 

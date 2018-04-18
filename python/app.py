@@ -29,30 +29,11 @@ active = functions.checkActive()
 try:
     while active:
             line = functions.readString()
-            lines = line.split(",")
-            if functions.checksum(line):
-                functions.main(lines)
-except (KeyboardInterrupt, SystemExit):
-    GPIO.setup(variables.runled, GPIO.OUT)
-    GPIO.output(variables.runled, GPIO.LOW)
-    raise
-except Exception as ex:
-    functions.log('close' + str(ex))
-
-
-import functions
-#check active
-active = functions.checkActive()
-
-#mainloop
-try:
-    while active:
-            line = functions.readString()
-            lines = line.split(",")
+            lines = line.split(",")            
             functions.main(lines)
 except (KeyboardInterrupt, SystemExit):
     GPIO.setup(variables.runled, GPIO.OUT)
     GPIO.output(variables.runled, GPIO.LOW)
     raise
 except Exception as ex:
-    functions.log('close' + str(ex))
+    functions.log('close :' + str(ex))
