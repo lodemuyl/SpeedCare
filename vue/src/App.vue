@@ -48,7 +48,6 @@
                   <li><router-link class="grey-text text-lighten-3" to="Disclaimer">Disclaimer</router-link></li>
                   <li><a class="grey-text text-lighten-3" href="mailto:lodemuyl@student.arteveldehs.be">Contact</a></li>
                   <li><router-link to="Over" class="grey-text text-lighten-3">Over</router-link></li>
-                  <li v-show="!currentUser"><router-link to="Admin" class="grey-text text-lighten-3">Admin</router-link></li>
                 </ul>
               </div>
               <div class="col l3 s12">

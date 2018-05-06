@@ -1,8 +1,12 @@
 .rittencalender{  
+    .event-box{
+        position: relative;
+        top: -25px;
+    }
     .full-calendar-header,.header-center{
         flex: none;
     }  
-    background-color: $beige;
+    background-color: $beige!important;
     .autoritevent,.body-item{
         background-color: $red!important;
         color: $wit!important;
