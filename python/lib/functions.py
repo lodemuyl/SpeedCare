@@ -162,56 +162,59 @@ def write():
             #current time
             connectioncheck = checknetwork()            
             if connectioncheck:
-                variables.networktimeoutcounter = 0                
-                speedlim = getSpeedLimit(variables.lat,variables.lon)                
-                now = datetime.datetime.now()
-                year = now.year
-                month = now.month
-                day = now.day
-                currdate = str(day) +'/'+ str(month) +'/'+str(year)
-                currtime = str(now.time())
-                #refs
-                writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
-                writerefovertredingen = variables.uid + '/' + 'overtredingen' + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
-                writeaantalritten = variables.uid + '/' + 'aantalritten' + '/' + str(year) + '/' + str(month)
-                writeaantalovertredingen = variables.uid + '/' + 'aantal overtredingen' + '/' + str(year) + '/' + str(month)
-                #data die moet worden weggeschreven bijd e gewone logs
-                writedata = {
-                    "lat" : variables.lat,
-                    "lon" : variables.lon,
-                    "snelheid" : variables.snelheid,
-                    "maxsnelheid" : str(speedlim),
-                    "signaal" : variables.kwaliteit,
-                    "sattelieten" : variables.sattelieten,
-                    }
-                #overtredingen wegschrijven
-                if variables.snelheid > speedlim:
-                    violation = getViolationLocation(variables.lat, variables.lon)
-                    violation["werkelijkesnelheid"] = variables.snelheid
-                    violation["maximumsnelheid"] = speedlim
-                    violation["tesnel"] = variables.snelheid - speedlim
-                    violation["lat"] = variables.lat
-                    violation["lng"] = variables.lon
-                    connectieovertredingen = db.reference(writerefovertredingen)
-                    connectieaantalovertredingen = db.reference(writeaantalovertredingen)
-                    def updateovertredingen(current):
-                        return current + 1 if current else 1
-                    connectieaantalovertredingen.transaction(updateovertredingen)
-                    if violation:
-                        writedata["overtreding"] = True
-                        connectieovertredingen.push(violation)
-                    else:
-                        writedata["overtreding"] = True
-                        connectieovertredingen.push("Kon locatie niet ophalen.")
-                #increment van aantalritten en aantal overtredingen bij 1e tick
-                if variables.counter == 0:                    
-                    connectieaantalritten = db.reference(writeaantalritten)                
-                    def updateritten(current):
-                        return current + 1 if current else 1                        
-                    connectieaantalritten.transaction(updateritten)
-                #gewone logs wegschrijven
-                write = db.reference(writeref)
-                write.push(writedata)
+                if variables.gps:
+                    variables.networktimeoutcounter = 0                
+                    speedlim = getSpeedLimit(variables.lat,variables.lon)                
+                    now = datetime.datetime.now()
+                    year = now.year
+                    month = now.month
+                    day = now.day
+                    currdate = str(day) +'/'+ str(month) +'/'+str(year)
+                    currtime = str(now.time())
+                    #refs
+                    writeref = variables.uid + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
+                    writerefovertredingen = variables.uid + '/' + 'overtredingen' + '/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + str(variables.autoritid)[:8] + '/' + currtime[:8]
+                    writeaantalritten = variables.uid + '/' + 'aantalritten' + '/' + str(year) + '/' + str(month)
+                    writeaantalovertredingen = variables.uid + '/' + 'aantal overtredingen' + '/' + str(year) + '/' + str(month)
+                    #data die moet worden weggeschreven bijd e gewone logs
+                    writedata = {
+                        "lat" : variables.lat,
+                        "lon" : variables.lon,
+                        "snelheid" : variables.snelheid,
+                        "maxsnelheid" : str(speedlim),
+                        "signaal" : variables.kwaliteit,
+                        "sattelieten" : variables.sattelieten,
+                        }
+                    #overtredingen wegschrijven
+                    if variables.snelheid > speedlim:
+                        violation = getViolationLocation(variables.lat, variables.lon)
+                        violation["werkelijkesnelheid"] = variables.snelheid
+                        violation["maximumsnelheid"] = speedlim
+                        violation["tesnel"] = variables.snelheid - speedlim
+                        violation["lat"] = variables.lat
+                        violation["lng"] = variables.lon
+                        connectieovertredingen = db.reference(writerefovertredingen)
+                        connectieaantalovertredingen = db.reference(writeaantalovertredingen)
+                        def updateovertredingen(current):
+                            return current + 1 if current else 1
+                        connectieaantalovertredingen.transaction(updateovertredingen)
+                        if violation:
+                            writedata["overtreding"] = True
+                            connectieovertredingen.push(violation)
+                        else:
+                            writedata["overtreding"] = True
+                            connectieovertredingen.push("Kon locatie niet ophalen.")
+                    #increment van aantalritten en aantal overtredingen bij 1e tick
+                    if variables.counter == 0:                    
+                        connectieaantalritten = db.reference(writeaantalritten)                
+                        def updateritten(current):
+                            return current + 1 if current else 1                        
+                        connectieaantalritten.transaction(updateritten)
+                    #gewone logs wegschrijven
+                    write = db.reference(writeref)
+                    write.push(writedata)
+                else:
+                    pass
             elif not connectioncheck:
                 print('!!!' + str(variables.networktimeoutcounter) + 'seconden timeout')
                 logging.info('message : networkdown since' + str(variables.networktimeoutcounter) + ' seconds')
@@ -251,15 +254,18 @@ def readString():
         sys.exit(1)
 #lat en long
 def getLatLng(latString,lngString):
-	lat = latString[:2].lstrip('0') + "." + "%.7s" % str(float(latString[2:])*1.0/60.0).lstrip("0.")
-	lng = lngString[:3].lstrip('0') + "." + "%.7s" % str(float(lngString[3:])*1.0/60.0).lstrip("0.")
-	return lat,lng
+    degr = 1.0/60.0
+    latstr = latString[:2]
+    lngstr = lngString[:3]
+    lat = latstr.lstrip('0') + "." + "%.7s" % str((float(latstr)*degr)).lstrip("0.")
+    lng = lngstr.lstrip('0') + "." + "%.7s" % str((float(lngstr)*degr)).lstrip("0.")
+    return lat,lng
     
 #rmc
 def printRMC(lines):
     try:
-        if lines:
-            variables.gewijzigdeparameters = float(variables.gewijzigdeparameters) + 3
+        if not (str(lines[0]) == "" or str(lines[1]) == "" or str(lines[3]) == "" or str(lines[5]) == ""):
+            variables.gewijzigdeparameters = float(variables.gewijzigdeparameters) + 3            
             latlng = getLatLng(lines[3],lines[5])
             variables.lat = float(latlng[0])
             variables.lon = float(latlng[1])
@@ -268,10 +274,14 @@ def printRMC(lines):
             print("")
             print("Lat,Long                       :", variables.lat, lines[4], ", ", variables.lon, lines[6], sep='')
             print("Snelheid                       :", variables.snelheid)
+            variables.gps = True
             return
+        else:
+            logging.info('message : no rmc lines')            
+            pass
     except Exception as ex:
         logging.info('message : ' + str(ex))
-        print('message : no rmc lines')
+        print('message : ex rmc lines')
         GPIO.setup(variables.errorled, GPIO.OUT)
         GPIO.output(variables.errorled, GPIO.HIGH)
         GPIO.setup(variables.runled, GPIO.OUT)
@@ -286,7 +296,7 @@ def speed(knots):
 #gga
 def printGGA(lines):
     try:
-        if lines:
+        if not (str(lines[6]) == "" or str(lines[7]) == "" or str(lines[9]) == ""):
             variables.gewijzigdeparameters = float(variables.gewijzigdeparameters) + 3
             #variables.tijd = getTime(lines[1], "%H%M%S.%f", "%H:%M:%S")
             variables.kwaliteit = variables.signaal[int(lines[6])]
@@ -298,9 +308,12 @@ def printGGA(lines):
             print("")
             print("")
             return
+        else:
+            logging.info('message : no gga lines')
+            pass
     except Exception as ex:
         logging.info('message : ' + str(ex))
-        print('message : no gga stream')
+        print('message : gga exeption')
         GPIO.setup(variables.errorled, GPIO.OUT)
         GPIO.output(variables.errorled, GPIO.HIGH)
         GPIO.setup(variables.runled, GPIO.OUT)

@@ -33,6 +33,7 @@ sattelieten = 0
 kwaliteit = ""
 hoogte = 0
 gewijzigdeparameters = 0
+gps = False
 #leds
 powerled = 27
 runled = 17
@@ -52,8 +53,8 @@ scriptdir = os.path.dirname(__file__)
 rel_path = "maximumsnelheden.json"
 maxspeedpath = os.path.join(scriptdir, rel_path)
 #maxspeedapi
-appid = 'bngQkvofptY6BhYwJqkR'
-appcode = 'PiLtHYGTE1jPKNQuDp7xxw'
+appid = 'xq5MMLEZQ2rxbvQV2src'
+appcode = 'Hgp5xGRglqVLpm5wET71EQ'
 #gogolegeocodeapi
 key = 'AIzaSyCjDB7jB1CqPueuUcUPXj1LBxMmob3iF1M'
 #state of init firebaste
