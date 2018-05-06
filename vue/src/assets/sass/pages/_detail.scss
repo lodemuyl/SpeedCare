@@ -7,7 +7,7 @@
         flex-wrap: wrap;
     }
     .leftside,.rightside{
-        height: 90vh;
+        min-height: 90vh;
         color: white;
         flex-basis: 450px;
         flex-grow: 1;
@@ -71,6 +71,8 @@
     }
     .paxspeedtext{
         margin-right: 10px;
+        max-width: 131.73px;
+        word-wrap: break-word;
     }
     .overtredingenclick{
         :hover{

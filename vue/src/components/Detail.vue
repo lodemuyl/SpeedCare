@@ -20,7 +20,7 @@
     <div v-show="loaded">
         <h2 class="pagetitle center">{{ datum | datumnederlands }}</h2>
         <div class="pannel">
-            <div class="leftside">
+            <div class="leftside" id="leftside">
                 <gmap-map  :zoom="ritmetadata.zoom" map-type-id="terrain" :center="ritmetadata.center"  mapTypeId: google.maps.MapTypeId.ROADMAP style="width: 100%; height: 100%">
                     <gmap-polyline class="polyline"
                         :path="coordinates"
@@ -76,11 +76,11 @@
                         <div v-show="violations.length">                        
                             <ul class="collapsible">
                                 <li v-for="violation in uniqueviolations">
-                                   <a class="violationclick" v-on:click="showviolationdetail" :time="violation.tijd" :street="violation.straat" :number="violation.nummer" :city="violation.gemeente" :max="violation.maximumsnelheid" :speed="violation.werkelijkesnelheid" :lat="violation.lat" :lng="violation.lng"> 
+                                   <a class="violationclick" href="#leftside" v-on:click="showviolationdetail" :time="violation.tijd" :street="violation.straat" :number="violation.nummer" :city="violation.gemeente" :max="violation.maximumsnelheid" :speed="violation.werkelijkesnelheid" :lat="violation.lat" :lng="violation.lng"> 
                                         <div class="collapsible-header">
                                             <img class ="maxspeedsign" :src="violation.url">
                                             <span class="overtredingstijd">{{ violation.tijd }}</span>
-                                            <div class="paxspeedtext">{{ violation.straat }} {{ violation.nummer }}  {{ violation.gemeente }} </div>                                    
+                                            <div class="paxspeedtext">{{ violation.straat }} {{ violation.nummer }}  {{ violation.gemeente }}</div>                                    
                                             <span class="new badge red">{{ violation.werkelijkesnelheid }} km/u</span>
                                         </div>   
                                     </a> 
@@ -413,7 +413,7 @@ export default {
           this.overtredingspercentages.zwaar =  zwaar
           this.overtredingspercentages.zeerzwaar =  zeerzwaar  
           let safe = Number(100-aantalovertredingen)
-          this.score = safe 
+          this.score = safe.toFixed(2)
           this.labels.push("Geen overtredingen");
           this.labels.push("Zwakke overtredingen (- 5 km/h)");
           this.labels.push("Medium overtredingen (5 - 10km/h)")

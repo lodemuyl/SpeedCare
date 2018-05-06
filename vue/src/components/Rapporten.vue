@@ -204,7 +204,11 @@ export default {
         percentage[key] = {}
        Object.keys(this.overtredingscategorie[key]).forEach(waarde =>{ 
          let huidigewaarde =  this.overtredingscategorie[key][waarde];
-         percentage[key][waarde] = ((huidigewaarde / aantalovertredingen) * 100).toFixed(2);
+         let nieuwewaarde = (huidigewaarde / aantalovertredingen) * 100
+         if (huidigewaarde == 0 && aantalovertredingen == 0){
+           nieuwewaarde = 0
+         }
+         percentage[key][waarde] = Number(nieuwewaarde).toFixed(2);
        })
       });
       return percentage

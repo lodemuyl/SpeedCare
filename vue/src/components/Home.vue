@@ -174,9 +174,9 @@ export default {
         })
     },
     overtredingen: function(jaar, maand , all){
-       all.child('aantal overtredingen').once('value', (snapshot)=>{
+       all.child('aantal overtredingen').child(jaar).child(maand).once('value', (snapshot)=>{
          if(snapshot.exists()){
-           this.aantalovertredingen = snapshot.child(jaar).child(maand).val()
+           this.aantalovertredingen = snapshot.val()
          }
        }).then(()=>{
          this.loaded = true

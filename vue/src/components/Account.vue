@@ -42,7 +42,7 @@
                 <label class="labelacc rood strong" for="Productnummer">Productnummer</label>
               </div>
               <div class="input-field col s12 m6 l6">
-              <i class="fa fa-user prefix rood"></i>
+                <i class="fa fa-user prefix rood"></i>
                 <input disabled v-bind:value="naam" id="Naam" type="text" class="validate">
                 <label class="labelacc rood strong" for="Naam">
                 Naam
@@ -74,6 +74,11 @@
                     </a>
                   </div>
                 </label>
+              </div>
+              <div class="input-field col s12 m12 l12">
+                <i class="fa fa-trophy prefix rood"></i>
+                <input :value="'Je hebt ' + aantalovertredingen + ' overtredingen gereden op een totaal van ' + aantalritten + ' ritten'" disabled id="score" type="text" class="validate">
+                <label class="labelacc rood strong" for="score">Overzicht van totaal aantal ritten en totaal aantal gereden overtredingen.</label>
               </div>
               <div class="input-field col s12 m12 l12">
                 <a v-on:click="logout" class="waves-effect waves-light btn fullwidth groenbackground">Logout</a>
@@ -138,6 +143,8 @@ export default {
       modalplaceholder: null,
       modalname: null,
       showww: false,
+      aantalritten: 0,
+      aantalovertredingen: 0,
       ww: {
         "new": null,
         "confirm": null
@@ -283,7 +290,8 @@ export default {
       };         
       db.ref(ref).once("value").then((e)=>{
         this.productnummer = e.val()
-        this.loaded = true
+      }).then(()=>{
+        this.totaal()
       })
     },
     editprofilepicture: function(){
@@ -327,6 +335,31 @@ export default {
         M.toast({html: "Je bent uitgelogd", displayLength:6000,classes:"groenbackground"})
       })
       
+    },
+    totaal: function(){
+      let uid = this.$parent.currentUser.uid
+      let refritten = uid + "/aantalritten" 
+      let refovertredingen = uid + "/aantal overtredingen" 
+      db.ref(refritten).once("value").then((e)=>{
+        e.forEach((jaar)=>{
+           jaar.forEach((maand)=>{
+            this.aantalritten += Number(maand.val())
+           })
+         })   
+      }).then(()=>{
+        db.ref(refovertredingen).once("value").then((a)=>{
+         a.forEach((jaar)=>{
+           jaar.forEach((maand)=>{
+             this.aantalovertredingen += Number(maand.val())
+           })
+         })
+          console.log(this.aantalritten)
+          console.log(this.aantalovertredingen) 
+        })
+      }).then(()=>{
+          this.loaded = true
+      })
+
     }
   }
 }

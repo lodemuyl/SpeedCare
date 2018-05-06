@@ -105,7 +105,10 @@ let router = new Router({
         requiresAuth: false
       }
     },
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  }
 })
 router.beforeEach((to, from, next) => {
   //ingelogd of niet
