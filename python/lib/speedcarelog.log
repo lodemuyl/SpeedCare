@@ -1,0 +1,52 @@
+2018-05-19 00:27:54,887,887 INFO     [functions.py:93] Network up
+2018-05-19 00:27:54,888,888 INFO     [functions.py:54] in checkactive
+2018-05-19 00:27:54,889,889 INFO     [functions.py:56] in network
+2018-05-19 00:27:54,890,890 INFO     [functions.py:61] init firebase
+2018-05-19 00:27:54,893,893 DEBUG    [retry.py:200] Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+2018-05-19 00:27:54,966,966 DEBUG    [requests.py:117] Making request: POST https://accounts.google.com/o/oauth2/token
+2018-05-19 00:27:54,998,998 DEBUG    [connectionpool.py:824] Starting new HTTPS connection (1): accounts.google.com
+2018-05-19 00:27:55,672,672 DEBUG    [connectionpool.py:396] https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+2018-05-19 00:27:55,699,699 DEBUG    [connectionpool.py:824] Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+2018-05-19 00:27:56,725,725 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+2018-05-19 00:27:56,730,730 INFO     [functions.py:67] start
+2018-05-19 00:27:59,839,839 INFO     [functions.py:93] Network up
+2018-05-19 00:27:59,868,868 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "GET /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten/2018/5.json HTTP/1.1" 200 1
+2018-05-19 00:28:00,148,148 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "PUT /0qxj0RU91xWF0eRdFnen9OvSIy42/aantalritten/2018/5.json HTTP/1.1" 200 1
+2018-05-19 00:28:00,431,431 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/5/19/00:27:53/00:28:00.json HTTP/1.1" 200 31
+2018-05-19 00:28:01,311,311 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/5/19/00:27:53/00:28:01.json HTTP/1.1" 200 31
+2018-05-19 00:28:02,421,421 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/5/19/00:27:53/00:28:02.json HTTP/1.1" 200 31
+2018-05-19 00:28:03,917,917 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/5/19/00:27:53/00:28:03.json HTTP/1.1" 200 31
+2018-05-19 00:28:06,951,951 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "POST /0qxj0RU91xWF0eRdFnen9OvSIy42/2018/5/19/00:27:53/00:28:06.json HTTP/1.1" 200 31
+2018-05-19 00:30:52,031,31 INFO     [functions.py:93] Network up
+2018-05-19 00:30:52,033,33 INFO     [functions.py:54] in checkactive
+2018-05-19 00:30:52,037,37 INFO     [functions.py:56] in network
+2018-05-19 00:30:52,038,38 INFO     [functions.py:61] init firebase
+2018-05-19 00:30:52,043,43 DEBUG    [retry.py:200] Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+2018-05-19 00:30:52,116,116 DEBUG    [requests.py:117] Making request: POST https://accounts.google.com/o/oauth2/token
+2018-05-19 00:30:52,145,145 DEBUG    [connectionpool.py:824] Starting new HTTPS connection (1): accounts.google.com
+2018-05-19 00:30:52,596,596 DEBUG    [connectionpool.py:396] https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+2018-05-19 00:30:52,622,622 DEBUG    [connectionpool.py:824] Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+2018-05-19 00:30:53,319,319 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+2018-05-19 00:30:53,323,323 INFO     [functions.py:67] start
+2018-05-19 00:31:11,121,121 INFO     [functions.py:93] Network up
+2018-05-19 00:31:11,122,122 INFO     [functions.py:54] in checkactive
+2018-05-19 00:31:11,123,123 INFO     [functions.py:56] in network
+2018-05-19 00:31:11,124,124 INFO     [functions.py:61] init firebase
+2018-05-19 00:31:11,128,128 DEBUG    [retry.py:200] Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+2018-05-19 00:31:11,200,200 DEBUG    [requests.py:117] Making request: POST https://accounts.google.com/o/oauth2/token
+2018-05-19 00:31:11,230,230 DEBUG    [connectionpool.py:824] Starting new HTTPS connection (1): accounts.google.com
+2018-05-19 00:31:11,575,575 DEBUG    [connectionpool.py:396] https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+2018-05-19 00:31:11,601,601 DEBUG    [connectionpool.py:824] Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+2018-05-19 00:31:12,472,472 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+2018-05-19 00:31:12,477,477 INFO     [functions.py:67] start
+2018-05-19 00:31:23,933,933 INFO     [functions.py:93] Network up
+2018-05-19 00:31:23,934,934 INFO     [functions.py:54] in checkactive
+2018-05-19 00:31:23,935,935 INFO     [functions.py:56] in network
+2018-05-19 00:31:23,936,936 INFO     [functions.py:61] init firebase
+2018-05-19 00:31:23,940,940 DEBUG    [retry.py:200] Converted retries value: 3 -> Retry(total=3, connect=None, read=None, redirect=None, status=None)
+2018-05-19 00:31:24,012,12 DEBUG    [requests.py:117] Making request: POST https://accounts.google.com/o/oauth2/token
+2018-05-19 00:31:24,042,42 DEBUG    [connectionpool.py:824] Starting new HTTPS connection (1): accounts.google.com
+2018-05-19 00:31:24,409,409 DEBUG    [connectionpool.py:396] https://accounts.google.com:443 "POST /o/oauth2/token HTTP/1.1" 200 None
+2018-05-19 00:31:24,437,437 DEBUG    [connectionpool.py:824] Starting new HTTPS connection (1): speedcare-lode.firebaseio.com
+2018-05-19 00:31:25,983,983 DEBUG    [connectionpool.py:396] https://speedcare-lode.firebaseio.com:443 "GET /Relations.json HTTP/1.1" 200 56
+2018-05-19 00:31:25,988,988 INFO     [functions.py:67] start
