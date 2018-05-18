@@ -26,6 +26,7 @@
     "vue-fullcalendar": "^1.0.9",
     "vue-materialize": "^1.0.0",
     "vue-router": "^3.0.1",
+    "vue-scrollto": "^2.11.0",
     "vue2-google-maps": "^0.8.11"
   },
   "devDependencies": {

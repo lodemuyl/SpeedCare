@@ -76,7 +76,7 @@
                         <div v-show="violations.length">                        
                             <ul class="collapsible">
                                 <li v-for="violation in uniqueviolations">
-                                   <a class="violationclick" href="#leftside" v-on:click="showviolationdetail" :time="violation.tijd" :street="violation.straat" :number="violation.nummer" :city="violation.gemeente" :max="violation.maximumsnelheid" :speed="violation.werkelijkesnelheid" :lat="violation.lat" :lng="violation.lng"> 
+                                   <a class="violationclick" v-scroll-to="'#leftside'" v-on:click="showviolationdetail" :time="violation.tijd" :street="violation.straat" :number="violation.nummer" :city="violation.gemeente" :max="violation.maximumsnelheid" :speed="violation.werkelijkesnelheid" :lat="violation.lat" :lng="violation.lng"> 
                                         <div class="collapsible-header">
                                             <img class ="maxspeedsign" :src="violation.url">
                                             <span class="overtredingstijd">{{ violation.tijd }}</span>
@@ -124,6 +124,7 @@ import uniq from 'lodash/uniq'
 import moment from 'moment'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import 'moment/locale/nl';
+import VueScrollTo from 'vue-scrollto'
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyBRG_RCT37qOM0FoRvX-CZWEH0pu6DzWpk',
@@ -131,6 +132,19 @@ Vue.use(VueGoogleMaps, {
     language: 'nl'
   }
 })
+
+Vue.use(VueScrollTo, {
+     container: "body",
+     duration: 500,
+     easing: "ease",
+     offset: -40,
+     cancelable: true,
+     onStart: false,
+     onDone: false,
+     onCancel: false,
+     x: false,
+     y: true
+ })
 Vue.component('infoWindow', VueGoogleMaps.InfoWindow)
 export default {
   name: 'Detail',
@@ -349,7 +363,7 @@ export default {
             let lat = Number(event.currentTarget.attributes['lat'].value);
             let lng = Number(event.currentTarget.attributes['lng'].value);
             let max = event.currentTarget.attributes['max'].value;
-            let werkelijkesnelheid = event.currentTarget.attributes['speed'].value;
+            let werkelijkesnelheid =  event.currentTarget.attributes['speed'].value;
             this.infoWinOpen.position.lat = lat;
             this.infoWinOpen.position.lng = lng;
             this.infoWinOpen.content.speed = Number(werkelijkesnelheid).toFixed(2);
@@ -363,19 +377,22 @@ export default {
             }else{
                 this.infoWinOpen.class.groen = false;
                 this.infoWinOpen.class.rood = true;
-            };
-            this.infoWinOpen.open = true;
+            };         
+            this.infoWinOpen.open = true       
       },
       polylinepointclick: function(event){
           if(event.vertex){
+            console.log(event.vertex)
+            let info = this.coordinates[event.vertex].info
+            let maxsnelheid = this.precisionRound(Number(info.maxsnelheid), 2);
+            let werkelijkesnelheid = this.precisionRound(Number(info.werkelijkesnelheid), 2);
             this.infoWinOpen.content.uur = null
             this.infoWinOpen.content.plaats = null
-            let info = this.coordinates[event.vertex -2].info
             this.infoWinOpen.position.lat = event.latLng.lat()
             this.infoWinOpen.position.lng = event.latLng.lng()
-             this.infoWinOpen.content.speed = Number(info.werkelijkesnelheid).toFixed(2)
+             this.infoWinOpen.content.speed = werkelijkesnelheid
              this.infoWinOpen.content.speedim = './static/img/maxspeed/' + info.maxsnelheid + '.png'
-             if(Number(info.maxsnelheid) >= info.werkelijkesnelheid){
+             if(maxsnelheid >= werkelijkesnelheid){
                 this.infoWinOpen.class.groen = true
                 this.infoWinOpen.class.rood = false
              }else{
@@ -424,7 +441,12 @@ export default {
           this.data.push(medium )
           this.data.push(zwaar )
           this.data.push(zeerzwaar)
+      },
+      precisionRound: function(number, precision) {
+        var factor = Math.pow(10, precision);
+        return Math.round(number * factor) / factor;
       }
+
   },
   filters: {
       datumnederlands: function(datum){
