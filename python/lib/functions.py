@@ -28,7 +28,8 @@ def main(lines):
     elif lines[0] == "GPGGA":
         printGGA(lines)
         if variables.gewijzigdeparameters >= 6:
-            write()            
+            write()
+            print('schrijf')
         pass     
 #init firebase
 def initfirebase():
@@ -50,10 +51,14 @@ def initfirebase():
 #checkactive
 def checkActive():
     network = checknetwork()
+    logging.info('in checkactive')
     if network:
+        logging.info('in network')
         try:
             if(variables.init == False):            
                 #firebase credentials
+                print('init firebase')
+                logging.info('init firebase')
                 initfirebase()
                 checkproductkey = db.reference('Relations').get()        
             if checkproductkey and checkproductkey[variables.pk]:
@@ -70,8 +75,7 @@ def checkActive():
             GPIO.output(variables.runled, GPIO.LOW)
             sys.exit(1)
         except Exception as active:
-            print('jouw pk is nog niet geactiveerd of bestaat niet')
-            logging.info('jouw pk is nog niet geactiveerd of bestaat niet' + str(active))            
+            logging.info('checkactivenetwork' + str(active))            
             GPIO.setup(variables.errorled, GPIO.OUT)
             GPIO.output(variables.errorled, GPIO.HIGH)
             return False
@@ -253,22 +257,40 @@ def readString():
         GPIO.output(variables.runled, GPIO.LOW)
         sys.exit(1)
 #lat en long
-def getLatLng(latString,lngString):
-    degr = 1.0/60.0
-    latstr = latString[:2]
-    lngstr = lngString[:3]
-    lat = latstr.lstrip('0') + "." + "%.7s" % str((float(latstr)*degr)).lstrip("0.")
-    lng = lngstr.lstrip('0') + "." + "%.7s" % str((float(lngstr)*degr)).lstrip("0.")
-    return lat,lng
+def getLatLng(latString,lngString, vertical, horizontal):
+    vertical = 1
+    horizontal = 1
+    if vertical == "S":
+        vertical = -1
+    if horizontal == "W":
+        horizontal = -1  
+    #degr = 1.0/60.0
+    #latstr = latString[:2]
+    #lngstr = lngString[:3]
+    #degr = 1/60
+    #latstr = latString
+    #lngstr = lngString
+    
+    #lat = latstr.lstrip('0') + "." + "%.7s" % str((float(latstr)*degr)).lstrip("0.")
+    #lng = lngstr.lstrip('0') + "." + "%.7s" % str((float(lngstr)*degr)).lstrip("0.")
+    lat1 = int(float(latString)/100)
+    lat2 = float(latString) - (lat1 * 100)
+    lat = (lat1 + (lat2/60)) * horizontal
+    latround = round(lat, 5)
+    lng1 = int(float(lngString)/100)
+    lng2 = float(lngString) - (lng1 * 100)
+    lng = (lng1 + (lng2/60)) * vertical
+    lnground = round(lng, 5)
+    return latround,lnground
     
 #rmc
 def printRMC(lines):
     try:
         if not (str(lines[0]) == "" or str(lines[1]) == "" or str(lines[3]) == "" or str(lines[5]) == ""):
             variables.gewijzigdeparameters = float(variables.gewijzigdeparameters) + 3            
-            latlng = getLatLng(lines[3],lines[5])
-            variables.lat = float(latlng[0])
-            variables.lon = float(latlng[1])
+            latlng = getLatLng(lines[3],lines[5], lines[4], lines[6])
+            variables.lat = latlng[0]
+            variables.lon = latlng[1]
             variables.snelheid = speed(float(lines[7]))
             print("")
             print("")
@@ -277,11 +299,12 @@ def printRMC(lines):
             variables.gps = True
             return
         else:
+            print('no rmc lines') 
             logging.info('message : no rmc lines')            
             pass
     except Exception as ex:
         logging.info('message : ' + str(ex))
-        print('message : ex rmc lines')
+        print('message : ' + ex)
         GPIO.setup(variables.errorled, GPIO.OUT)
         GPIO.output(variables.errorled, GPIO.HIGH)
         GPIO.setup(variables.runled, GPIO.OUT)
@@ -309,11 +332,12 @@ def printGGA(lines):
             print("")
             return
         else:
+            print('no gga lines')
             logging.info('message : no gga lines')
-            pass
+            raise Exception('no gps connection')
     except Exception as ex:
         logging.info('message : ' + str(ex))
-        print('message : gga exeption')
+        print('message : ' + str(ex))
         GPIO.setup(variables.errorled, GPIO.OUT)
         GPIO.output(variables.errorled, GPIO.HIGH)
         GPIO.setup(variables.runled, GPIO.OUT)

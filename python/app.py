@@ -1,6 +1,7 @@
 #imports
 import os
 import sys
+import time
 import serial
 import datetime
 import logging
@@ -9,22 +10,13 @@ import RPi.GPIO as GPIO
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib'))
 #variables
 import variables
-#functies#imports
-import os
-import sys
-import serial
-import datetime
-import logging
-import RPi.GPIO as GPIO
 #add lib to sys path
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib'))
-#variables
-import variables
 #functies
 import functions
 #check active
 active = functions.checkActive()
-
+time.sleep(3)
 #mainloop
 try:
     while active:
@@ -36,4 +28,6 @@ except (KeyboardInterrupt, SystemExit):
     GPIO.output(variables.runled, GPIO.LOW)
     raise
 except Exception as ex:
-    functions.log('close :' + str(ex))
+    functions.logging.info('close :' + str(ex))
+    GPIO.setup(variables.runled, GPIO.OUT)
+    GPIO.output(variables.runled, GPIO.LOW)
