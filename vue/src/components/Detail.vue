@@ -412,6 +412,8 @@ export default {
           }
       },
       violationspage: function(){
+          let date = new Date(this.datum)
+          this.$parent.actievemaand = date.getMonth();
           this.$parent.actiefoverzicht = null;
           this.$parent.actiefsnelheid = "firstclick",
           this.$router.push('/Rapporten')

@@ -40,6 +40,9 @@
 .autooverflow{
     overflow: auto;
 }
+.hand:hover{
+    cursor: pointer;
+}
 .link{
     color: $red;
     border-bottom: 2px solid $red;

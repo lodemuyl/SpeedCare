@@ -44,7 +44,7 @@
               </div>
             </div>
           </router-link>
-          <div v-on:click="routerovertredingen">
+          <div v-on:click="routerovertredingen" class="hand">
             <div class="col pannelpadding s12 m12 l6 halfplus">
               <div class="card-panel groenbackground fullheight">
                 <span class="rood initchar ">{{ aantalovertredingen }}</span>

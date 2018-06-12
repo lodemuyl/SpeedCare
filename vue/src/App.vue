@@ -45,9 +45,9 @@
               <div class="col l3 s12">
                 <h5 class="groen">Algemeen</h5></h5>
                 <ul>
-                  <li><router-link class="grey-text text-lighten-3" to="Disclaimer">Disclaimer</router-link></li>
+                  <li><a v-on:click="redirect('Disclaimer')" class="grey-text text-lighten-3 hand">Disclaimer</a></li>
                   <li><a class="grey-text text-lighten-3" href="mailto:lodemuyl@student.arteveldehs.be">Contact</a></li>
-                  <li><router-link to="Over" class="grey-text text-lighten-3">Over</router-link></li>
+                  <li><a v-on:click="redirect('Over')" class="grey-text text-lighten-3 hand">Over</a></li>
                 </ul>
               </div>
               <div class="col l3 s12">
@@ -87,6 +87,8 @@ export default {
       mapsapikey: 'AIzaSyCjDB7jB1CqPueuUcUPXj1LBxMmob3iF1M',
       actiefoverzicht: "firstclick",
       actiefsnelheid: null,
+      actievemaand: null,
+      rittenoverzicht: null,
     }
   },
   created(){
@@ -112,6 +114,16 @@ export default {
         M.toast({html: "Je bent uitgelogd", displayLength:6000,classes:"groenbackground"})
         this.$router.replace('/Home')
       })      
+    },
+    redirect: function(to){
+      if(to =="Over"){
+        this.$router.push('/Over')
+      }
+      else if(to =="Disclaimer"){
+         this.$router.push('/Disclaimer')
+      }
+
+
     }
   }
 }

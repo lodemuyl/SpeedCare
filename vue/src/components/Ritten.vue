@@ -41,11 +41,16 @@ export default {
       msg: 'Ritten',
       loaded: true,
       config: {
-        lang: 'nl',
+        lang: 'nl'
       },
       fcEvents : [
       ]
     }
+  },
+  created(){
+    //let jaar = new Date(current).getFullYear();
+    //let maand = new Date(current).getMonth() + 1;
+    //this.ritten(2018,4)
   },
   methods: {
     ritten: function(jaar, maand){
@@ -77,11 +82,12 @@ export default {
       this.$router.push(path)
     },
     changeMonth: function(start, end, current){
+      console.log(start);
+      console.log(end)
       this.loaded = false
       let jaar = new Date(current).getFullYear();
       let maand = new Date(current).getMonth() + 1;
       this.ritten(jaar, maand);
-
     }
   },
   components: {

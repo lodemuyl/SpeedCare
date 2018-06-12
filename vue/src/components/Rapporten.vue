@@ -110,7 +110,7 @@
                           <div class="ritten" v-for="rit in overtreding.ritten">
                             <p>Rit van {{rit.rit}}</p>
                             <div class="collection overtredingcollection" v-for="tijdstip in rit.logs">
-                              <div class="collection-item"><p><img :src="'../static/img/maxspeed/' + tijdstip.info.maximumsnelheid + '.png'"></p><p>{{tijdstip.info.straat}}  {{tijdstip.info.nummer}}  {{tijdstip.info.postcode}} {{tijdstip.info.gemeente}}</p><p> om {{tijdstip.tijd}}</p><p class="right"><span class="rood">{{tijdstip.info.werkelijkesnelheid}}</span> km/h</p></div>
+                              <div class="collection-item"><p><img :src="'../static/img/maxspeed/' + tijdstip.info.maximumsnelheid + '.png'"></p><p>{{tijdstip.info.straat}}  {{tijdstip.info.nummer}}  {{tijdstip.info.postcode}} {{tijdstip.info.gemeente}}</p><p> om {{tijdstip.tijd}}</p><p class="right"><span>{{tijdstip.info.werkelijkesnelheid}}</span> km/h</p></div>
                             </div>
                           </div>                        
                         </div>                
@@ -209,11 +209,16 @@ export default {
     }
   },
   created(){
-    this.speedviolations();
+    let inheritmonth = this.$parent.actievemaand;
+    if (inheritmonth){
+      this.monthnumber = inheritmonth
+      this.$parent.actievemaand = null;
+    }else{
+    this.monthnumber = new Date().getMonth()
+    }
+    this.changemonth();
   },
   mounted(){
-    //monthnumber
-    this.monthnumber = new Date().getMonth()
     //materialize initialization
     var tabs = document.querySelector('.tabs'); 
     var firstclick = document.querySelector('#firstclick');
@@ -244,7 +249,6 @@ export default {
       
     },
     overtredingenlistwatch: function(){
-      console.log("lode")
       if(this.overtredingenlist){
         this.overtredingen = true
       }
@@ -373,7 +377,6 @@ export default {
       return name
     }
   },
-
   filters: {
     percentfilter: function(waarde){
       return waarde + ' %'
