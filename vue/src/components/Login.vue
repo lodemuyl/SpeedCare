@@ -82,9 +82,9 @@ export default {
       firebase.auth().signInWithEmailAndPassword(this.email, this.wachtwoord).then(
             (e) => {
               let ref = e.uid + "/actief"
-              db.ref(ref).set(true)               
-              this.$router.push('/') 
+              db.ref(ref).set(true)       
               location.reload()
+              this.$router.push('/') 
               let lastsignin = this.$parent.currentUser.metadata.lastSignInTime;              
             },
             (err) => {      
