@@ -61,8 +61,8 @@
           </div>
           <div class="footer-copyright">
             <div class="container">
-            © 2018 Copyright - <router-link class="grey-text text-lighten-3" to="Disclaimer"><strong class="rood">www.speedcare.herokuapp.com </strong></router-link>
-            <a class="grijs right" target="_blank" href="http://lodemuylaert.be">Auteur</a>
+            © 2018 Copyright - <a class="grey-text text-lighten-3" ng-click=""><strong>www.speedcare.herokuapp.com </strong></a>
+            <a class="right wit" target="_blank" href="http://lodemuylaert.be">Auteur</a>
             </div>
         </div>
       </footer>

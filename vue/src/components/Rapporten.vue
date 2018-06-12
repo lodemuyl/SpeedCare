@@ -1,7 +1,17 @@
 <template>
   <div class="rapporten">
-    <h2 class="pagetitle center">{{ msg }}</h2>
-      <div class="">
+    <h2 class="pagetitle center">{{ msg }} {{  year }}</h2>
+      <div class=""></div>
+        <div class="row">
+          <div class="col s12 md12 l12">
+            <div>
+                <select class="select" v-model="monthnumber" v-on:change="changemonth()">
+                  <option v-for="(maand, index) in months"  v-bind:value="index" v-bind:selected="index == (monthnumber+1)" >{{maand.name}}</option>
+                </select>
+                <label>Selecteer jouw maand.</label>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col s12 md12 l12">
             <ul id="" class="tabs tabs tabs-fixed-width">
@@ -29,7 +39,7 @@
                       </div>
                   </div>  
                   <div v-show="loadoverzicht" class="card-content white-text">
-                    <span class="card-title halfstrong">Overzicht  {{ month }}</span>
+                    <span class="card-title halfstrong">Overzicht {{ monthname() }} {{ year }}</span>
                     <p>Hier krijgt u een percentueel overzicht van alle overtredingen.</p>
                     <table>
                       <thead>
@@ -75,7 +85,7 @@
           <div id="snelheid" class="col s12 md12 l12 sw">
                 <div class="card">
                   <div v-show="!overtredingen">
-                    <p class="noviolations"><span class="card-title halfstrong">Er zijn geen overtredingen vastgesteld voor {{ month }}.</span></p>
+                    <p class="noviolations"><span class="card-title halfstrong">Er zijn geen overtredingen vastgesteld voor {{ monthname() }}.</span></p>
                   </div>
                   <div v-show="overtredingen">
                     <div v-show="!loadedspeed" id="load">
@@ -94,8 +104,8 @@
                           </div>
                     </div>
                     <div v-show="loadedspeed" class="card-content white-text">
-                      <span class="card-title halfstrong overtredingenmaand">Overtredingen {{ month }}</span>
-                        <div  v-for="overtreding in overtredingenlist">
+                      <span class="card-title halfstrong overtredingenmaand">Overtredingen {{ monthname() }}</span>
+                        <div  v-for="overtreding in overtredingenlistwatch">
                           <p class="dagnaam">{{overtreding.dagnaam}}</p>
                           <div class="ritten" v-for="rit in overtreding.ritten">
                             <p>Rit van {{rit.rit}}</p>
@@ -123,21 +133,7 @@ import { db } from '../assets/js/firebase'
 require('chart.js');
 require('hchs-vue-charts');
 Vue.use(VueCharts);
-export default {
-  name: 'Rapporten',
-  data () {
-    return {
-      msg: 'Rapporten',
-      user: this.$parent.currentUser.providerData[0].displayName,
-      firebaseref: db.ref(this.$parent.currentUser.uid), 
-      loadoverzicht: false,
-      loadedspeed: false,
-      actiefoverzicht: this.$parent.actiefoverzicht,
-      actiefsnelheid: this.$parent.actiefsnelheid,
-      overtredingen: true,
-      overtredingenaantal: 0,
-      overtredingenlist: [],
-      overtredingscategorie:{
+const over = {
         "0 tot 5 km/h": {
           "10": 0,
           "30": 0,
@@ -174,69 +170,158 @@ export default {
           "100": 0,
           "120": 0,
         },
-      },
-      maanden:['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
-      month:  moment(moment(), "YYYY-MM").locale('nl').format('MMMM YYYY'),
+      }
+export default {
+  name: 'Rapporten',
+  data () {
+    return {
+      msg: 'Rapporten',
+      user: this.$parent.currentUser.providerData[0].displayName,
+      firebaseref: db.ref(this.$parent.currentUser.uid), 
+      loadoverzicht: false,
+      loadedspeed: false,
+      actiefoverzicht: this.$parent.actiefoverzicht,
+      actiefsnelheid: this.$parent.actiefsnelheid,
+      overtredingen: true,
+      overtredingenaantal: 0,
+      overtredingenlist: [],
+      overtredingscategorie: over,
+      year: moment(moment(), "YYYY").locale('nl').format('YYYY'),
+      monthnumber: 0,
       options:{
         responsive: true
       },
-      
+      changed: false,
+      months: [
+        { name: "Januari", value: 1},
+        { name: "Februari", value: 2},
+        { name: "Maart", value: 3},
+        { name: "April", value: 4},
+        { name: "Mei", value: 5},
+        { name: "Juni", value: 6},
+        { name: "Juli", value: 7},
+        { name: "Augustus", value: 8},
+        { name: "September", value: 9},
+        { name: "Oktober", value: 10},
+        { name: "November", value: 11},
+        { name: "December", value: 12}
+        ]
     }
   },
   created(){
     this.speedviolations();
   },
   mounted(){
+    //monthnumber
+    this.monthnumber = new Date().getMonth()
     //materialize initialization
     var tabs = document.querySelector('.tabs'); 
-    var firstclick = document.querySelector('#firstclick');     
+    var firstclick = document.querySelector('#firstclick');
+    var select = document.querySelector('.select');
     this.$nextTick(function(){ 
+      var instances = M.Select.init(select);
       var tab = M.Tabs.init(tabs);    
       tab.updateTabIndicator();
       firstclick.click();            
     })
   },
   computed: {
-    percentages: function(){
-      let aantalovertredingen = this.overtredingenaantal
-      let percentage = {}
-      Object.keys(this.overtredingscategorie).forEach(key => {        
-        percentage[key] = {}
-       Object.keys(this.overtredingscategorie[key]).forEach(waarde =>{ 
-         let huidigewaarde =  this.overtredingscategorie[key][waarde];
-         let nieuwewaarde = (huidigewaarde / aantalovertredingen) * 100
-         if (huidigewaarde == 0 && aantalovertredingen == 0){
-           nieuwewaarde = 0
-         }
-         percentage[key][waarde] = Number(nieuwewaarde).toFixed(2);
-       })
-      });
-      return percentage
+    percentages: function(){ 
+        let aantalovertredingen = this.overtredingenaantal
+        let percentage = {}
+        Object.keys(this.overtredingscategorie).forEach(key => {        
+          percentage[key] = {}
+        Object.keys(this.overtredingscategorie[key]).forEach(waarde =>{ 
+          let huidigewaarde =  this.overtredingscategorie[key][waarde];
+          let nieuwewaarde = (huidigewaarde / aantalovertredingen) * 100
+          if (huidigewaarde == 0 && aantalovertredingen == 0){
+            nieuwewaarde = 0
+          }
+          percentage[key][waarde] = Number(nieuwewaarde).toFixed(2);
+        })
+        });
+        return percentage
+      
+    },
+    overtredingenlistwatch: function(){
+      console.log("lode")
+      if(this.overtredingenlist){
+        this.overtredingen = true
+      }
+      return this.overtredingenlist
     }
   },
   methods: {
+    changemonth: function(){
+      this.changed = true;    
+      this.overtredingenaantal = 0
+      this.overtredingenlist = [],
+        this.overtredingscategorie = {
+        "0 tot 5 km/h": {
+          "10": 0,
+          "30": 0,
+          "50": 0,
+          "70": 0,
+          "90": 0,
+          "100": 0,
+          "120": 0,
+        },
+        "5 tot 10 km/h":  {
+          "10": 0,
+          "30": 0,
+          "50": 0,
+          "70": 0,
+          "90": 0,
+          "100": 0,
+          "120": 0,
+        },
+        "10 tot 20 km/h":  {
+          "10": 0,
+          "30": 0,
+          "50": 0,
+          "70": 0,
+          "90": 0,
+          "100": 0,
+          "120": 0,
+        },
+        "+20 km/h":  {
+          "10": 0,
+          "30": 0,
+          "50": 0,
+          "70": 0,
+          "90": 0,
+          "100": 0,
+          "120": 0,
+        }
+      } 
+      this.$forceUpdate()
+      this.speedviolations()
+    },
     speedviolations: function(){
+      this.loadoverzicht = false;
+      this.loadedspeed = false;
       //inladen lijst voor select.
       let all = db.ref(this.$parent.currentUser.uid)
       let jaar = new Date().getFullYear();
-      let maand = new Date().getMonth()+1 
-      //leegmaken lijst  
-      this.overtredingenlist = []
+      let maand = this.monthnumber + 1
       all.child('overtredingen').child(jaar).child(maand).once('value', (snapshot)=>{
-        let list= {}
+        let list =[]
       //ophalen van gewone rittendata overtredingen
         if(snapshot.val() !== null){   
               snapshot.forEach((dag)=>{
               let dagnummer = dag.key
-              list["dag"] = dagnummer;
-              list["dagnaam"] = moment(dagnummer, "D").locale('nl').format('dddd LL')
-              list["ritten"] = []
+              let dagobj = {
+                "dag": dagnummer,
+                "dagnaam": moment(dagnummer, "D").locale('nl').format('dddd LL'),
+                "ritten": []
+              }
+              list.push(dagobj)
               dag.forEach((ritten)=>{
                 let ritobj = {}
                 let ritkey = ritten.key
                 ritobj["rit"] = ritkey
                 ritobj["logs"] = []
-                list["ritten"].push(ritobj)
+                dagobj["ritten"].push(ritobj)
                 ritten.forEach((info)=>{
                   let infoobj = {}
                   infoobj["tijd"] = info.key
@@ -248,7 +333,6 @@ export default {
                    let werkelijkesnelheid = val.werkelijkesnelheid
                    let tesnel = val.tesnel
                    this.overtredingenaantal += 1;
-
                    //this.overtredingscategorie[maxspeed] += 1
                    if(tesnel <= 5){
                       this.overtredingscategorie["0 tot 5 km/h"][maxspeed] += 1
@@ -266,11 +350,13 @@ export default {
                 })
               })
             })    
-          this.overtredingenlist.push(list)                  
+            //Vue.set(this.overtredingenlist, list)
+          this.overtredingenlist = list                 
         }else{
           this.overtredingen = false; 
         }   
       }).then(()=>{
+        this.changed == false
         this.loadoverzicht = true;
         this.loadedspeed = true;
       })     
@@ -281,9 +367,13 @@ export default {
       }else{
         return false
       }
-    }    
-
+    },
+    monthname: function(){
+      let name =  moment(moment().month(this.monthnumber), "YYYY-MM").locale('nl').format('MMMM')
+      return name
+    }
   },
+
   filters: {
     percentfilter: function(waarde){
       return waarde + ' %'

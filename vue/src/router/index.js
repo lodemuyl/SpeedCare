@@ -117,7 +117,7 @@ router.beforeEach((to, from, next) => {
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   //als je niet ingelogd bent en de route is requireauth dan ...
   if(requiresAuth && !currentUser) next('Login')
-  else if (!requiresAuth && currentUser && to.name == 'Over') next()
+  else if (currentUser && to.name == 'Over') next()
   else if (!requiresAuth && currentUser && to.name == 'Disclaimer') next()
   // als auth niet moet en wel ingelogd en route naar is home 
   else if (!requiresAuth && currentUser && to.name == 'Home') next()
